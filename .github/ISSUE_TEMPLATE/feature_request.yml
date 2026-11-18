@@ -1,0 +1,22 @@
+name: Feature request
+description: Suggest a capability or workflow improvement.
+title: "[Feature] "
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What are you trying to do?
+      description: Describe the engineering problem or workflow this would support.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behavior
+    validations:
+      required: true
+  - type: textarea
+    id: example
+    attributes:
+      label: Example or reference
+      description: A diagram, worked calculation or public reference helps define the expected result.

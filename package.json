@@ -1,0 +1,24 @@
+{
+  "name": "linkage-studio",
+  "version": "0.3.0",
+  "private": true,
+  "description": "Planar mechanism drawing and kinematic analysis for engineering students",
+  "scripts": {
+    "build": "node scripts/build.cjs",
+    "check": "node scripts/build.cjs --check",
+    "test": "node --test tests/interaction.test.cjs"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "license": "Unlicense",
+  "author": "James Wheeler",
+  "homepage": "https://majorpacketloss.github.io/linkage-studio/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MajorPacketLoss/linkage-studio.git"
+  },
+  "bugs": {
+    "url": "https://github.com/MajorPacketLoss/linkage-studio/issues"
+  }
+}
