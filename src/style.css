@@ -16,7 +16,7 @@ h1,h2,h3,p{margin:0}h1{font-size:24px;font-weight:600;letter-spacing:-.035em;lin
 .card{background:var(--surface);border:1px solid var(--line);border-radius:5px;overflow:hidden}.cardHead{padding:12px 14px;display:flex;justify-content:space-between;gap:12px;align-items:center;border-bottom:1px solid #e8edf2}.cardHead p{font-size:11px;color:var(--muted);margin-top:4px;line-height:1.4}.unit{font:11px ui-monospace,Consolas,monospace;color:#687f95;white-space:nowrap}
 .toolbar{display:flex;align-items:center;gap:4px;padding:8px 10px;background:#f5f7fa;border-bottom:1px solid var(--line);flex-wrap:wrap}.toolbar button,.toolbar select{font-size:11px;padding:6px 9px}.toolbar button:first-child{margin-right:5px}
 .viewControls{display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:7px 10px;border-bottom:1px solid #e1e8ef;background:#fcfdfe;font-size:10px;color:var(--muted)}.viewControls input{width:63px;border:1px solid var(--line);border-radius:3px;padding:4px;background:#fff;color:var(--ink)}.viewControls button{font-size:11px;padding:3px 8px}.viewControls span{margin-left:auto}
-#board{background:#f9fbfd;position:relative}#sketch{display:block;width:100%;min-height:280px;max-height:570px;user-select:none;touch-action:none}#sketch.panning,#sketch.panning *{cursor:grabbing!important}
+#dimensionEdit{position:absolute;z-index:1;height:28px;padding:3px 7px;font:12px ui-monospace,monospace}#board{background:#f9fbfd;position:relative}#sketch{display:block;width:100%;min-height:280px;max-height:570px;user-select:none;touch-action:none}#sketch.panning,#sketch.panning *{cursor:grabbing!important}
 .positionVectorControls{display:flex;gap:15px;flex-wrap:wrap;align-items:center;padding:7px 12px;font-size:10px;color:var(--muted);border-top:1px solid var(--line)}.positionVectorControls label{display:flex;align-items:center;gap:4px}.positionVectorControls span{margin-left:auto}
 .motion{display:flex;align-items:center;gap:11px;padding:9px 12px;border-top:1px solid var(--line);background:#f5f8fb}.motion button{min-width:52px;font-size:11px}.motion label{font-size:10px;color:var(--muted);white-space:nowrap}.motion input{flex:1;min-width:0}.motion output{font:12px ui-monospace,Consolas,monospace;min-width:70px;text-align:right;color:#1d5689}
 .sidebar{display:grid;gap:11px}.sideHead{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px;background:#f6f8fa;border-bottom:1px solid var(--line)}.sideHead button{font-size:10px;padding:3px 6px}.side>div:last-child{padding:11px 12px}.side label{display:grid;gap:4px;color:var(--muted);font-size:11px}.side input:not([type=checkbox]),.side select{width:100%;min-width:0;border:1px solid var(--line);border-radius:3px;padding:6px 7px;color:var(--ink);background:#fff}.side label.inline{display:flex;gap:6px;align-items:center;margin:9px 0}
@@ -27,7 +27,7 @@ h1,h2,h3,p{margin:0}h1{font-size:24px;font-weight:600;letter-spacing:-.035em;lin
 .plotControls{display:flex;align-items:center;gap:5px;padding:6px 10px;border-bottom:1px solid var(--line);font-size:10px;color:var(--muted)}.plotControls button{font-size:10px;padding:3px 7px}.plotControls output{font:10px ui-monospace,Consolas,monospace;width:38px;text-align:center}.plotControls span{margin-left:auto}
 .plotKey{display:flex;gap:18px;flex-wrap:wrap;font-size:10px;color:var(--muted);margin:10px 0 16px}.plotKey span{display:flex;align-items:center;gap:5px}.plotKey i{height:2px;width:15px}.absolute{background:#8d9bb3}.relative{background:#2462c0}.normal{background:#c27526}.tangent{background:#167d6e}
 .polygonStyle{border:1px solid var(--line);border-radius:4px;background:#fff;padding:7px 10px;margin-bottom:10px}.polygonStyle summary{font-size:11px;cursor:pointer;font-weight:600}.polygonStyleFields{display:flex;flex-wrap:wrap;align-items:end;gap:12px;margin-top:9px}.polygonStyleFields label{display:grid;gap:4px;font-size:10px;color:var(--muted)}.polygonStyleFields input{width:80px;padding:5px 7px;border:1px solid var(--line);border-radius:3px}.polygonStyleFields button,.polygonStyleFields select{font-size:11px;padding:5px 7px}
-.polygonExplanation{padding:9px 12px;border-top:1px solid var(--line);background:#fff}.polygonExplanation summary{font-size:11px;color:#23598b;cursor:pointer;font-weight:600}.polygonExplanationBody{margin-top:7px}.polygonExplanation label{display:flex;align-items:center;gap:6px;font-size:10px}.polygonExplanation select{max-width:100%;min-width:0;font-size:11px}.polygonExplanation p{font-size:11px;line-height:1.5;margin:5px 0}.polygonExplainHint{color:var(--muted)}.polygonEquation{font-family:ui-monospace,Consolas,monospace;color:#205388}.polygonValues{display:flex;flex-wrap:wrap;gap:6px 17px;margin:7px 0}.polygonValues dt{font-size:10px;color:var(--muted)}.polygonValues dd{margin:2px 0;font-size:11px;font-weight:600}[data-polygon-part]{cursor:pointer}.polygonPicked .polygonHit{stroke:#db9d43;opacity:.35}.polygonPicked>circle[fill=transparent]{fill:#efc776;opacity:.45}.polygonPicked>text{fill:#805013}
+.polygonExplanation{padding:9px 12px;border-top:1px solid var(--line);background:#fff}.polygonExplanation summary{font-size:11px;color:#23598b;cursor:pointer;font-weight:600}.polygonExplanationBody{margin-top:7px}.polygonExplanation label{display:flex;align-items:center;gap:6px;font-size:10px}.polygonExplanation select{max-width:100%;min-width:0;font-size:11px}.polygonExplanation p{font-size:11px;line-height:1.5;margin:5px 0}.polygonStepBody{margin-top:8px}.polygonStepControls{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:8px 0}.polygonStepControls button{font-size:11px;padding:4px 8px}.polygonStepControls output{font-size:11px;font-variant-numeric:tabular-nums}.polygonStepBody input[type=range]{flex:1;min-width:0}.polygonPending{visibility:hidden;pointer-events:none}.polygonStepCurrent .polygonHit{stroke:#efbb62;opacity:.3}.polygonStepCurrent>circle[fill=transparent]{fill:#efbb62;opacity:.4}.polygonExplainHint{color:var(--muted)}.polygonEquation{font-family:ui-monospace,Consolas,monospace;color:#205388}.polygonValues{display:flex;flex-wrap:wrap;gap:6px 17px;margin:7px 0}.polygonValues dt{font-size:10px;color:var(--muted)}.polygonValues dd{margin:2px 0;font-size:11px;font-weight:600}[data-polygon-part]{cursor:pointer}.polygonPicked .polygonHit{stroke:#db9d43;opacity:.35}.polygonPicked>circle[fill=transparent]{fill:#efc776;opacity:.45}.polygonPicked>text{fill:#805013}
 .equationCard{margin:13px 0}.equationCard summary{padding:11px 14px;font-weight:600;cursor:pointer}.equationCard>div{padding:0 16px 15px;font-size:12px;line-height:1.6}.equationCard p{margin:7px 0}.equationCard li{margin:6px 0}.equationCard h3{margin-top:11px}.reportMath{font:12px/1.7 ui-monospace,Consolas,monospace;padding:9px 12px;background:#f4f8fc;border-left:2px solid #8daac5;margin:8px 0}
 .tableScroll{overflow:auto}table{border-collapse:collapse;width:100%;font:11px ui-monospace,Consolas,monospace;text-align:right}th,td{padding:8px 11px;white-space:nowrap;border-top:1px solid #e5ebf0}th{font-weight:600;background:#f5f8fb;color:#4e667d}td:first-child,th:first-child{text-align:left}.data h3{padding:12px 14px 7px}.data .description{padding:8px 14px}
 .sweepCard{margin-top:15px}.sweepControls{display:flex;flex-wrap:wrap;align-items:end;gap:10px;padding:12px 14px;border-bottom:1px solid var(--line)}.sweepControls label{display:grid;gap:4px;font-size:11px;color:var(--muted)}.sweepControls input{width:110px;border:1px solid var(--line);border-radius:3px;padding:6px}.studyPlot{display:block;width:100%;max-height:215px}#sweepResult .description,#sweepResult .notice{margin:10px 14px}
@@ -39,7 +39,7 @@ dialog{border:1px solid #c3cfdb;border-radius:7px;color:var(--ink);padding:20px;
 @media(max-width:400px){.sidebar{grid-template-columns:1fr}.topActions{gap:1px}.topActions button{padding:4px 6px}.positionVectorControls{gap:5px}}
 /* The drawing surface owns the viewport; all editing UI floats above it. */
 @media screen{
- :root{--drawer-height:320px;--panel-shadow:0 3px 16px #20354b16}
+ :root{--drawer-height:42px;--panel-shadow:0 3px 16px #20354b16}
  html,body{width:100%;height:100%;overflow:hidden;background:#fbfcfe}
  [hidden]{display:none!important}
  main{display:contents;max-width:none;padding:0;margin:0}
@@ -55,7 +55,7 @@ dialog{border:1px solid #c3cfdb;border-radius:7px;color:var(--ink);padding:20px;
  .projectActions{gap:7px;flex-wrap:nowrap}.projectActions button{font-size:11px;padding:4px 8px;min-height:29px}.unitControl select{padding:4px 6px;font-size:11px}
  #board{position:fixed;inset:91px 0 47px;background:#fbfcfe;z-index:0}
  #sketch{width:100%;height:100%;min-height:0;max-height:none}
- .sketch>.cardHead{position:fixed;top:105px;left:80px;right:326px;padding:0;border:0;z-index:2;align-items:start;pointer-events:none}
+ .sketch>.cardHead{position:fixed;top:105px;left:128px;right:326px;padding:0;border:0;z-index:2;align-items:start;pointer-events:none}
  .sketch>.cardHead p{margin:0;max-width:540px;font-size:11px;line-height:1.5;background:#fbfcfed9;padding:4px 6px;border-radius:3px}
  #sketchUnit{display:none}
  .toolbar{position:fixed;z-index:20;left:12px;top:105px;display:flex;flex-direction:column;flex-wrap:nowrap;width:48px;padding:5px;gap:4px;background:#fff;border:1px solid var(--line);border-radius:7px;box-shadow:var(--panel-shadow)}
@@ -64,13 +64,13 @@ dialog{border:1px solid #c3cfdb;border-radius:7px;color:var(--ink);padding:20px;
  #constraintPopover label{display:grid;gap:7px;font-size:11px}#constraintPopover select{width:100%;font-size:12px}
  #constraintPopover h3{font-size:11px;margin:0 0 8px;color:var(--muted)}#constraintPopover button{width:100%;height:33px;justify-content:flex-start;gap:9px;padding:5px 7px;font-size:12px}#constraintPopover .toolIcon{width:19px;height:19px}
  .sidebar{position:fixed;z-index:15;top:105px;right:12px;bottom:60px;width:286px;display:block;background:#fff;border:1px solid var(--line);border-radius:7px;overflow:auto;box-shadow:var(--panel-shadow);overscroll-behavior:contain}
- .panelTitle{display:flex;align-items:center;justify-content:space-between;padding:7px 10px;border-bottom:1px solid var(--line);background:#fff;position:sticky;top:0;z-index:2}.panelTitle h2{font-size:12px}.panelTitle button,#closeAnalysis{border-color:transparent;width:28px;height:28px;padding:4px}
+ .panelTitle{display:flex;align-items:center;justify-content:space-between;padding:7px 10px;border-bottom:1px solid var(--line);background:#fff;position:sticky;top:0;z-index:2}.panelTitle h2{font-size:12px}.panelTitle>#status{margin-left:auto;margin-right:8px}.panelTitle button,#closeAnalysis{border-color:transparent;width:28px;height:28px;padding:4px}
  .sidebar .card{border:0;border-radius:0;border-bottom:1px solid var(--line)}.sidebar .sideHead{background:#fafbfd}.sidebar h2{font-size:12px}.sidebar .fields.three{grid-template-columns:repeat(3,minmax(0,1fr))}
  .workspaceDrawer{position:fixed;z-index:16;left:80px;right:310px;bottom:60px;height:var(--drawer-height);display:flex;flex-direction:column;background:#fff;border:1px solid #c8d4df;border-radius:7px;box-shadow:var(--panel-shadow);min-width:0}
  .drawerResize{position:absolute;left:0;right:0;top:-6px;height:12px;cursor:ns-resize;touch-action:none;z-index:4}.drawerResize:after{content:"";position:absolute;left:calc(50% - 18px);width:36px;height:3px;top:6px;background:#c1cdd8;border-radius:3px}
  .drawerHeader{height:39px;flex:none;display:flex;align-items:center;gap:7px;padding:0 7px 0 12px;border-bottom:1px solid var(--line)}.drawerTabs{display:flex;gap:14px;min-width:0;overflow:auto;align-self:stretch;flex:1}.drawerTabs button{border:0;border-radius:0;border-bottom:2px solid transparent;background:transparent;padding:4px 0;font-size:11px;white-space:nowrap}.drawerTabs button[aria-selected=true]{color:#1d6098;border-bottom-color:#2467ad;font-weight:650}
  #retractAnalysis{width:28px;height:28px;padding:4px;border-color:transparent;flex:none}.workspaceDrawer.collapsed .drawerBody{display:none}
- .sidebar details.side>summary{cursor:pointer;list-style:inside;display:list-item;font-weight:600}.sidebar details.side>summary::marker{color:#7b8ea3}.sidebar .sideBody{padding:10px 12px}.sidebar .sideBody>#status{display:inline-block;margin-bottom:8px}.sidebar .sideBody>#rename{float:right;font-size:10px;padding:3px 7px}.sidebar .sideBody>div{clear:both}
+ .sidebar details.side>summary{cursor:pointer;list-style:none;display:flex;justify-content:flex-start;font-weight:600}.sidebar details.side>summary::-webkit-details-marker{display:none}.sidebar details.side>summary::before{content:"";width:7px;height:7px;flex-shrink:0;border-right:2px solid #7b8ea3;border-bottom:2px solid #7b8ea3;transform:rotate(-45deg);margin-right:4px}.sidebar details.side[open]>summary::before{transform:rotate(45deg)}.sidebar .sideBody{padding:10px 12px}.sidebar .sideBody>#rename{float:right;font-size:10px;padding:3px 7px}.sidebar .sideBody>div{clear:both}
  .toolbar{max-height:calc(100vh - 165px);overflow:visible}.toolbar #redo{border-color:transparent}.list button[aria-pressed=true]{background:#fff2d9;border-color:#dd991f;color:#805309}
  .drawerBody{overflow:auto;padding:12px;min-height:0;flex:1;overscroll-behavior:contain}
  .drawerBody .analysisHead{margin:0 0 9px;gap:8px}.analysisHead .eyebrow{display:none}.analysisHead h2{font-size:12px}.analysisOptions{gap:10px;font-size:10px}
@@ -78,7 +78,7 @@ dialog{border:1px solid #c3cfdb;border-radius:7px;color:var(--ink);padding:20px;
  .drawerBody .plot .cardHead{padding:8px 10px}.drawerBody .plot .cardHead h2{font-size:12px}.plot svg{background:#fff;max-height:none}.plots.expanded .plot svg{max-height:none}.plotControls{padding:4px 7px}.plotControls button{min-height:24px;padding:3px 5px}.plotControls .toolIcon{width:14px;height:14px}.plotControls span{display:none}
  .drawerBody .equationCard,.drawerBody .sweepCard{margin:0}.drawerBody .plotKey{margin-bottom:0}.polygonStyle{margin-bottom:9px}
  #canvasViewControls{position:fixed;z-index:10;left:80px;bottom:calc(var(--drawer-height) + 70px);padding:5px 7px;gap:5px;border:1px solid var(--line);border-radius:5px;box-shadow:var(--panel-shadow);flex-wrap:nowrap;background:#fff;max-width:calc(100vw - 110px)}
- #canvasViewControls input{width:56px;font-size:11px}#canvasViewControls button{width:26px;height:26px;padding:4px;min-height:26px}#canvasViewControls .toolIcon{width:17px;height:17px}#canvasViewControls span{display:none}
+ #canvasViewControls input{width:56px;font-size:11px}#canvasViewControls button{width:26px;height:26px;padding:4px;min-height:26px}#canvasViewControls .toolIcon{width:17px;height:17px}#canvasViewControls span{display:none}#canvasViewControls .gridSnap{display:flex;align-items:center;gap:4px;white-space:nowrap}#canvasViewControls #gridSnap{width:auto;padding:0;margin:0;accent-color:var(--accent)}
  #canvasVectors{position:fixed;z-index:8;top:149px;left:86px;right:326px;border:0;background:transparent;padding:0;gap:12px;font-size:10px}#canvasVectors label{background:#fbfcfedb;border-radius:3px;padding:3px 4px}#sketchVectorStatus{flex-basis:100%;max-width:510px;background:#fbfcfedb;font-size:10px;margin:0}
  .motion{position:fixed;z-index:25;inset:auto 0 0;height:47px;background:#fff;padding:7px 16px;gap:14px}.motion button{min-width:32px;width:32px;height:31px;padding:5px}.motion input{max-width:none}.motion output{min-width:76px}.motion label{font-size:11px}
  .properties-hidden .workspaceDrawer{right:12px}.properties-hidden .sketch>.cardHead,.properties-hidden #canvasVectors{right:24px}
@@ -88,11 +88,57 @@ dialog{border:1px solid #c3cfdb;border-radius:7px;color:var(--ink);padding:20px;
 @media screen and (max-width:700px){
  .top{padding:0 9px;gap:7px}.brand{font-size:13px;gap:5px}.topActions{gap:0}.topActions button{width:28px;padding:5px}.topActions .toolIcon{width:17px;height:17px}
  .project{padding:0 10px}.project h1{font-size:12px;max-width:36vw}.projectActions{gap:4px}.projectActions button{padding:3px 6px}.projectActions .buttonText{display:none}.unitControl{font-size:0}.unitControl select{font-size:11px}
- .toolbar{left:7px;width:42px;padding:3px;gap:1px}.toolbar button{width:34px;height:34px}.sketch>.cardHead{left:60px;right:14px}#canvasVectors{left:64px;right:12px;top:164px;gap:4px}
+ .toolbar{left:7px;width:42px;padding:3px;gap:1px}.toolbar button{width:34px;height:34px}.sketch>.cardHead{left:128px;right:14px}#canvasVectors{left:64px;right:12px;top:164px;gap:4px}
  .sidebar{top:101px;right:7px;bottom:56px;width:min(286px,calc(100vw - 64px));z-index:22}
  .workspaceDrawer,.properties-hidden .workspaceDrawer{left:57px;right:7px;bottom:56px}.drawerHeader{padding-left:8px}.drawerTabs{gap:10px}.drawerTabs button{font-size:10px}.drawerBody{padding:8px}.drawerBody .plots{grid-template-columns:1fr}
  #canvasViewControls{left:57px;max-width:calc(100vw - 64px);gap:3px;padding:4px}#canvasViewControls input{width:47px}#canvasViewControls label{font-size:9px}.motion{padding:6px 10px;gap:8px}.motion label{font-size:10px}
 }
+@media screen{
+ :root{--soft:#f5f8fb;--hover:#edf3f9;--active:#e1ecf7;--canvas:#fbfcfe;--canvas-ink:#1c2d42;--canvas-muted:#596f87;--canvas-grid:#00000012;--canvas-axis:#00000030;--accent-text:#fff}
+ :root[data-theme=dark]{color-scheme:dark;--ink:#e2ebf5;--muted:#a2b3c6;--line:#3c4e63;--surface:#202c3b;--page:#15202e;--dark:#111a26;--soft:#263447;--hover:#31445a;--active:#364d66;--panel-shadow:0 3px 16px #0005}
+ html,body{background:var(--page)}
+ button,select,input:not([type=checkbox]):not([type=range]),.side input:not([type=checkbox]),.side select,.viewControls input{background:var(--surface);color:var(--ink);border-color:var(--line)}
+ button:hover,select:hover{background:var(--hover);border-color:var(--muted)}
+ button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline-color:var(--accent)}
+ button.active,.toolbar button.active{background:var(--active);color:var(--ink);border-color:var(--accent)}
+ .primary,.primary:hover{background:var(--accent);color:var(--accent-text);border-color:var(--accent)}.primary:hover{filter:brightness(.92)}
+ .topActions button{background:transparent;color:#e0e8f0;border-color:transparent}.topActions button:hover{background:#304458;border-color:#62758b}
+ .project,.toolbar,.sidebar,.panelTitle,.workspaceDrawer,#constraintPopover,#canvasViewControls,.motion,.polygonStyle,.polygonExplanation,dialog,.exampleTile{background:var(--surface);border-color:var(--line)}
+ .toolbar button:hover{background:var(--hover)}
+ .cardHead,.viewControls,.plotControls,th,td{border-color:var(--line)}
+ .sideHead,.sidebar .sideHead,.reportMath,th{background:var(--soft);color:var(--ink)}
+ .motion output,.unit,.eyebrow,.exampleFamily,.polygonExplanation summary,.polygonEquation{color:var(--muted)}
+ .drawerTabs button[aria-selected=true]{color:var(--ink);border-bottom-color:var(--accent)}
+ .drawerResize:after{background:var(--muted)}
+ #board{background:var(--canvas)}
+ .sketch>.cardHead p,#canvasVectors label,#sketchVectorStatus{background:var(--canvas);color:var(--canvas-muted)}
+ #sketch pattern path{stroke:var(--canvas-grid)}
+ #sketch>line[stroke="#b3c2d2"]{stroke:var(--canvas-axis)}
+ #sketch text[fill="#1c2d42"]{fill:var(--canvas-ink)}
+ #sketch text[fill="#788c9e"],#sketch text[fill="#596f87"]{fill:var(--canvas-muted)}
+ #sketch [stroke="#788c9e"],#sketch [stroke="#596f87"]{stroke:var(--canvas-muted)}
+ #sketch text[paint-order=stroke]{stroke:var(--canvas)}
+ #sketch [fill=white],#sketch [fill="#ffffff"],#sketch [fill="#f0f5fa"]{fill:var(--canvas)}
+ #sketch text[fill="#274560"]{fill:var(--wheel-color,#416e9e)}
+ #sketch [stroke="#665649"]{stroke:var(--rope-color,#665649)}
+ .plot svg{background:var(--surface)}
+ :root[data-theme=dark] .plot svg pattern path{stroke:var(--line)}
+ :root[data-theme=dark] .plot svg text,:root[data-theme=dark] .studyPlot text{fill:var(--ink)}
+ :root[data-theme=dark] .plot svg text[paint-order=stroke]{stroke:var(--surface)}
+ :root[data-theme=dark] .plot svg [stroke="#cbd9eb"]{stroke:var(--line)}
+ :root[data-theme=dark] .badge.good{color:#9ce0be;background:#234a3c}
+ :root[data-theme=dark] .notice,:root[data-theme=dark] .badge{color:#f0d19b;background:#4a3c25}
+ :root[data-theme=dark] .remove{color:#ffabb6}
+ :root[data-theme=dark] .list button[aria-pressed=true]{background:#4a3c25;color:#f0d19b}
+ #appearanceDialog{width:min(95vw,560px)}
+ #appearanceDialog fieldset{border:1px solid var(--line);border-radius:5px;margin:14px 0;padding:12px}
+ #appearanceDialog legend{font-weight:600}
+ .appearanceFields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+ .appearanceFields label{display:grid;gap:6px;font-size:12px;color:var(--muted)}
+ .appearanceFields input[type=color]{width:100%;height:34px;padding:3px;border:1px solid var(--line);border-radius:4px;cursor:pointer}
+ .appearanceFields select{width:100%;min-width:0;height:34px}
+}
+@media screen and (max-width:400px){.brand .logo{display:none}.topActions button{width:25px}}
 @media print{
  html,body{padding:0;margin:0;background:#fff;color:#172438}
  body>header,body>main,dialog{display:none!important}

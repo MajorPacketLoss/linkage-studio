@@ -71,7 +71,7 @@ function gearDrawing(source,q,map,scale,print=false){
   for(const [i,g] of (source.gears??[]).entries()){
     if(g.kind==='pulley'){out+=pulleyDrawing(source,q,i,map,scale,print);continue;}
     const center=map(...gearCenter(source,q,g)),r=gearRadius(g)*scale,angle=q[2*source.points.length+i]??g.angle;
-    const colour=print?"#244867":"#416e9e",points=[];
+    const colour=print?"#244867":"var(--wheel-color,#416e9e)",points=[];
     const internal=(source.meshes??[]).some(m=>m.type==="internal"&&(m.a===i||m.b===i)&&g.teeth>source.gears[m.a===i?m.b:m.a].teeth);
     // Schematic tooth outline, with a separate exact pitch circle.
     for(let tooth=0;tooth<g.teeth;tooth++){

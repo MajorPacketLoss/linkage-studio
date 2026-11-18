@@ -23,7 +23,7 @@ h1,h2,h3,p{margin:0}h1{font-size:24px;font-weight:600;letter-spacing:-.035em;lin
 .card{background:var(--surface);border:1px solid var(--line);border-radius:5px;overflow:hidden}.cardHead{padding:12px 14px;display:flex;justify-content:space-between;gap:12px;align-items:center;border-bottom:1px solid #e8edf2}.cardHead p{font-size:11px;color:var(--muted);margin-top:4px;line-height:1.4}.unit{font:11px ui-monospace,Consolas,monospace;color:#687f95;white-space:nowrap}
 .toolbar{display:flex;align-items:center;gap:4px;padding:8px 10px;background:#f5f7fa;border-bottom:1px solid var(--line);flex-wrap:wrap}.toolbar button,.toolbar select{font-size:11px;padding:6px 9px}.toolbar button:first-child{margin-right:5px}
 .viewControls{display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:7px 10px;border-bottom:1px solid #e1e8ef;background:#fcfdfe;font-size:10px;color:var(--muted)}.viewControls input{width:63px;border:1px solid var(--line);border-radius:3px;padding:4px;background:#fff;color:var(--ink)}.viewControls button{font-size:11px;padding:3px 8px}.viewControls span{margin-left:auto}
-#board{background:#f9fbfd;position:relative}#sketch{display:block;width:100%;min-height:280px;max-height:570px;user-select:none;touch-action:none}#sketch.panning,#sketch.panning *{cursor:grabbing!important}
+#dimensionEdit{position:absolute;z-index:1;height:28px;padding:3px 7px;font:12px ui-monospace,monospace}#board{background:#f9fbfd;position:relative}#sketch{display:block;width:100%;min-height:280px;max-height:570px;user-select:none;touch-action:none}#sketch.panning,#sketch.panning *{cursor:grabbing!important}
 .positionVectorControls{display:flex;gap:15px;flex-wrap:wrap;align-items:center;padding:7px 12px;font-size:10px;color:var(--muted);border-top:1px solid var(--line)}.positionVectorControls label{display:flex;align-items:center;gap:4px}.positionVectorControls span{margin-left:auto}
 .motion{display:flex;align-items:center;gap:11px;padding:9px 12px;border-top:1px solid var(--line);background:#f5f8fb}.motion button{min-width:52px;font-size:11px}.motion label{font-size:10px;color:var(--muted);white-space:nowrap}.motion input{flex:1;min-width:0}.motion output{font:12px ui-monospace,Consolas,monospace;min-width:70px;text-align:right;color:#1d5689}
 .sidebar{display:grid;gap:11px}.sideHead{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px;background:#f6f8fa;border-bottom:1px solid var(--line)}.sideHead button{font-size:10px;padding:3px 6px}.side>div:last-child{padding:11px 12px}.side label{display:grid;gap:4px;color:var(--muted);font-size:11px}.side input:not([type=checkbox]),.side select{width:100%;min-width:0;border:1px solid var(--line);border-radius:3px;padding:6px 7px;color:var(--ink);background:#fff}.side label.inline{display:flex;gap:6px;align-items:center;margin:9px 0}
@@ -34,7 +34,7 @@ h1,h2,h3,p{margin:0}h1{font-size:24px;font-weight:600;letter-spacing:-.035em;lin
 .plotControls{display:flex;align-items:center;gap:5px;padding:6px 10px;border-bottom:1px solid var(--line);font-size:10px;color:var(--muted)}.plotControls button{font-size:10px;padding:3px 7px}.plotControls output{font:10px ui-monospace,Consolas,monospace;width:38px;text-align:center}.plotControls span{margin-left:auto}
 .plotKey{display:flex;gap:18px;flex-wrap:wrap;font-size:10px;color:var(--muted);margin:10px 0 16px}.plotKey span{display:flex;align-items:center;gap:5px}.plotKey i{height:2px;width:15px}.absolute{background:#8d9bb3}.relative{background:#2462c0}.normal{background:#c27526}.tangent{background:#167d6e}
 .polygonStyle{border:1px solid var(--line);border-radius:4px;background:#fff;padding:7px 10px;margin-bottom:10px}.polygonStyle summary{font-size:11px;cursor:pointer;font-weight:600}.polygonStyleFields{display:flex;flex-wrap:wrap;align-items:end;gap:12px;margin-top:9px}.polygonStyleFields label{display:grid;gap:4px;font-size:10px;color:var(--muted)}.polygonStyleFields input{width:80px;padding:5px 7px;border:1px solid var(--line);border-radius:3px}.polygonStyleFields button,.polygonStyleFields select{font-size:11px;padding:5px 7px}
-.polygonExplanation{padding:9px 12px;border-top:1px solid var(--line);background:#fff}.polygonExplanation summary{font-size:11px;color:#23598b;cursor:pointer;font-weight:600}.polygonExplanationBody{margin-top:7px}.polygonExplanation label{display:flex;align-items:center;gap:6px;font-size:10px}.polygonExplanation select{max-width:100%;min-width:0;font-size:11px}.polygonExplanation p{font-size:11px;line-height:1.5;margin:5px 0}.polygonExplainHint{color:var(--muted)}.polygonEquation{font-family:ui-monospace,Consolas,monospace;color:#205388}.polygonValues{display:flex;flex-wrap:wrap;gap:6px 17px;margin:7px 0}.polygonValues dt{font-size:10px;color:var(--muted)}.polygonValues dd{margin:2px 0;font-size:11px;font-weight:600}[data-polygon-part]{cursor:pointer}.polygonPicked .polygonHit{stroke:#db9d43;opacity:.35}.polygonPicked>circle[fill=transparent]{fill:#efc776;opacity:.45}.polygonPicked>text{fill:#805013}
+.polygonExplanation{padding:9px 12px;border-top:1px solid var(--line);background:#fff}.polygonExplanation summary{font-size:11px;color:#23598b;cursor:pointer;font-weight:600}.polygonExplanationBody{margin-top:7px}.polygonExplanation label{display:flex;align-items:center;gap:6px;font-size:10px}.polygonExplanation select{max-width:100%;min-width:0;font-size:11px}.polygonExplanation p{font-size:11px;line-height:1.5;margin:5px 0}.polygonStepBody{margin-top:8px}.polygonStepControls{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:8px 0}.polygonStepControls button{font-size:11px;padding:4px 8px}.polygonStepControls output{font-size:11px;font-variant-numeric:tabular-nums}.polygonStepBody input[type=range]{flex:1;min-width:0}.polygonPending{visibility:hidden;pointer-events:none}.polygonStepCurrent .polygonHit{stroke:#efbb62;opacity:.3}.polygonStepCurrent>circle[fill=transparent]{fill:#efbb62;opacity:.4}.polygonExplainHint{color:var(--muted)}.polygonEquation{font-family:ui-monospace,Consolas,monospace;color:#205388}.polygonValues{display:flex;flex-wrap:wrap;gap:6px 17px;margin:7px 0}.polygonValues dt{font-size:10px;color:var(--muted)}.polygonValues dd{margin:2px 0;font-size:11px;font-weight:600}[data-polygon-part]{cursor:pointer}.polygonPicked .polygonHit{stroke:#db9d43;opacity:.35}.polygonPicked>circle[fill=transparent]{fill:#efc776;opacity:.45}.polygonPicked>text{fill:#805013}
 .equationCard{margin:13px 0}.equationCard summary{padding:11px 14px;font-weight:600;cursor:pointer}.equationCard>div{padding:0 16px 15px;font-size:12px;line-height:1.6}.equationCard p{margin:7px 0}.equationCard li{margin:6px 0}.equationCard h3{margin-top:11px}.reportMath{font:12px/1.7 ui-monospace,Consolas,monospace;padding:9px 12px;background:#f4f8fc;border-left:2px solid #8daac5;margin:8px 0}
 .tableScroll{overflow:auto}table{border-collapse:collapse;width:100%;font:11px ui-monospace,Consolas,monospace;text-align:right}th,td{padding:8px 11px;white-space:nowrap;border-top:1px solid #e5ebf0}th{font-weight:600;background:#f5f8fb;color:#4e667d}td:first-child,th:first-child{text-align:left}.data h3{padding:12px 14px 7px}.data .description{padding:8px 14px}
 .sweepCard{margin-top:15px}.sweepControls{display:flex;flex-wrap:wrap;align-items:end;gap:10px;padding:12px 14px;border-bottom:1px solid var(--line)}.sweepControls label{display:grid;gap:4px;font-size:11px;color:var(--muted)}.sweepControls input{width:110px;border:1px solid var(--line);border-radius:3px;padding:6px}.studyPlot{display:block;width:100%;max-height:215px}#sweepResult .description,#sweepResult .notice{margin:10px 14px}
@@ -46,7 +46,7 @@ dialog{border:1px solid #c3cfdb;border-radius:7px;color:var(--ink);padding:20px;
 @media(max-width:400px){.sidebar{grid-template-columns:1fr}.topActions{gap:1px}.topActions button{padding:4px 6px}.positionVectorControls{gap:5px}}
 /* The drawing surface owns the viewport; all editing UI floats above it. */
 @media screen{
- :root{--drawer-height:320px;--panel-shadow:0 3px 16px #20354b16}
+ :root{--drawer-height:42px;--panel-shadow:0 3px 16px #20354b16}
  html,body{width:100%;height:100%;overflow:hidden;background:#fbfcfe}
  [hidden]{display:none!important}
  main{display:contents;max-width:none;padding:0;margin:0}
@@ -62,7 +62,7 @@ dialog{border:1px solid #c3cfdb;border-radius:7px;color:var(--ink);padding:20px;
  .projectActions{gap:7px;flex-wrap:nowrap}.projectActions button{font-size:11px;padding:4px 8px;min-height:29px}.unitControl select{padding:4px 6px;font-size:11px}
  #board{position:fixed;inset:91px 0 47px;background:#fbfcfe;z-index:0}
  #sketch{width:100%;height:100%;min-height:0;max-height:none}
- .sketch>.cardHead{position:fixed;top:105px;left:80px;right:326px;padding:0;border:0;z-index:2;align-items:start;pointer-events:none}
+ .sketch>.cardHead{position:fixed;top:105px;left:128px;right:326px;padding:0;border:0;z-index:2;align-items:start;pointer-events:none}
  .sketch>.cardHead p{margin:0;max-width:540px;font-size:11px;line-height:1.5;background:#fbfcfed9;padding:4px 6px;border-radius:3px}
  #sketchUnit{display:none}
  .toolbar{position:fixed;z-index:20;left:12px;top:105px;display:flex;flex-direction:column;flex-wrap:nowrap;width:48px;padding:5px;gap:4px;background:#fff;border:1px solid var(--line);border-radius:7px;box-shadow:var(--panel-shadow)}
@@ -71,13 +71,13 @@ dialog{border:1px solid #c3cfdb;border-radius:7px;color:var(--ink);padding:20px;
  #constraintPopover label{display:grid;gap:7px;font-size:11px}#constraintPopover select{width:100%;font-size:12px}
  #constraintPopover h3{font-size:11px;margin:0 0 8px;color:var(--muted)}#constraintPopover button{width:100%;height:33px;justify-content:flex-start;gap:9px;padding:5px 7px;font-size:12px}#constraintPopover .toolIcon{width:19px;height:19px}
  .sidebar{position:fixed;z-index:15;top:105px;right:12px;bottom:60px;width:286px;display:block;background:#fff;border:1px solid var(--line);border-radius:7px;overflow:auto;box-shadow:var(--panel-shadow);overscroll-behavior:contain}
- .panelTitle{display:flex;align-items:center;justify-content:space-between;padding:7px 10px;border-bottom:1px solid var(--line);background:#fff;position:sticky;top:0;z-index:2}.panelTitle h2{font-size:12px}.panelTitle button,#closeAnalysis{border-color:transparent;width:28px;height:28px;padding:4px}
+ .panelTitle{display:flex;align-items:center;justify-content:space-between;padding:7px 10px;border-bottom:1px solid var(--line);background:#fff;position:sticky;top:0;z-index:2}.panelTitle h2{font-size:12px}.panelTitle>#status{margin-left:auto;margin-right:8px}.panelTitle button,#closeAnalysis{border-color:transparent;width:28px;height:28px;padding:4px}
  .sidebar .card{border:0;border-radius:0;border-bottom:1px solid var(--line)}.sidebar .sideHead{background:#fafbfd}.sidebar h2{font-size:12px}.sidebar .fields.three{grid-template-columns:repeat(3,minmax(0,1fr))}
  .workspaceDrawer{position:fixed;z-index:16;left:80px;right:310px;bottom:60px;height:var(--drawer-height);display:flex;flex-direction:column;background:#fff;border:1px solid #c8d4df;border-radius:7px;box-shadow:var(--panel-shadow);min-width:0}
  .drawerResize{position:absolute;left:0;right:0;top:-6px;height:12px;cursor:ns-resize;touch-action:none;z-index:4}.drawerResize:after{content:"";position:absolute;left:calc(50% - 18px);width:36px;height:3px;top:6px;background:#c1cdd8;border-radius:3px}
  .drawerHeader{height:39px;flex:none;display:flex;align-items:center;gap:7px;padding:0 7px 0 12px;border-bottom:1px solid var(--line)}.drawerTabs{display:flex;gap:14px;min-width:0;overflow:auto;align-self:stretch;flex:1}.drawerTabs button{border:0;border-radius:0;border-bottom:2px solid transparent;background:transparent;padding:4px 0;font-size:11px;white-space:nowrap}.drawerTabs button[aria-selected=true]{color:#1d6098;border-bottom-color:#2467ad;font-weight:650}
  #retractAnalysis{width:28px;height:28px;padding:4px;border-color:transparent;flex:none}.workspaceDrawer.collapsed .drawerBody{display:none}
- .sidebar details.side>summary{cursor:pointer;list-style:inside;display:list-item;font-weight:600}.sidebar details.side>summary::marker{color:#7b8ea3}.sidebar .sideBody{padding:10px 12px}.sidebar .sideBody>#status{display:inline-block;margin-bottom:8px}.sidebar .sideBody>#rename{float:right;font-size:10px;padding:3px 7px}.sidebar .sideBody>div{clear:both}
+ .sidebar details.side>summary{cursor:pointer;list-style:none;display:flex;justify-content:flex-start;font-weight:600}.sidebar details.side>summary::-webkit-details-marker{display:none}.sidebar details.side>summary::before{content:"";width:7px;height:7px;flex-shrink:0;border-right:2px solid #7b8ea3;border-bottom:2px solid #7b8ea3;transform:rotate(-45deg);margin-right:4px}.sidebar details.side[open]>summary::before{transform:rotate(45deg)}.sidebar .sideBody{padding:10px 12px}.sidebar .sideBody>#rename{float:right;font-size:10px;padding:3px 7px}.sidebar .sideBody>div{clear:both}
  .toolbar{max-height:calc(100vh - 165px);overflow:visible}.toolbar #redo{border-color:transparent}.list button[aria-pressed=true]{background:#fff2d9;border-color:#dd991f;color:#805309}
  .drawerBody{overflow:auto;padding:12px;min-height:0;flex:1;overscroll-behavior:contain}
  .drawerBody .analysisHead{margin:0 0 9px;gap:8px}.analysisHead .eyebrow{display:none}.analysisHead h2{font-size:12px}.analysisOptions{gap:10px;font-size:10px}
@@ -85,7 +85,7 @@ dialog{border:1px solid #c3cfdb;border-radius:7px;color:var(--ink);padding:20px;
  .drawerBody .plot .cardHead{padding:8px 10px}.drawerBody .plot .cardHead h2{font-size:12px}.plot svg{background:#fff;max-height:none}.plots.expanded .plot svg{max-height:none}.plotControls{padding:4px 7px}.plotControls button{min-height:24px;padding:3px 5px}.plotControls .toolIcon{width:14px;height:14px}.plotControls span{display:none}
  .drawerBody .equationCard,.drawerBody .sweepCard{margin:0}.drawerBody .plotKey{margin-bottom:0}.polygonStyle{margin-bottom:9px}
  #canvasViewControls{position:fixed;z-index:10;left:80px;bottom:calc(var(--drawer-height) + 70px);padding:5px 7px;gap:5px;border:1px solid var(--line);border-radius:5px;box-shadow:var(--panel-shadow);flex-wrap:nowrap;background:#fff;max-width:calc(100vw - 110px)}
- #canvasViewControls input{width:56px;font-size:11px}#canvasViewControls button{width:26px;height:26px;padding:4px;min-height:26px}#canvasViewControls .toolIcon{width:17px;height:17px}#canvasViewControls span{display:none}
+ #canvasViewControls input{width:56px;font-size:11px}#canvasViewControls button{width:26px;height:26px;padding:4px;min-height:26px}#canvasViewControls .toolIcon{width:17px;height:17px}#canvasViewControls span{display:none}#canvasViewControls .gridSnap{display:flex;align-items:center;gap:4px;white-space:nowrap}#canvasViewControls #gridSnap{width:auto;padding:0;margin:0;accent-color:var(--accent)}
  #canvasVectors{position:fixed;z-index:8;top:149px;left:86px;right:326px;border:0;background:transparent;padding:0;gap:12px;font-size:10px}#canvasVectors label{background:#fbfcfedb;border-radius:3px;padding:3px 4px}#sketchVectorStatus{flex-basis:100%;max-width:510px;background:#fbfcfedb;font-size:10px;margin:0}
  .motion{position:fixed;z-index:25;inset:auto 0 0;height:47px;background:#fff;padding:7px 16px;gap:14px}.motion button{min-width:32px;width:32px;height:31px;padding:5px}.motion input{max-width:none}.motion output{min-width:76px}.motion label{font-size:11px}
  .properties-hidden .workspaceDrawer{right:12px}.properties-hidden .sketch>.cardHead,.properties-hidden #canvasVectors{right:24px}
@@ -95,11 +95,57 @@ dialog{border:1px solid #c3cfdb;border-radius:7px;color:var(--ink);padding:20px;
 @media screen and (max-width:700px){
  .top{padding:0 9px;gap:7px}.brand{font-size:13px;gap:5px}.topActions{gap:0}.topActions button{width:28px;padding:5px}.topActions .toolIcon{width:17px;height:17px}
  .project{padding:0 10px}.project h1{font-size:12px;max-width:36vw}.projectActions{gap:4px}.projectActions button{padding:3px 6px}.projectActions .buttonText{display:none}.unitControl{font-size:0}.unitControl select{font-size:11px}
- .toolbar{left:7px;width:42px;padding:3px;gap:1px}.toolbar button{width:34px;height:34px}.sketch>.cardHead{left:60px;right:14px}#canvasVectors{left:64px;right:12px;top:164px;gap:4px}
+ .toolbar{left:7px;width:42px;padding:3px;gap:1px}.toolbar button{width:34px;height:34px}.sketch>.cardHead{left:128px;right:14px}#canvasVectors{left:64px;right:12px;top:164px;gap:4px}
  .sidebar{top:101px;right:7px;bottom:56px;width:min(286px,calc(100vw - 64px));z-index:22}
  .workspaceDrawer,.properties-hidden .workspaceDrawer{left:57px;right:7px;bottom:56px}.drawerHeader{padding-left:8px}.drawerTabs{gap:10px}.drawerTabs button{font-size:10px}.drawerBody{padding:8px}.drawerBody .plots{grid-template-columns:1fr}
  #canvasViewControls{left:57px;max-width:calc(100vw - 64px);gap:3px;padding:4px}#canvasViewControls input{width:47px}#canvasViewControls label{font-size:9px}.motion{padding:6px 10px;gap:8px}.motion label{font-size:10px}
 }
+@media screen{
+ :root{--soft:#f5f8fb;--hover:#edf3f9;--active:#e1ecf7;--canvas:#fbfcfe;--canvas-ink:#1c2d42;--canvas-muted:#596f87;--canvas-grid:#00000012;--canvas-axis:#00000030;--accent-text:#fff}
+ :root[data-theme=dark]{color-scheme:dark;--ink:#e2ebf5;--muted:#a2b3c6;--line:#3c4e63;--surface:#202c3b;--page:#15202e;--dark:#111a26;--soft:#263447;--hover:#31445a;--active:#364d66;--panel-shadow:0 3px 16px #0005}
+ html,body{background:var(--page)}
+ button,select,input:not([type=checkbox]):not([type=range]),.side input:not([type=checkbox]),.side select,.viewControls input{background:var(--surface);color:var(--ink);border-color:var(--line)}
+ button:hover,select:hover{background:var(--hover);border-color:var(--muted)}
+ button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline-color:var(--accent)}
+ button.active,.toolbar button.active{background:var(--active);color:var(--ink);border-color:var(--accent)}
+ .primary,.primary:hover{background:var(--accent);color:var(--accent-text);border-color:var(--accent)}.primary:hover{filter:brightness(.92)}
+ .topActions button{background:transparent;color:#e0e8f0;border-color:transparent}.topActions button:hover{background:#304458;border-color:#62758b}
+ .project,.toolbar,.sidebar,.panelTitle,.workspaceDrawer,#constraintPopover,#canvasViewControls,.motion,.polygonStyle,.polygonExplanation,dialog,.exampleTile{background:var(--surface);border-color:var(--line)}
+ .toolbar button:hover{background:var(--hover)}
+ .cardHead,.viewControls,.plotControls,th,td{border-color:var(--line)}
+ .sideHead,.sidebar .sideHead,.reportMath,th{background:var(--soft);color:var(--ink)}
+ .motion output,.unit,.eyebrow,.exampleFamily,.polygonExplanation summary,.polygonEquation{color:var(--muted)}
+ .drawerTabs button[aria-selected=true]{color:var(--ink);border-bottom-color:var(--accent)}
+ .drawerResize:after{background:var(--muted)}
+ #board{background:var(--canvas)}
+ .sketch>.cardHead p,#canvasVectors label,#sketchVectorStatus{background:var(--canvas);color:var(--canvas-muted)}
+ #sketch pattern path{stroke:var(--canvas-grid)}
+ #sketch>line[stroke="#b3c2d2"]{stroke:var(--canvas-axis)}
+ #sketch text[fill="#1c2d42"]{fill:var(--canvas-ink)}
+ #sketch text[fill="#788c9e"],#sketch text[fill="#596f87"]{fill:var(--canvas-muted)}
+ #sketch [stroke="#788c9e"],#sketch [stroke="#596f87"]{stroke:var(--canvas-muted)}
+ #sketch text[paint-order=stroke]{stroke:var(--canvas)}
+ #sketch [fill=white],#sketch [fill="#ffffff"],#sketch [fill="#f0f5fa"]{fill:var(--canvas)}
+ #sketch text[fill="#274560"]{fill:var(--wheel-color,#416e9e)}
+ #sketch [stroke="#665649"]{stroke:var(--rope-color,#665649)}
+ .plot svg{background:var(--surface)}
+ :root[data-theme=dark] .plot svg pattern path{stroke:var(--line)}
+ :root[data-theme=dark] .plot svg text,:root[data-theme=dark] .studyPlot text{fill:var(--ink)}
+ :root[data-theme=dark] .plot svg text[paint-order=stroke]{stroke:var(--surface)}
+ :root[data-theme=dark] .plot svg [stroke="#cbd9eb"]{stroke:var(--line)}
+ :root[data-theme=dark] .badge.good{color:#9ce0be;background:#234a3c}
+ :root[data-theme=dark] .notice,:root[data-theme=dark] .badge{color:#f0d19b;background:#4a3c25}
+ :root[data-theme=dark] .remove{color:#ffabb6}
+ :root[data-theme=dark] .list button[aria-pressed=true]{background:#4a3c25;color:#f0d19b}
+ #appearanceDialog{width:min(95vw,560px)}
+ #appearanceDialog fieldset{border:1px solid var(--line);border-radius:5px;margin:14px 0;padding:12px}
+ #appearanceDialog legend{font-weight:600}
+ .appearanceFields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+ .appearanceFields label{display:grid;gap:6px;font-size:12px;color:var(--muted)}
+ .appearanceFields input[type=color]{width:100%;height:34px;padding:3px;border:1px solid var(--line);border-radius:4px;cursor:pointer}
+ .appearanceFields select{width:100%;min-width:0;height:34px}
+}
+@media screen and (max-width:400px){.brand .logo{display:none}.topActions button{width:25px}}
 @media print{
  html,body{padding:0;margin:0;background:#fff;color:#172438}
  body>header,body>main,dialog{display:none!important}
@@ -125,13 +171,14 @@ dialog{border:1px solid #c3cfdb;border-radius:7px;color:var(--ink);padding:20px;
 
 
 
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-JCLlSZGrIKTl798y1+csQikt1JRUfydkvxTVPr20g/8='; style-src 'unsafe-inline'; img-src data: blob:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-y8DSopmm8dAWpBu4dcMwoi/5ztfb1846xXd0FFD5fr0='; style-src 'unsafe-inline'; img-src data: blob:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 </head>
 <body>
 <header class="top">
   <div class="brand"><span class="logo" aria-hidden="true">↗</span>Linkage Studio <span class="brandSub">Planar mechanisms</span></div>
-  <div class="topActions"><button id="new">New</button><button id="load">Open</button><button id="save">Save</button><button id="printOpen">Print to scale</button><button id="propertiesToggle" aria-controls="propertiesPanel" aria-expanded="true">Properties</button><button id="analysisToggle" aria-controls="analysisPanel" aria-expanded="true">Analysis</button><button id="helpOpen" aria-label="Open help">Help</button><input id="file" type="file" accept=".json,application/json" hidden></div>
+  <div class="topActions"><button id="new">New</button><button id="load">Open</button><button id="save">Save</button><button id="printOpen">Print to scale</button><button id="propertiesToggle" aria-controls="propertiesPanel" aria-expanded="true">Properties</button><button id="analysisToggle" aria-controls="analysisPanel" aria-expanded="true">Analysis</button><button id="appearanceOpen" aria-label="Appearance" aria-controls="appearanceDialog">Appearance</button><button id="helpOpen" aria-label="Open help">Help</button><input id="file" type="file" accept=".json,application/json" hidden></div>
 </header>
 <main>
 <section class="project">
@@ -148,40 +195,46 @@ dialog{border:1px solid #c3cfdb;border-radius:7px;color:var(--ink);padding:20px;
   </div>
   <div id="canvasViewControls" class="viewControls">
     <button id="zoomOut" aria-label="Zoom out">−</button><label for="viewScale">Zoom %</label><input id="viewScale" type="number" min="10" max="1600" step="1"><button id="zoomIn" aria-label="Zoom in">+</button><button id="fit">Fit</button>
-    <label id="gridLabel" for="gridSpacing">Grid</label><input id="gridSpacing" type="number" step="any">
+    <label id="gridLabel" for="gridSpacing">Grid</label><input id="gridSpacing" type="number" step="any"><label class="gridSnap" title="Snap within 4 screen pixels, without overriding constraints"><input id="gridSnap" type="checkbox" checked>Snap</label>
     <span>Scroll to zoom · Right-drag to pan · Left-drag to select</span>
   </div>
-  <div id="board"><svg id="sketch" viewBox="0 0 800 440" aria-label="Editable mechanism position diagram"></svg></div>
+  <div id="board"><svg id="sketch" viewBox="0 0 800 440" aria-label="Editable mechanism position diagram"></svg><input id="dimensionEdit" type="number" step="any" required hidden aria-label="Link length"></div>
   <div id="canvasVectors" class="positionVectorControls"><label><input type="checkbox" id="sketchVelocityVectors">Velocity vectors</label><label><input type="checkbox" id="sketchAccelerationVectors">Acceleration vectors</label><span id="sketchVectorStatus"></span></div>
   <div class="motion"><button id="play" aria-label="Play mechanism">Play</button><label id="scrubLabel" for="scrub">Input angle</label><input id="scrub" type="range"><output id="position"></output></div>
 </section>
-<aside class="sidebar" id="propertiesPanel" aria-label="Model properties"><div class="panelTitle"><h2>Model</h2><button id="closeProperties" aria-label="Close properties" title="Close properties">Close</button></div>
-  <details class="card side" open><summary class="sideHead"><span>Motion input</span></summary><div class="sideBody"><span id="status" role="status"></span><div id="drive"></div></div></details>
+<aside class="sidebar" id="propertiesPanel" aria-label="Model properties"><div class="panelTitle"><h2>Model</h2><span id="status" role="status"></span><button id="closeProperties" aria-label="Close properties" title="Close properties">Close</button></div>
+  <details class="card side" open><summary class="sideHead"><span>Motion input</span></summary><div class="sideBody"><div id="drive"></div></div></details>
   <details class="card side inspect" open><summary class="sideHead"><span>Properties</span></summary><div class="sideBody"><button id="rename">Rename</button><div id="inspector"></div></div></details>
   <details class="card side" open><summary class="sideHead"><span>Wheel and rope connections</span></summary><div class="sideBody"><div id="gearConnections"></div><button id="ropeOpen">Rope constraint…</button><div id="ropeConnections"></div></div></details>
 </aside>
 </div>
-<section id="analysisPanel" class="workspaceDrawer" aria-label="Analysis panel"><div id="drawerResize" class="drawerResize" role="separator" tabindex="0" aria-label="Resize analysis panel" aria-orientation="horizontal"></div><div class="drawerHeader"><div class="drawerTabs" role="tablist" aria-label="Analysis views"><button id="tab-polygons" type="button" role="tab" data-panel-tab="polygons" aria-controls="pane-polygons">Polygons</button><button id="tab-results" type="button" role="tab" data-panel-tab="results" aria-controls="pane-results">Results</button><button id="tab-equations" type="button" role="tab" data-panel-tab="equations" aria-controls="pane-equations">Equations</button><button id="tab-study" type="button" role="tab" data-panel-tab="study" aria-controls="pane-study">Motion study</button></div><button id="retractAnalysis" aria-label="Retract analysis panel" title="Retract analysis panel">Retract</button><button id="closeAnalysis" aria-label="Close analysis panel" title="Close analysis panel">Close</button></div><div class="drawerBody"><div id="pane-polygons" role="tabpanel" aria-labelledby="tab-polygons"><section class="analysisHead"><div><p class="eyebrow">INSTANTANEOUS KINEMATICS</p><h2>Vector constructions</h2></div><div class="analysisOptions"><label><input type="checkbox" id="construction" checked>Construction guides</label><label><input id="split" type="checkbox" checked>Normal and tangential</label></div></section>
+<section id="analysisPanel" class="workspaceDrawer collapsed" aria-label="Analysis panel"><div id="drawerResize" class="drawerResize" role="separator" tabindex="0" aria-label="Resize analysis panel" aria-orientation="horizontal"></div><div class="drawerHeader"><div class="drawerTabs" role="tablist" aria-label="Analysis views"><button id="tab-polygons" type="button" role="tab" data-panel-tab="polygons" aria-controls="pane-polygons">Polygons</button><button id="tab-results" type="button" role="tab" data-panel-tab="results" aria-controls="pane-results">Results</button><button id="tab-equations" type="button" role="tab" data-panel-tab="equations" aria-controls="pane-equations">Equations</button><button id="tab-study" type="button" role="tab" data-panel-tab="study" aria-controls="pane-study">Motion study</button></div><button id="retractAnalysis" aria-label="Retract analysis panel" title="Retract analysis panel">Retract</button><button id="closeAnalysis" aria-label="Close analysis panel" title="Close analysis panel">Close</button></div><div class="drawerBody"><div id="pane-polygons" role="tabpanel" aria-labelledby="tab-polygons"><section class="analysisHead"><div><p class="eyebrow">INSTANTANEOUS KINEMATICS</p><h2>Vector constructions</h2></div><div class="analysisOptions"><label><input type="checkbox" id="construction" checked>Construction guides</label><label><input id="split" type="checkbox" checked>Normal and tangential</label></div></section>
 <details id="editorPolygonStyle" class="polygonStyle"></details>
 <div id="plots" class="plots">
-  <section id="velocityCard" class="card plot"><div class="cardHead"><h2>Velocity polygon</h2><span id="velocityUnit" class="unit"></span></div><div class="plotControls"><button id="velocityOut" aria-label="Zoom velocity out">−</button><output id="velocityZoom">100%</output><button id="velocityIn" aria-label="Zoom velocity in">+</button><button id="velocityFit">Fit</button><button id="velocityExpand">Expand</button><span>Scroll to zoom · Drag to pan</span></div><svg id="velocity" viewBox="0 0 480 270" aria-label="Velocity polygon"></svg><details id="velocityExplanation" class="polygonExplanation"></details></section>
-  <section id="accelerationCard" class="card plot"><div class="cardHead"><h2>Acceleration polygon</h2><span id="accelerationUnit" class="unit"></span></div><div class="plotControls"><button id="accelerationOut" aria-label="Zoom acceleration out">−</button><output id="accelerationZoom">100%</output><button id="accelerationIn" aria-label="Zoom acceleration in">+</button><button id="accelerationFit">Fit</button><button id="accelerationExpand">Expand</button><span>Scroll to zoom · Drag to pan</span></div><svg id="acceleration" viewBox="0 0 480 270" aria-label="Acceleration polygon"></svg><details id="accelerationExplanation" class="polygonExplanation"></details></section>
+  <section id="velocityCard" class="card plot"><div class="cardHead"><h2>Velocity polygon</h2><span id="velocityUnit" class="unit"></span></div><div class="plotControls"><button id="velocityOut" aria-label="Zoom velocity out">−</button><output id="velocityZoom">100%</output><button id="velocityIn" aria-label="Zoom velocity in">+</button><button id="velocityFit">Fit</button><button id="velocityExpand">Expand</button><span>Scroll to zoom · Drag to pan</span></div><svg id="velocity" viewBox="0 0 480 270" aria-label="Velocity polygon"></svg><details id="velocityExplanation" class="polygonExplanation"></details><details id="velocitySteps" class="polygonExplanation"></details></section>
+  <section id="accelerationCard" class="card plot"><div class="cardHead"><h2>Acceleration polygon</h2><span id="accelerationUnit" class="unit"></span></div><div class="plotControls"><button id="accelerationOut" aria-label="Zoom acceleration out">−</button><output id="accelerationZoom">100%</output><button id="accelerationIn" aria-label="Zoom acceleration in">+</button><button id="accelerationFit">Fit</button><button id="accelerationExpand">Expand</button><span>Scroll to zoom · Drag to pan</span></div><svg id="acceleration" viewBox="0 0 480 270" aria-label="Acceleration polygon"></svg><details id="accelerationExplanation" class="polygonExplanation"></details><details id="accelerationSteps" class="polygonExplanation"></details></section>
 </div>
 <div class="plotKey"><span><i class="absolute"></i>Absolute</span><span><i class="relative"></i>Relative</span><span><i class="normal"></i>Normal</span><span><i class="tangent"></i>Tangential</span></div>
 </div><div id="pane-results" role="tabpanel" aria-labelledby="tab-results"><section class="card data"><div class="cardHead"><div><h2>Results</h2><p>Counterclockwise is positive. Linear results follow the selected length unit.</p></div><button id="csv">Export CSV</button></div><div id="results"></div></section>
 </div><div id="pane-equations" role="tabpanel" aria-labelledby="tab-equations"><details class="card equationCard"><summary>Equations and graphical construction</summary><div id="equations"></div></details>
 </div><div id="pane-study" role="tabpanel" aria-labelledby="tab-study"><section class="card sweepCard"><div class="cardHead"><div><h2>Motion study</h2><p>Continue from the current assembly in small input increments.</p></div><button id="sweepRun">Run sweep</button></div><div class="sweepControls"><label>Input span (° or length unit)<input id="sweepSpan" type="number" step="any" value="360"></label><label>Samples<input id="sweepSamples" type="number" min="12" max="360" step="1" value="90"></label><label>Track<select id="sweepPoint"></select></label><button id="sweepCSV" disabled>Export study CSV</button></div><div id="sweepResult"></div></section>
 </div></div></section></main>
+<dialog id="appearanceDialog" aria-labelledby="appearanceTitle"><div class="dialogHead"><h2 id="appearanceTitle">Appearance</h2><button id="appearanceClose" type="button">Close</button></div>
+<p class="description">Changes preview immediately and are saved on this browser when local storage is available. These screen preferences do not change saved mechanisms or printed diagrams.</p>
+<div class="appearanceFields"><label>Theme<select id="appTheme"><option value="light">Light</option><option value="dark">Dark</option><option value="system">Follow system</option></select></label><label>App accent<input id="appAccent" type="color" value="#235f99"></label><label>Drawing background<input id="appCanvas" type="color" value="#fbfcfe"></label><label class="appearanceAutomatic"><span>Background setting</span><span><input id="appCanvasAutomatic" type="checkbox" checked> Follow theme</span></label></div>
+<fieldset><legend>Mechanism colors</legend><p class="description">Link colors repeat in order for each group of six links.</p><div class="appearanceFields"><label>Link 1<input type="color" data-appearance-color="link1" value="#2467ad"></label><label>Link 2<input type="color" data-appearance-color="link2" value="#16776d"></label><label>Link 3<input type="color" data-appearance-color="link3" value="#75518f"></label><label>Link 4<input type="color" data-appearance-color="link4" value="#a16830"></label><label>Link 5<input type="color" data-appearance-color="link5" value="#a34a62"></label><label>Link 6<input type="color" data-appearance-color="link6" value="#657c28"></label><label>Gears and pulleys<input type="color" data-appearance-color="wheel" value="#416e9e"></label><label>Belts and ropes<input type="color" data-appearance-color="rope" value="#665649"></label></div></fieldset>
+<div class="printActions"><button id="appearanceReset" type="button">Reset appearance</button></div><p id="appearanceStatus" class="description" role="status"></p></dialog>
 <dialog id="exampleDialog"><div class="dialogHead"><h2>Example library</h2><button id="examplesClose">Close</button></div><div id="exampleList"></div></dialog>
 <dialog id="helpDialog"><div class="dialogHead"><h2>Using Linkage Studio</h2><button id="helpClose">Close</button></div><div class="helpContent">
-<p>The grid is the drawing workspace. Use the Properties and Analysis buttons in the top bar to reopen closed panels. Drag the top edge of the analysis panel to resize it, or use its retract button to leave only the tab strip; its tabs contain polygons, results, equations and motion studies.</p>
+<p>Open Appearance in the top bar to choose Light, Dark or Follow system, set an app accent, and customize mechanism colors. The drawing background follows the theme unless you uncheck Follow theme and choose a color. Changes preview immediately and are stored in this browser when possible; Reset appearance restores the defaults. These screen preferences do not change mechanism files, analysis values or printed diagrams.</p>
+<p>The grid is the drawing workspace. The Snap checkbox beside Grid is on by default and can be turned off. It attracts placements and dragged objects only when they are very close to a grid line (at most four screen pixels); mechanical constraints still take priority. Analysis starts retracted with its tab strip visible; click a tab or the retract/expand button to expand it. Use the Properties and Analysis buttons to reopen closed panels. Drag the top edge of the analysis panel to resize it, or use its retract button to leave only the tab strip; its tabs contain polygons, results, equations and motion studies.</p>
 <p>Choose an example, or place pins and connect them with the Link tool. Ground pins fix their location. A slider pin follows a fixed straight guide. Set a link length in Properties, choose one motion input, then Solve.</p>
 <p>Midpoint, coincident and collinear relations snap immediately and stay active during simulation. Alignment and angle constraints have a During simulation switch; use it for a motion constraint, or leave it off to set only the construction pose. Shared pins, tracer attachments, sliders, locked lengths and gear meshes remain mechanical constraints.</p>
 <p>New links have an editable length. Entering a length enables its editing lock; turn off “Lock length while editing” to reshape it again. Links remain rigid during motion analysis. The padlock beside a dimension marks a locked length.</p>
-<p>Select an object to edit it. Drag pins or links to explore the constrained motion. Delete removes the selection. Ctrl+Z undoes edits; Ctrl+Shift+Z or Ctrl+Y redoes them. Right-drag the grid to pan in any tool. Left-drag empty grid to select an area. Drag an object in Select mode to edit it. Escape clears selection and returns to Select. Save and Open use portable JSON files, including files from earlier versions.</p>
-<p>Gear wheels can use a ground shaft, a joint-mounted shaft, or a free centre. In Properties, choose shaft support and Apply. Follow a joint lets the wheel spin independently; Attach shaft to link makes the wheel rotate rigidly with that link. Meshing supports carrier-relative motion, including moving shaft centres. A free centre can leave undetermined motion until more constraints are added.</p><p> Define pitch size through module and tooth count, then connect gears with an external mesh, internal mesh or common shaft. Select a link and any of its joints when attaching a rigid shaft. Automatic fit moves an editable second shaft into contact or fits an independent pair’s module to the shaft spacing. The placement setting can instead require existing positions to match. Incompatible connections fail without changing the sketch. Gear outlines are schematic. Ideal no-slip kinematics use pitch circles.</p>
+<p>Select an object to edit it. Double-click a link length in the sketch to edit it in the selected length unit and open that link in Properties. Enter or leaving the field applies the value; Escape cancels. Drag pins or links to explore the constrained motion. Delete removes the selection. Ctrl+Z undoes edits; Ctrl+Shift+Z or Ctrl+Y redoes them. Right-drag the grid to pan in any tool. Left-drag empty grid to select an area. Drag an object in Select mode to edit it. Escape clears selection and returns to Select. Save and Open use portable JSON files, including files from earlier versions.</p>
+<p>New gears and pulleys use Free centre shaft support by default. Gear wheels can use a ground shaft, a joint-mounted shaft, or a free centre. In Properties, choose shaft support and Apply. Grounded shafts do not translate when dragged. Free shafts and shafts following a movable joint drag with that joint's constraints; grabbing the wheel preserves the pointer's offset from its shaft. Follow a joint lets the wheel spin independently; Attach shaft to link makes the wheel rotate rigidly with that link. Meshing supports carrier-relative motion, including moving shaft centres. A free centre can leave undetermined motion until more constraints are added.</p><p> Define pitch size through module and tooth count, then connect gears with an external mesh, internal mesh or common shaft. Select a link and any of its joints when attaching a rigid shaft. Automatic fit moves an editable second shaft into contact or fits an independent pair’s module to the shaft spacing. The placement setting can instead require existing positions to match. Incompatible connections fail without changing the sketch. Gear outlines are schematic. Ideal no-slip kinematics use pitch circles.</p>
 <p>U adds a pulley. Connect two fixed shafts with an open or crossed belt in Wheel and rope connections. Rope constraints relate signed slider travels using strand coefficients; the moving-pulley example explains its two supporting strands. These are ideal, inextensible fixed-direction segments. K applies collinear to two links or a link and joint. Select a tracer-bearing link to dimension tracer offsets, radius and angle; entered offsets remain fixed when the base length changes.</p>
-<p>Inspect individual polygon parts by selecting a point or segment. For a manual construction, draw the known vector, extend the perpendicular directions, intersect them, and separate normal and tangential acceleration. Stationary pins and zero vectors share the pole.</p>
+<p>Inspect individual polygon parts by selecting a point or segment. Use Polygon appearance for thickness, line-style and arrowhead presets. Open Step-by-step polygon drawing beneath either polygon to reveal the current solved mechanism one part at a time, with explanations and values. Show complete or close the viewer to restore the full drawing. Printing always includes the full polygon. For a manual construction, draw the known vector, extend the perpendicular directions, intersect them, and separate normal and tangential acceleration. Stationary pins and zero vectors share the pole.</p>
 <p>Print supports physical scales in millimetres on paper. Choose the same paper and orientation in the browser dialog, use 100% or Actual size, disable headers and footers, and measure the 50 mm check line. Add or remove construction guides, dimensions, annotations and component vectors before printing.</p>
 <p>Length units are mm, cm, m, in and ft. Rates use seconds, angular input uses degrees and angular rates use rad/s and rad/s². Analysis covers planar rigid links, fixed guides and ideal gears with grounded or joint-mounted shafts. It stops at unresolved or singular configurations.</p>
 <h3>Keyboard shortcuts</h3><p>V Select · J Joint · U Pulley · K Collinear · L Link · S Slider · F Ground · T Tracer · G Gear · M Midpoint · C Coincident · H Horizontal · I Vertical · Space Play/pause · Home Fit · +/− Zoom · P Properties · A Analysis · ? Help. Ctrl+S Save · Ctrl+O Open · Ctrl+N New · Ctrl+Z Undo · Ctrl+Shift+Z / Ctrl+Y Redo. Drawing shortcuts pause while typing or using a dialog.</p><p>Gear reference <a href="https://mae3.eng.ucsd.edu/machine-design/gear-ratios" target="_blank" rel="noreferrer">UC San Diego · Gear ratios</a></p>
@@ -194,6 +247,104 @@ dialog{border:1px solid #c3cfdb;border-radius:7px;color:var(--ink);padding:20px;
 <dialog id="angleDialog"><div class="dialogHead"><h2>Angle constraint</h2><button id="angleClose">Close</button></div><p class="description">Counterclockwise from the reference to the directed link, from its first joint to its second. Choose whether this angle only sets the starting pose or remains active during motion.</p><div class="fields"><label>Link<select id="angleLink"></select></label><label>Reference<select id="angleReference"></select></label><label>Angle (degrees)<input id="angleValue" type="number" step="any" value="0"></label></div><label><input id="anglePhysical" type="checkbox"> Maintain this angle during simulation</label><p id="angleMessage" role="status"></p><button id="angleApply" class="primary">Apply angle</button></dialog>
 <dialog id="ropeDialog"><div class="dialogHead"><h2>Rope length constraint</h2><button id="ropeClose">Close</button></div><p class="description">For fixed-direction rope segments: n₁s₁ + n₂s₂ = constant. Travel follows each slider’s positive guide direction. A moving pulley often contributes two strands. This does not infer an arbitrary rope routing.</p><div class="fields"><label>First slider<select id="ropeA"></select></label><label>Strand coefficient<input id="ropeWeightA" type="number" min="-20" max="20" value="1" step="1"></label><label>Second slider<select id="ropeB"></select></label><label>Strand coefficient<input id="ropeWeightB" type="number" min="-20" max="20" value="2" step="1"></label><label>Moving wheel (optional)<select id="ropeWheel"></select></label></div><p class="description">An associated moving wheel uses a stationary rope strand on its positive-normal side (90 degrees counterclockwise from its guide direction); its rim spin is determined by centre travel. Use the worked moving-pulley example for the routed two-strand system.</p><p id="ropeMessage" role="status"></p><button id="ropeApply" class="primary">Constrain rope length</button></dialog><div id="printOutput"></div><style id="printPageStyle"></style>
 <script>
+"use strict";
+(() => {
+  const storageKey = "linkage-studio-appearance";
+  const defaults = {
+    theme: "light", accent: "#235f99", canvas: "#fbfcfe", autoCanvas: true,
+    link1: "#2467ad", link2: "#16776d", link3: "#75518f",
+    link4: "#a16830", link5: "#a34a62", link6: "#657c28",
+    wheel: "#416e9e", rope: "#665649"
+  };
+  const get = id => document.getElementById(id);
+  const root = document.documentElement;
+  const media = window.matchMedia?.("(prefers-color-scheme: dark)");
+  const validColor = value => typeof value === "string" && /^#[0-9a-f]{6}$/i.test(value);
+  let preferences = {...defaults}, storageAvailable = true;
+  try {
+    const saved = JSON.parse(window.localStorage.getItem(storageKey));
+    if (saved && typeof saved === "object") {
+      for (const key of Object.keys(defaults)) {
+        if (key === "theme" ? ["light", "dark", "system"].includes(saved[key]) : key === "autoCanvas" ? typeof saved[key] === "boolean" : validColor(saved[key])) {
+          preferences[key] = saved[key];
+        }
+      }
+    }
+  } catch { storageAvailable = false; }
+
+  function luminance(color) {
+    const rgb = color.slice(1).match(/../g).map(value => parseInt(value, 16) / 255);
+    const linear = rgb.map(value => value <= .04045 ? value / 12.92 : ((value + .055) / 1.055) ** 2.4);
+    return linear[0] * .2126 + linear[1] * .7152 + linear[2] * .0722;
+  }
+  function apply() {
+    const dark = preferences.theme === "dark" || preferences.theme === "system" && media?.matches;
+    root.setAttribute("data-theme", dark ? "dark" : "light");
+    root.style.setProperty("--accent", preferences.accent);
+    root.style.setProperty("--accent-text", luminance(preferences.accent) > .179 ? "#172438" : "#ffffff");
+    const canvas = preferences.autoCanvas ? dark ? "#15202e" : defaults.canvas : preferences.canvas;
+    root.style.setProperty("--canvas", canvas);
+    get("appCanvas").value = canvas;
+    const darkCanvas = luminance(canvas) < .179;
+    root.style.setProperty("--canvas-ink", darkCanvas ? "#e2ebf5" : "#1c2d42");
+    root.style.setProperty("--canvas-muted", darkCanvas ? "#a0b5cb" : "#596f87");
+    root.style.setProperty("--canvas-grid", darkCanvas ? "#ffffff18" : "#00000012");
+    root.style.setProperty("--canvas-axis", darkCanvas ? "#ffffff38" : "#00000030");
+    for (let i = 1; i <= 6; i++) root.style.setProperty("--link-" + i, preferences["link" + i]);
+    root.style.setProperty("--wheel-color", preferences.wheel);
+    root.style.setProperty("--rope-color", preferences.rope);
+  }
+  function sync() {
+    get("appTheme").value = preferences.theme;
+    get("appAccent").value = preferences.accent;
+    if (!preferences.autoCanvas) get("appCanvas").value = preferences.canvas;
+    get("appCanvasAutomatic").checked = preferences.autoCanvas;
+    get("appCanvas").disabled = preferences.autoCanvas;
+    for (const input of document.querySelectorAll("[data-appearance-color]")) input.value = preferences[input.dataset.appearanceColor];
+  }
+  function save() {
+    apply();
+    try {
+      window.localStorage.setItem(storageKey, JSON.stringify(preferences));
+      storageAvailable = true;
+    } catch { storageAvailable = false; }
+    get("appearanceStatus").textContent = storageAvailable ? "Appearance saved on this browser." : "Appearance applied for this session. Browser storage is unavailable.";
+  }
+  get("appearanceOpen").onclick = () => {
+    sync();
+    get("appearanceStatus").textContent = storageAvailable ? "" : "Browser storage is unavailable; changes apply for this session.";
+    get("appearanceDialog").showModal();
+  };
+  get("appearanceClose").onclick = () => get("appearanceDialog").close();
+  get("appTheme").onchange = event => {
+    if (!["light", "dark", "system"].includes(event.target.value)) return;
+    preferences.theme = event.target.value;
+    save();
+  };
+  for (const [id, key] of [["appAccent", "accent"], ["appCanvas", "canvas"]]) {
+    get(id).oninput = event => {
+      if (!validColor(event.target.value)) return;
+      preferences[key] = event.target.value;
+      save();
+    };
+  }
+  for (const input of document.querySelectorAll("[data-appearance-color]")) input.oninput = event => {
+    if (!validColor(event.target.value)) return;
+    preferences[input.dataset.appearanceColor] = event.target.value;
+    save();
+  };
+  get("appCanvasAutomatic").onchange = event => {
+    preferences.autoCanvas = event.target.checked;
+    get("appCanvas").disabled = preferences.autoCanvas;
+    save();
+  };
+  get("appearanceReset").onclick = () => { preferences = {...defaults}; sync(); save(); };
+  if (media?.addEventListener) media.addEventListener("change", apply);
+  else media?.addListener?.(apply);
+  apply();
+  sync();
+})();
+
 "use strict";
 
 const RAD = Math.PI / 180;
@@ -728,6 +879,87 @@ function explainVector(id,kind,a,b,value,accel,role){
 }
 
 
+"use strict";
+
+const polygonConstructions=new Map();
+function polygonConstructionSteps(source,solution,parts,accel){
+  if(!parts.length)return [];
+  const quantity=accel?'acceleration':'velocity';
+  const base=['pole','axis-x','axis-y','grid','scale',...parts.filter(p=>p.id.startsWith('abs-')&&p.value&&magnitude(...p.value)<1e-9).map(p=>p.id)];
+  const steps=[{label:'Set the pole and scale',text:'Place O at zero '+quantity+'. Grounded pins and any other zero vectors coincide with O. Use the scale bar for the current drawing.',ids:base}];
+  const drive=source.drive;
+  if(drive){
+    const name=drive.type==='linear'?source.points[drive.id].name:drive.type==='gear'?source.gears[drive.id].name:source.links[drive.id].name;
+    steps.push({label:'Start with the motion input · '+name,text:'Use the prescribed '+(drive.type==='linear'?'slider speed and acceleration':'angular speed and angular acceleration')+' at this pose. The guide and rigid-link, shaft, gear and rope constraints determine the remaining rates. Coupled loops are solved together before tracing their vectors.',ids:[]});
+  }
+  for(const mesh of source.meshes){
+    const a=source.gears[mesh.a].name,b=source.gears[mesh.b].name;
+    const relation=mesh.type==='shaft'?'Both wheels share angular rates.':mesh.type.startsWith('belt-')?'Use equal signed belt speed Rω and tangential acceleration Rα. '+(mesh.type==='belt-open'?'The wheels rotate in the same sense.':'The wheels rotate in opposite senses.'):'Use the tooth-count ratio relative to the line joining the shaft centres; include carrier motion for moving shafts.';
+    steps.push({label:'Transfer motion · '+a+' / '+b,text:relation+' Material-point vectors also include shaft-centre motion.',ids:[]});
+  }
+  for(const cable of source.cables??[]){
+    steps.push({label:'Resolve rope motion · '+cable.name,text:'Differentiate '+cable.terms.map(t=>t.weight+' s('+source.points[t.point].name+')').join(' + ')+' = constant. The same signed coefficients relate slider speeds and accelerations; draw each vector along its guide.',ids:[]});
+  }
+  const covered=new Set(base);
+  const add=(part,extra=[])=>{
+    steps.push({label:part.label,text:part.text,equation:part.equation,value:part.value,ids:[part.id,...extra],coordinate:part.coordinate});
+    covered.add(part.id);extra.forEach(id=>covered.add(id));
+  };
+  for(const part of parts.filter(p=>p.category==='Construction lines'))add(part);
+  if(accel){
+    for(const part of parts.filter(p=>p.id.startsWith('norm-'))){
+      const suffix=part.id.slice(5),tip='tip-'+suffix,tangent=parts.find(p=>p.id==='tan-'+suffix);
+      add(part,[tip]);
+      if(tangent)add(tangent);
+    }
+  }
+  for(const part of parts.filter(p=>p.id.startsWith('abs-')&&!covered.has(p.id)))add(part);
+  for(const part of parts.filter(p=>p.id.startsWith('rel-')))add(part);
+  steps.push({label:'Check the complete polygon',text:'Check the vector components, loop closure and scale. Relative velocities are perpendicular to rigid links. Acceleration components sum to each endpoint; a pulley or gear material point includes centre motion plus inward normal and tangential terms.',ids:parts.map(p=>p.id),complete:true});
+  return steps;
+}
+function updatePolygonConstruction(id,parts,format,unit){
+  const panel=$(id+'Steps');
+  if(!panel)return;
+  let state=polygonConstructions.get(id);
+  if(!state){state={open:false,step:0,signature:''};polygonConstructions.set(id,state);}
+  state.steps=polygonConstructionSteps(model,result,parts,id==='acceleration');
+  state.format=format;state.unit=unit;
+  const signature=JSON.stringify(state.steps.map(s=>s.ids));
+  if(signature!==state.signature||state.source!==model){state.step=0;state.signature=signature;state.source=model;}
+  state.step=Math.min(state.step,Math.max(0,state.steps.length-1));
+  if(state.panel!==panel){
+    state.panel=panel;
+    panel.innerHTML='<summary>Step-by-step polygon drawing</summary><div class="polygonStepBody"><p>Trace the solved current mechanism, including custom links, sliders, gears and pulleys.</p><div class="polygonStepControls"><button id="'+id+'StepPrevious" type="button" aria-label="Previous construction step">Previous</button><output id="'+id+'StepCount"></output><button id="'+id+'StepNext" type="button" aria-label="Next construction step">Next</button><button id="'+id+'StepComplete" type="button">Show complete</button></div><label>Drawing progress<input id="'+id+'StepProgress" aria-label="'+(id==='acceleration'?'Acceleration':'Velocity')+' drawing progress" type="range" min="0" step="1"></label><div id="'+id+'StepText" role="status"></div></div>';
+    panel.open=state.open;
+    panel.ontoggle=()=>{state.open=panel.open;drawPolygonConstruction(id);};
+    $(id+'StepPrevious').onclick=()=>{state.step=Math.max(0,state.step-1);drawPolygonConstruction(id);};
+    $(id+'StepNext').onclick=()=>{state.step=Math.min(state.steps.length-1,state.step+1);drawPolygonConstruction(id);};
+    $(id+'StepProgress').oninput=event=>{state.step=Number(event.target.value);drawPolygonConstruction(id);};
+    $(id+'StepComplete').onclick=()=>{state.step=Math.max(0,state.steps.length-1);drawPolygonConstruction(id);};
+  }
+  drawPolygonConstruction(id);
+}
+function drawPolygonConstruction(id){
+  const state=polygonConstructions.get(id);
+  if(!state)return;
+  const {steps,step,format,unit}=state,part=steps[step];
+  $(id+'StepPrevious').disabled=!part||step===0;
+  $(id+'StepNext').disabled=!part||step===steps.length-1;
+  $(id+'StepProgress').disabled=!part;
+  $(id+'StepComplete').disabled=!part||Boolean(part.complete);
+  $(id+'StepProgress').max=Math.max(0,steps.length-1);$(id+'StepProgress').value=step;
+  $(id+'StepCount').textContent=part?(step+1)+' / '+steps.length:'No solved polygon';
+  $(id+'StepText').innerHTML=part?explanationText(part,format,unit):'<p>Solve the mechanism to generate its drawing steps.</p>';
+  const revealed=new Set(steps.slice(0,step+1).flatMap(s=>s.ids));
+  for(const node of $(id).querySelectorAll('[data-polygon-part]')){
+    const ids=node.dataset.polygonMembers?.split(' ')??[node.dataset.polygonPart];
+    const pending=state.open&&!part?.complete&&!ids.some(key=>revealed.has(key));
+    node.classList.toggle('polygonPending',pending);
+    node.classList.toggle('polygonStepCurrent',state.open&&!pending&&Boolean(part?.ids.some(key=>ids.includes(key))));
+  }
+}
+
 
 "use strict";
 
@@ -870,7 +1102,7 @@ function gearDrawing(source,q,map,scale,print=false){
   for(const [i,g] of (source.gears??[]).entries()){
     if(g.kind==='pulley'){out+=pulleyDrawing(source,q,i,map,scale,print);continue;}
     const center=map(...gearCenter(source,q,g)),r=gearRadius(g)*scale,angle=q[2*source.points.length+i]??g.angle;
-    const colour=print?"#244867":"#416e9e",points=[];
+    const colour=print?"#244867":"var(--wheel-color,#416e9e)",points=[];
     const internal=(source.meshes??[]).some(m=>m.type==="internal"&&(m.a===i||m.b===i)&&g.teeth>source.gears[m.a===i?m.b:m.a].teeth);
     // Schematic tooth outline, with a separate exact pitch circle.
     for(let tooth=0;tooth<g.teeth;tooth++){
@@ -1267,6 +1499,7 @@ function addPulley(){
     const g={name:'P'+n,kind:'pulley',radius:30,x:0,y:0,teeth:20,module:3,angle:0};
     const last=model.gears.at(-1);if(last){g.x=last.x+gearRadius(last)+g.radius+40;g.y=last.y;}
     selection={type:'gear',id:model.gears.push(g)-1};
+    mountGear(selection.id,'free');
   });
 }
 function connectBelt(a,b,type){
@@ -1286,7 +1519,7 @@ function connectBelt(a,b,type){
 }
 function pulleyDrawing(source,q,i,map,scale,print){
   const g=source.gears[i],center=map(...gearCenter(source,q,g)),r=gearRadius(g)*scale,angle=q[2*source.points.length+i];
-  const color=print?'#244867':'#476e9d';let out='';
+  const color=print?'#244867':'var(--wheel-color,#476e9d)';let out='';
   if(!print&&objectSelected('gear',i))out+=circle(...center,r+6,'fill="none" stroke="#f0a128" stroke-width="5" opacity=".7"');
   out+='<g '+(!print?'data-gear="'+i+'" style="cursor:pointer"':'')+'>';
   out+=circle(...center,r,'fill="white" stroke="'+color+'" stroke-width="1.65"')+circle(...center,r*.9,'fill="none" stroke="'+color+'" stroke-width="1"');
@@ -1354,9 +1587,16 @@ function drawingArea(){
   if(typeof window.workspaceArea==="function")return window.workspaceArea();
   return {x:70,y:45,width:canvasSize.width-140,height:canvasSize.height-90};
 }
-const colors = ["#2467ad","#16776d","#75518f","#a16830","#a34a62","#657c28"];
+const colors = ["var(--link-1,#2467ad)","var(--link-2,#16776d)","var(--link-3,#75518f)","var(--link-4,#a16830)","var(--link-5,#a34a62)","var(--link-6,#657c28)"];
 const unitsPerPaperMillimetre=2.5;
-const defaultPolygonStyle=Object.freeze({lineWidth:.288,arrow:"none",headSize:2.6,headStroke:.22});
+const defaultPolygonStyle=Object.freeze({lineWidth:.288,linePattern:"solid",arrow:"none",headSize:2.6,headStroke:.22});
+const polygonStylePresets={
+  tracing:{label:"Tracing · plain",style:{...defaultPolygonStyle}},
+  fine:{label:"Fine · open arrows",style:{...defaultPolygonStyle,lineWidth:.16,arrow:"open",headStroke:.14}},
+  bold:{label:"Bold · filled arrows",style:{...defaultPolygonStyle,lineWidth:.5,arrow:"filled",headStroke:.3}},
+  dashed:{label:"Dashed · outlined arrows",style:{...defaultPolygonStyle,lineWidth:.3,linePattern:"dashed",arrow:"outline"}},
+  technical:{label:"Technical · differentiated",style:{...defaultPolygonStyle,lineWidth:.35,linePattern:"differentiated",arrow:"open"}}
+};
 const polygonStyle={...defaultPolygonStyle};
 const toolHints = {
   mount:"Click the joint that should carry this wheel shaft.",
@@ -1400,7 +1640,15 @@ const distanceText=(value,mmDecimals=2)=>fmt(toDisplay(value),Math.max(6,mmDecim
 const vectorUnit=accel=>displayUnits+(accel?"/s²":"/s");
 const plotViews={velocity:{zoom:1,x:0,y:0},acceleration:{zoom:1,x:0,y:0}};
 let expandedPlot=null;
-let gridSpacing=25;
+let gridSpacing=25,snapToGrid=true;
+function snapGridPosition(position){
+  if(!snapToGrid||!(gridSpacing>0)||!(view?.scale>0))return position;
+  const tolerance=Math.min(gridSpacing*.08,4/view.scale);
+  return position.map(value=>{
+    const nearest=Math.round(value/gridSpacing)*gridSpacing;
+    return Math.abs(nearest-value)<=tolerance?nearest:value;
+  });
+}
 let history = [], redoHistory=[], selection = null, staged = null, tool = "select", dirty = false;
 let constraintListOpen=true;
 let multiSelection=[];
@@ -1553,9 +1801,9 @@ function renderSketch() {
     svg+=line(p2.map((t,j)=>t-(j?dy:dx)*.15),p2.map((t,j)=>t+(j?dy:dx)*.15),'stroke="'+color+'"');
     const mx=(p1[0]+p2[0])/2,my=(p1[1]+p2[1])/2;
     const display=distanceText(drag?.pose&&l.lengthLocked===false?magnitude(...vector(q,a,b)):l.length)+" "+displayUnits, width=display.length*7+10;
-    svg+='<rect x="'+(mx-width/2)+'" y="'+(my-9)+'" width="'+width+'" height="18" rx="4" fill="#ffffff" '+hit+'/>';
+    svg+='<rect x="'+(mx-width/2)+'" y="'+(my-9)+'" width="'+width+'" height="18" rx="4" fill="#ffffff" data-dimension="'+i+'" '+hit+'/>';
     if(l.lengthLocked!==false)svg+='<g transform="translate('+(mx-width/2-12)+' '+(my-5)+')" fill="none" stroke="'+color+'" stroke-width="1.3" pointer-events="none"><rect x="0" y="4" width="8" height="7" rx="1"/><path d="M2 4V2a2 2 0 0 1 4 0v2"/></g>';
-    svg+=txt(mx,my+4,display,'text-anchor="middle" fill="'+color+'" font-size="12" '+hit);
+    svg+=txt(mx,my+4,display,'text-anchor="middle" fill="'+color+'" font-size="12" data-dimension="'+i+'" '+hit);
   }
   for(const [i,p] of model.points.entries()){
     const [x,y]=pos[i], active=objectSelected("point",i)||(staged?.type==="point"&&staged.id===i);
@@ -1833,11 +2081,13 @@ function polygon(id, values, accel=false) {
   if(!values) {
     svg.innerHTML=txt(240,139,"Solve the mechanism to draw this polygon.",'text-anchor="middle" fill="#536981" font-size="13"');
     updatePolygonExplanation(id,[],n=>distanceText(n,4),vectorUnit(accel));
+    updatePolygonConstruction(id,[],n=>distanceText(n,4),vectorUnit(accel));
     return;
   }
   const parts=[];
   svg.innerHTML=polygonMarkup(id,polygonGeometry(values,accel),accel,{...view,parts});
   updatePolygonExplanation(id,parts,n=>distanceText(n,4),vectorUnit(accel));
+  updatePolygonConstruction(id,parts,n=>distanceText(n,4),vectorUnit(accel));
 }
 function drawingBounds(extent) {
   const xs=extent.map(p=>p[0]),ys=extent.map(p=>p[1]);
@@ -1847,9 +2097,10 @@ function drawingBounds(extent) {
 function polygonGeometry(values,accel) {
   return buildGeneralPolygon(model,result,accel);
 }
-function polygonSegment(start,end,colour,absolute,style) {
+function polygonSegment(start,end,colour,absolute,style,kind="rel") {
   const stroke=style.lineWidth*unitsPerPaperMillimetre*(absolute?2/3:1);
-  const shaft='stroke="'+colour+'" stroke-width="'+stroke+'"';
+  const dash=style.linePattern==="dashed"?"6 4":style.linePattern==="differentiated"?(absolute?"2 3":kind==="norm"?"7 3":kind==="tan"?"7 3 2 3":""):"";
+  const shaft='stroke="'+colour+'" stroke-width="'+stroke+'"'+(dash?' stroke-dasharray="'+dash+'"':"");
   if(style.arrow==="none")return line(start,end,shaft);
   const dx=end[0]-start[0], dy=end[1]-start[1], span=magnitude(dx,dy);
   const size=Math.min(style.headSize*unitsPerPaperMillimetre,span*.48);
@@ -1912,7 +2163,7 @@ function polygonMarkup(id,geometry,accel,view) {
     const a=register({id:"guide-"+i,category:"Construction lines",label:guideLabel??"Dashed guide · "+link,
       text:description??(accel?"Extend the tangent direction through the normal tip. This line is perpendicular to "+link+". Its intersection locates the endpoint.":
         "Extend the direction perpendicular to "+link+". Its intersection with the other construction line locates the endpoint."),
-      equation:"Construction direction ∥ J r("+link+")"});
+      equation:edge?"Construction direction ∥ J r("+link+")":undefined});
     const end=[[u-k*dir[0],v+k*dir[1]],[u+k*dir[0],v-k*dir[1]]];
     content+=group(a,(a?line(...end,hit):"")+line(...end,'stroke="#7c8a99" stroke-width="'+guideStroke+'" stroke-dasharray="4 3"'));
   }
@@ -1923,7 +2174,7 @@ function polygonMarkup(id,geometry,accel,view) {
     const components=format(b[0]-a[0])+", "+format(b[1]-a[1]);
     return '<g'+attrs+'><title>'+safe(label+" ("+components+") "+unit)+'</title>'+
       (attrs?line(p,q,hit):"")+
-      polygonSegment(p,q,palette[k],k==="abs",style)+'</g>';
+      polygonSegment(p,q,palette[k],k==="abs",style,k)+'</g>';
   };
   const explain=(id,type,a,b,from,to,role)=>parts?explainVector(id,type,a,b,[to[0]-from[0],to[1]-from[1]],accel,role):null;
   points.forEach((p,i)=>content+=segment(pole,p,"abs","Pole → "+names[i],explain("abs-"+i,"abs","O",names[i],pole,p,pinRoles[i])));
@@ -1946,7 +2197,7 @@ function polygonMarkup(id,geometry,accel,view) {
     const [x,y]=map(e.tip);
     const attrs=register({id:"tip-"+e.id+"-"+e.a+"-"+e.b,category:"Construction points",label:(e.label??"Normal tip")+" · "+edgeLabel(e),
       text:"This is the end of the normal component and the start of the tangential component. It is a construction point in the acceleration diagram.",
-      equation:e.gearPoint?"Normal tip = −ω²r (fixed centre)": "Normal tip = a("+names[e.a]+") − ω² r("+names[e.a]+names[e.b]+")",value:e.tip,coordinate:true});
+      equation:e.gearPoint?"Normal tip = a(centre) − ω²r": "Normal tip = a("+names[e.a]+") − ω² r("+names[e.a]+names[e.b]+")",value:e.tip,coordinate:true});
     if(magnitude(x-map(points[e.a])[0],y-map(points[e.a])[1])>4)
       content+=group(attrs,(attrs?circle(x,y,6,'fill="transparent"'):"")+circle(x,y,1.4,'fill="#c27526"'));
   }
@@ -2039,7 +2290,8 @@ function renderMotion() {
   $("position").textContent=positionText;
   scrub.setAttribute("aria-valuetext",positionText);
 }
-function render() {
+function render(preserveSketch = false) {
+  cancelDimensionEdit();
   $("title").textContent=model.title;
   if(window.refreshGeneral)window.refreshGeneral();
   $("lengthUnits").value=displayUnits;
@@ -2048,6 +2300,7 @@ function render() {
   $("gridSpacing").min=toDisplay(0.001);
   $("gridSpacing").max=toDisplay(1000000);
   $("gridSpacing").value=distanceText(gridSpacing,3);
+  $("gridSnap").checked=snapToGrid;
   const blocks=model.points.filter(p=>p.rail).length;
   const ground=(model.points.some(p=>p.fixed||p.rail)||model.gears.length)?1:0;
   $("summary").textContent=(model.links.length+model.gears.length+blocks+ground)+" links · "+model.points.length+" pins · "+
@@ -2058,7 +2311,7 @@ function render() {
   document.querySelectorAll("[data-tool]").forEach(b=>{b.classList.toggle("active",b.dataset.tool===tool);b.setAttribute("aria-pressed",b.dataset.tool===tool);});
   $("constraintTool").value=modes.some(([key])=>key===tool)?tool:"";
   $("constraintsToggle").classList.toggle("active",modes.some(([key])=>key===tool));
-  renderSketch();
+  if(!preserveSketch)renderSketch();
   renderViewControls();
   renderDrive();
   renderInspector();
@@ -2124,10 +2377,11 @@ function engage(next) {
   tool=next;
   render();
 }
-function pick(target,xy) {
+function pick(target,xy,preserveSketch = false) {
+  if(xy)xy=snapGridPosition(xy);
   const point=target?.type==="point" ? target.id:null;
   const link=target?.type==="link" ? target.id:null;
-  if(tool==="select"){selection=target;multiSelection=[];render();return;}
+  if(tool==="select"){selection=target;multiSelection=[];render(preserveSketch);return;}
   if(tool==='collinear'){
     if(!staged&&(link!==null||point!==null)){staged=target;render();return;}
     if(staged?.type==='link'&&link!==null&&link!==staged.id){addConstructionConstraint({type:'collinear',link:staged.id,referenceLink:link});return;}
@@ -2213,14 +2467,15 @@ sketch.addEventListener("pointerdown",event=>{
   if(tool!=="select"||event.button!==0)return;
   const target=targetFrom(event);
   if(!target)return;
+  let grabbed=target;
   if(target.type==="gear"){
-    stop();seedCurrent();selection=target;
-    drag={mode:"gear",target,pointer:event.pointerId,x:event.clientX,y:event.clientY,cursor:modelPosition(event),before:snapshot()};
-    render();return;
+    const g=model.gears[target.id];
+    if(!Number.isInteger(g.centerPoint)||model.points[g.centerPoint].fixed)return;
+    grabbed={type:"point",id:g.centerPoint};
   }
   if(playing){stop();renderMotion();}
   const cursor=modelPosition(event), pose=scene();
-  const grab=grabPoint(model,pose,target,cursor);
+  const grab=grabPoint(model,pose,grabbed,cursor);
   if(!grab)return;
   const offset=grab.map((row,i)=>dot(row,pose)-cursor[i]);
   drag={mode:"geometry",target,grab,offset,seed:pose,pointer:event.pointerId,x:event.clientX,y:event.clientY};
@@ -2245,17 +2500,7 @@ sketch.addEventListener("pointermove",event=>{
     selection=drag.target;
     sketch.setPointerCapture(event.pointerId);
   }
-  if(drag.mode==="gear"){
-    const destination=modelPosition(event),dx=destination[0]-drag.cursor[0],dy=destination[1]-drag.cursor[1];
-    const base=clone(drag.before.model),g=base.gears[drag.target.id];
-    if(Number.isInteger(g.centerPoint)){
-      const seed=coord(base),grab=grabPoint(base,seed,{type:'point',id:g.centerPoint},drag.cursor);
-      const pose=dragPose({...base,editLengths:true,constructionMode:true},seed,grab,destination,Math.max(12,Math.hypot(dx,dy)));
-      if(pose){storeConstructionPose(base,pose);fitGearsToLinks(base);model=base;updateDrivePosition(pose);result=solveModel(model,pose);dirty=false;}
-    }else{model=translatedGearAssembly(base,drag.target.id,dx,dy);result=solveModel(model,coord(model));dirty=false;}
-    renderSketch();return;
-  }
-  const destination=modelPosition(event).map((x,i)=>x+drag.offset[i]);
+  const destination=snapGridPosition(modelPosition(event).map((x,i)=>x+drag.offset[i]));
   const next=dragPose({...model,editLengths:true,constructionMode:true},drag.pose??drag.seed,drag.grab,destination,Math.max(12,6/view.scale));
   drag.failed=!next;
   if(next){
@@ -2285,11 +2530,6 @@ function finishDrag(commit) {
     else if(moved)renderSketch();return;
   }
   if(mode==="pan")return;
-  if(mode==="gear"){
-    if(commit&&moved&&JSON.stringify(model)!==JSON.stringify(before.model)){history.push(before);redoHistory=[];render();}
-    else restoreSnapshot(before);
-    return;
-  }
   if(commit&&moved&&pose?.some((x,i)=>Math.abs(x-seed[i])>1e-7)){
     remember();
     storeConstructionPose(model,pose);
@@ -2308,9 +2548,54 @@ sketch.addEventListener("pointerup",()=>finishDrag(true));
 sketch.addEventListener("pointercancel",()=>finishDrag(false));
 sketch.addEventListener("lostpointercapture",()=>finishDrag(false));
 sketch.addEventListener("pointerleave",()=>{if(!moved)finishDrag(false);});
+let dimensionLink=null;
+function cancelDimensionEdit(){
+  dimensionLink=null;
+  $("dimensionEdit").hidden=true;
+}
+function commitDimensionEdit(){
+  if(dimensionLink===null)return;
+  const input=$("dimensionEdit");
+  if(!input.checkValidity()||!Number.isFinite(input.valueAsNumber)){input.reportValidity();return;}
+  const id=dimensionLink,value=fromDisplay(input.valueAsNumber);
+  cancelDimensionEdit();
+  if(input.valueAsNumber===Number(distanceText(model.links[id].length,9))){renderSketch();return;}
+  edit(()=>{model.links[id].length=value;model.links[id].lengthLocked=true;});
+}
+$("dimensionEdit").addEventListener("change",commitDimensionEdit);
+$("dimensionEdit").addEventListener("blur",commitDimensionEdit);
+$("dimensionEdit").addEventListener("keydown",event=>{
+  if(event.key!=="Enter"&&event.key!=="Escape")return;
+  event.preventDefault();event.stopPropagation();
+  if(event.key==="Enter")commitDimensionEdit();
+  else{cancelDimensionEdit();renderSketch();}
+});
 sketch.addEventListener("click",event=>{
   if(moved||event.shiftKey){moved=false;return;}
-  pick(targetFrom(event),modelPosition(event));
+  // Keep dimension labels mounted so the browser can dispatch a double click.
+  const dimension=event.target.closest("[data-dimension]"),target=targetFrom(event);
+  pick(target,modelPosition(event),Boolean(dimension));
+  if(dimension)setTimeout(()=>{
+    if(dimensionLink===null&&selection?.type===target?.type&&selection?.id===target?.id)renderSketch();
+  },600);
+});
+sketch.addEventListener("dblclick",event=>{
+  const label=event.target.closest("[data-dimension]");
+  if(!label||moved||event.shiftKey)return;
+  event.preventDefault();
+  stop();tool="select";staged=null;multiSelection=[];
+  selection={type:"link",id:Number(label.dataset.dimension)};
+  setPanel($("propertiesPanel"),true);
+  $("inspector").closest("details").open=true;
+  render();
+  const rect=sketch.querySelector('rect[data-dimension="'+selection.id+'"]').getBoundingClientRect();
+  const board=$("board").getBoundingClientRect(),input=$("dimensionEdit");
+  dimensionLink=selection.id;
+  input.min=toDisplay(.001);input.value=distanceText(model.links[dimensionLink].length,9);
+  input.setAttribute("aria-label",model.links[dimensionLink].name+" length ("+displayUnits+")");
+  input.style.left=(rect.x-board.x)+"px";input.style.top=(rect.y-board.y-5)+"px";
+  input.style.width=Math.max(100,rect.width)+"px";
+  input.hidden=false;input.focus();input.select();
 });
 sketch.addEventListener("wheel",event=>{
   event.preventDefault();
@@ -2439,6 +2724,7 @@ $("viewScale").onchange=event=>{
   if(Number.isFinite(value)) zoomTo(view.reference*value/100);
   else renderViewControls();
 };
+$("gridSnap").onchange=()=>snapToGrid=$("gridSnap").checked;
 $("gridSpacing").onchange=event=>{
   const field=event.target;
   if(field.checkValidity()&&Number.isFinite(field.valueAsNumber))gridSpacing=fromDisplay(field.valueAsNumber);
@@ -2949,6 +3235,7 @@ $("addGear").onclick=()=>edit(()=>{
   const end=model.gears.at(-1);
   const g={name:"G"+(model.gears.length+1),x:end?end.x+gearRadius(end)+20:0,y:end?.y??0,teeth:20,module:2,angle:0};
   selection={type:"gear",id:model.gears.push(g)-1};
+  mountGear(selection.id,"free");
 });
 $("construction").onchange=renderAnalysis;
 $("sweepRun").onclick=runStudy;
@@ -2961,6 +3248,8 @@ $("sweepCSV").onclick=()=>{
 const polygonStylePanels=[$("editorPolygonStyle")];
 for(const panel of polygonStylePanels){
   panel.innerHTML='<summary>Polygon appearance</summary><div class="polygonStyleFields">'+
+    '<label>Preset<select data-preset-style="true">'+Object.entries(polygonStylePresets).map(([key,preset])=>'<option value="'+key+'">'+preset.label+'</option>').join('')+'<option value="custom">Custom</option></select></label>'+
+    '<label>Line style<select data-style="linePattern"><option value="solid">Solid</option><option value="dashed">Dashed</option><option value="differentiated">Differentiate vector types</option></select></label>'+
     '<label>Line (mm on paper)<input data-style="lineWidth" type="number" min="0.05" max="1.5" step="any"></label>'+
     '<label>Arrowheads<select data-style="arrow"><option value="none">Off</option><option value="open">Open chevron</option><option value="outline">Outlined triangle</option><option value="filled">Filled triangle</option></select></label>'+
     '<label>Head length (mm)<input data-style="headSize" type="number" min="0.6" max="8" step="any"></label>'+
@@ -2968,15 +3257,20 @@ for(const panel of polygonStylePanels){
     '<button type="button" data-reset-style>Reset for tracing</button></div>';
   panel.addEventListener("input",event=>{
     const field=event.target,key=field.dataset.style;
-    if(key==="arrow")polygonStyle.arrow=field.value;
+    if(key==="arrow"||key==="linePattern")polygonStyle[key]=field.value;
     else if(key&&field.checkValidity()&&Number.isFinite(field.valueAsNumber))polygonStyle[key]=field.valueAsNumber;
     else return;
     refreshPolygonStyle(field);
   });
+  panel.querySelector("[data-preset-style]").onchange=event=>{
+    const preset=polygonStylePresets[event.target.value];
+    if(preset){Object.assign(polygonStyle,preset.style);refreshPolygonStyle();}
+  };
   panel.addEventListener("change",()=>syncPolygonStyle());
   panel.querySelector("[data-reset-style]").onclick=()=>{Object.assign(polygonStyle,defaultPolygonStyle);refreshPolygonStyle();};
 }
 function syncPolygonStyle(activeField){
+  for(const panel of polygonStylePanels)panel.querySelector("[data-preset-style]").value=Object.entries(polygonStylePresets).find(([,preset])=>Object.keys(defaultPolygonStyle).every(key=>preset.style[key]===polygonStyle[key]))?.[0]??"custom";
   for(const panel of polygonStylePanels)for(const field of panel.querySelectorAll("[data-style]")){
     const key=field.dataset.style;
     if(field!==activeField)field.value=polygonStyle[key];
@@ -3018,6 +3312,7 @@ const workspaceSymbols={
   open:'<path d="M3 19V5h7l3 3h8v3M3 19l3-8h16l-3 8z"/>',
   save:'<path d="M3 3h15l3 3v15H3zM7 3v6h10V3M7 21v-8h10v8"/>',
   print:'<path d="M6 8V3h12v5M6 17H3V8h18v9h-3M6 14h12v7H6zM17 11h1"/>',
+  appearance:'<circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor" stroke="none"/>',
   help:'<circle cx="12" cy="12" r="9"/><path d="M9 8a3 3 0 0 1 6 1c0 2-3 2-3 5m0 3v.1"/>',
   library:'<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="m17 13 5 8H12z"/>',
   solve:'<path d="m4 12 5 5L20 6"/>',
@@ -3043,7 +3338,7 @@ for(const [id,name,label] of [
  ['addGear','gear','Add gear'],['addPulley','pulley','Add pulley (U)'],['constraintsToggle','constraints','Geometric constraints'],['undo','undo','Undo (Ctrl+Z)'],['redo','redo','Redo (Ctrl+Shift+Z / Ctrl+Y)'],
  ['zoomOut','minus','Zoom out'],['zoomIn','plus','Zoom in'],['fit','fit','Fit mechanism'],['play','play','Play mechanism'],
  ['closeProperties','close','Close properties'],['closeAnalysis','close','Close analysis'],['retractAnalysis','minus','Retract / expand analysis'],
- ['helpOpen','help','Help'],['propertiesToggle','properties','Properties'],['analysisToggle','analysis','Analysis']
+ ['appearanceOpen','appearance','Appearance'],['helpOpen','help','Help'],['propertiesToggle','properties','Properties'],['analysisToggle','analysis','Analysis']
 ])iconButton($(id),name,label);
 for(const [id,name,label] of [['new','new','New'],['load','open','Open'],['save','save','Save'],['printOpen','print','Print'],['examplesOpen','library','Examples'],['solve','solve','Solve']])iconButton($(id),name,label,true);
 for(const kind of ['velocity','acceleration'])for(const [suffix,name,label] of [['Out','minus','Zoom out'],['In','plus','Zoom in'],['Fit','fit','Fit polygon']])iconButton($(kind+suffix),name,label);
@@ -3146,8 +3441,8 @@ window.workspaceArea=()=>{
   const bottom=analysisPanel.hidden?85:drawerHeight+78;
   return {x:100,y:70,width:Math.max(90,canvasSize.width-right-130),height:Math.max(90,canvasSize.height-bottom-95)};
 };
-if(window.innerWidth<900){setPanel(propertiesPanel,false);setPanel(analysisPanel,false);}
-updateDrawerHeight(drawerHeight);
+if(window.innerWidth<900)setPanel(propertiesPanel,false);
+updateDrawerHeight(42);
 let canvasReady=false;
 function resizeWorkspace(){
   const before=drawingArea();

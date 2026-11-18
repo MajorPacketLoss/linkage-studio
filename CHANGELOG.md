@@ -1,5 +1,32 @@
 # Changelog
 
+## 0.4.0 - 2026-11-18
+
+### Added
+
+- Added Light, Dark and Follow system themes, with a top-bar Appearance dialog.
+- Added custom accent, drawing-background, six repeating link, wheel and rope colors, with immediate preview, browser-local saving and reset. When browser storage is unavailable, preferences apply for the session only.
+- Added Tracing, Fine, Bold, Dashed and Technical polygon appearance presets, plus custom line thickness, line patterns and arrowheads. These settings also apply to printed polygons.
+- Added step-by-step velocity and acceleration polygon drawing for the current solved mechanism, including custom links, sliders, tracers, gears, belts and moving pulleys. Previous/Next controls, a progress slider and Show complete reveal vectors with explanations, equations and component values.
+- Added optional grid snapping for object placement and dragging, enabled by default without overriding mechanical constraints.
+- Added inline link-length editing by double-clicking a dimension label, using the selected display units. Enter or leaving the field commits and locks the length; Escape cancels, and edits support undo/redo and constraint validation.
+
+### Changed
+
+- Moved the mechanism status badge into the Model panel header.
+- Replaced collapsible Properties section indicators with chevrons showing their expanded or collapsed state.
+- Start the analysis panel retracted to its tabs, including on narrow screens, to leave more room for the mechanism.
+- New gears and pulleys now use Free centre shaft support by default.
+- Updated the README, user guide and in-app help for appearance controls, polygon construction steps, snapping and wheel-support defaults.
+
+### Fixed
+
+- Unified gear and pulley dragging with constrained joint dragging, preserving grounded shafts and rejecting incompatible movement.
+- Preserved dimension labels during selection so double-click editing works reliably.
+- Kept polygon construction steps synchronized with pose and unit changes, restarting when a different mechanism is loaded. Printing always includes complete polygons, regardless of step-viewer progress.
+- Kept app theme and color preferences separate from mechanism files, analysis values and printed diagram colors.
+- Expanded interaction regression coverage for appearance preferences, polygon styles and steps, dimension editing, wheel dragging and grid snapping.
+
 ## 0.3.0 - 2026-11-18
 
 - Removed the planet-carrier builder interface.

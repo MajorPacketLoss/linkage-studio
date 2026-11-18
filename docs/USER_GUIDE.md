@@ -22,7 +22,7 @@ Select a link with tracer points to enter each tracer's along-link offset, norma
 
 ## Gears
 
-A shaft can be grounded, follow a joint, or have a free centre. Following a joint allows the wheel to spin independently. Use **Attach shaft to link** when the wheel must rotate rigidly with that link.
+New gears use **Free centre** shaft support by default. A shaft can be grounded, follow a joint, or have a free centre. Following a joint allows the wheel to spin independently. Use **Attach shaft to link** when the wheel must rotate rigidly with that link.
 
 Automatic fitting attempts to move an editable shaft into pitch contact or resize compatible gears to their shaft spacing. **Fix gear pitch size** protects a wheel from automatic resizing. A fixed module may require a tooth count that cannot fit the requested spacing exactly.
 
@@ -30,7 +30,7 @@ Automatic fitting attempts to move an editable shaft into pitch contact or resiz
 
 ## Pulleys, belts and ropes
 
-Use **U** or **Pulley** to add a wheel. Select it to set its pitch radius, choose ground or free shaft support, or pick an existing joint to follow. A joint mount locates its centre without fixing its rotation. Attach shaft to link also works with pulleys.
+Use **U** or **Pulley** to add a wheel with **Free centre** shaft support by default. Select it to set its pitch radius, choose ground or free shaft support, or pick an existing joint to follow. A joint mount locates its centre without fixing its rotation. Attach shaft to link also works with pulleys.
 
 In **Wheel and rope connections**, choose two pulleys and select **Open belt** or **Crossed belt**. Open belts keep the same rotation direction; crossed belts reverse it. Both use equal ideal belt speed, so R1 omega1 = R2 omega2 for an open belt and R1 omega1 = -R2 omega2 for a crossed belt. Angular accelerations follow the same radius ratio. These belt connections require stationary, separated shafts. A pulley radius edit that overlaps its connected wheel is rejected.
 
@@ -46,6 +46,10 @@ Choose an input in Motion input, or allow automatic selection. Explicit input se
 
 Analysis contains polygons, numerical results, equations and motion studies. Velocity and acceleration vectors can also appear on the position diagram. Polygon views have independent zoom controls and component explanations.
 
+In **Polygons → Polygon appearance**, choose **Tracing**, **Fine**, **Bold**, **Dashed**, or **Technical**. Customize line thickness, line pattern and arrowheads; the preset changes to **Custom**. Appearance applies to both polygons and printed polygon sheets. **Reset for tracing** restores thin plain lines.
+
+Open **Step-by-step polygon drawing** beneath either polygon to progressively reveal its current solved vectors. Use **Previous**, **Next**, or the drawing-progress slider to inspect explanations, equations and vector components. **Show complete** reveals the entire polygon; closing the step viewer also restores the full drawing. Steps are generated for the current mechanism, including custom links, sliders, tracer points, gears, belts and moving pulleys, rather than a fixed example. Changing the pose or display units updates the values; loading a different mechanism restarts the sequence. Unsolved mechanisms need to be solved first. These steps trace the computed solution, not an independent manual intersection solver. **Construction guides** and **Normal and tangential** determine which construction details are included. Printing always uses the complete polygon, even while stepping.
+
 Counterclockwise angular rates are positive. Rates use seconds, angular rates use radians, and linear results follow the selected length unit.
 
 ## Saving and printing
@@ -55,6 +59,10 @@ Counterclockwise angular rates are positive. Rates use seconds, angular rates us
 Print lets you choose diagrams, polygons, results and construction details. Choose a physical scale, match the paper and orientation in the print dialog, use **100% / Actual size**, and disable browser headers and footers. Measure the 50 mm check line before tracing or taking measurements.
 
 ## Workspace
+
+Open **Appearance** in the top bar to choose **Light**, **Dark**, or **Follow system**, and customize the app accent. The drawing background follows the theme by default; uncheck **Follow theme** to choose a custom background. Customize the six repeating link colors, gears and pulleys, or belts and ropes. Changes preview immediately and persist in this browser when local storage is available; otherwise they last for the session. **Reset appearance** restores the original light theme and colors. Appearance preferences do not alter mechanism JSON files, analysis values, or printed diagrams. Polygon line and arrowhead settings remain separate.
+
+**Snap** is enabled by default. Turn it off beside **Grid** to disable attraction to nearby grid lines; mechanical constraints always take priority.
 
 Right-drag pans the grid. Left-drag empty grid selects an area. Drag an object with Select active to edit it within its constraints. Escape clears selection and returns to Select. Delete removes selected objects; Ctrl+Z restores an edit.
 

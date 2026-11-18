@@ -163,6 +163,7 @@ $("addGear").onclick=()=>edit(()=>{
   const end=model.gears.at(-1);
   const g={name:"G"+(model.gears.length+1),x:end?end.x+gearRadius(end)+20:0,y:end?.y??0,teeth:20,module:2,angle:0};
   selection={type:"gear",id:model.gears.push(g)-1};
+  mountGear(selection.id,"free");
 });
 $("construction").onchange=renderAnalysis;
 $("sweepRun").onclick=runStudy;
@@ -175,6 +176,8 @@ $("sweepCSV").onclick=()=>{
 const polygonStylePanels=[$("editorPolygonStyle")];
 for(const panel of polygonStylePanels){
   panel.innerHTML='<summary>Polygon appearance</summary><div class="polygonStyleFields">'+
+    '<label>Preset<select data-preset-style="true">'+Object.entries(polygonStylePresets).map(([key,preset])=>'<option value="'+key+'">'+preset.label+'</option>').join('')+'<option value="custom">Custom</option></select></label>'+
+    '<label>Line style<select data-style="linePattern"><option value="solid">Solid</option><option value="dashed">Dashed</option><option value="differentiated">Differentiate vector types</option></select></label>'+
     '<label>Line (mm on paper)<input data-style="lineWidth" type="number" min="0.05" max="1.5" step="any"></label>'+
     '<label>Arrowheads<select data-style="arrow"><option value="none">Off</option><option value="open">Open chevron</option><option value="outline">Outlined triangle</option><option value="filled">Filled triangle</option></select></label>'+
     '<label>Head length (mm)<input data-style="headSize" type="number" min="0.6" max="8" step="any"></label>'+
@@ -182,15 +185,20 @@ for(const panel of polygonStylePanels){
     '<button type="button" data-reset-style>Reset for tracing</button></div>';
   panel.addEventListener("input",event=>{
     const field=event.target,key=field.dataset.style;
-    if(key==="arrow")polygonStyle.arrow=field.value;
+    if(key==="arrow"||key==="linePattern")polygonStyle[key]=field.value;
     else if(key&&field.checkValidity()&&Number.isFinite(field.valueAsNumber))polygonStyle[key]=field.valueAsNumber;
     else return;
     refreshPolygonStyle(field);
   });
+  panel.querySelector("[data-preset-style]").onchange=event=>{
+    const preset=polygonStylePresets[event.target.value];
+    if(preset){Object.assign(polygonStyle,preset.style);refreshPolygonStyle();}
+  };
   panel.addEventListener("change",()=>syncPolygonStyle());
   panel.querySelector("[data-reset-style]").onclick=()=>{Object.assign(polygonStyle,defaultPolygonStyle);refreshPolygonStyle();};
 }
 function syncPolygonStyle(activeField){
+  for(const panel of polygonStylePanels)panel.querySelector("[data-preset-style]").value=Object.entries(polygonStylePresets).find(([,preset])=>Object.keys(defaultPolygonStyle).every(key=>preset.style[key]===polygonStyle[key]))?.[0]??"custom";
   for(const panel of polygonStylePanels)for(const field of panel.querySelectorAll("[data-style]")){
     const key=field.dataset.style;
     if(field!==activeField)field.value=polygonStyle[key];

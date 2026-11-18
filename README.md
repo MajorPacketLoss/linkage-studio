@@ -21,7 +21,9 @@ Use **Save** to keep a mechanism as a JSON file. Use **Print** for diagrams and 
 - Gear-driven linkages, open and crossed belt drives, and moving pulleys.
 - Inextensible rope-length constraints with signed strand coefficients.
 - Midpoint, coincident, horizontal, vertical, angle and collinear constraints.
-- Position, velocity and acceleration analysis with component explanations.
+- Position, velocity and acceleration analysis with component explanations and step-by-step polygon drawing.
+- Light, dark and system themes, with custom accent, drawing-background and mechanism colors saved locally.
+- Polygon line-thickness, line-style and arrowhead presets, with custom appearance controls.
 - Animation, motion studies, CSV export and scale printing.
 - Metric and imperial length units, editable link and tracer dimensions, undo and redo.
 

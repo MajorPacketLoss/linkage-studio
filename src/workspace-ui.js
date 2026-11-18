@@ -29,6 +29,7 @@ const workspaceSymbols={
   open:'<path d="M3 19V5h7l3 3h8v3M3 19l3-8h16l-3 8z"/>',
   save:'<path d="M3 3h15l3 3v15H3zM7 3v6h10V3M7 21v-8h10v8"/>',
   print:'<path d="M6 8V3h12v5M6 17H3V8h18v9h-3M6 14h12v7H6zM17 11h1"/>',
+  appearance:'<circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor" stroke="none"/>',
   help:'<circle cx="12" cy="12" r="9"/><path d="M9 8a3 3 0 0 1 6 1c0 2-3 2-3 5m0 3v.1"/>',
   library:'<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="m17 13 5 8H12z"/>',
   solve:'<path d="m4 12 5 5L20 6"/>',
@@ -54,7 +55,7 @@ for(const [id,name,label] of [
  ['addGear','gear','Add gear'],['addPulley','pulley','Add pulley (U)'],['constraintsToggle','constraints','Geometric constraints'],['undo','undo','Undo (Ctrl+Z)'],['redo','redo','Redo (Ctrl+Shift+Z / Ctrl+Y)'],
  ['zoomOut','minus','Zoom out'],['zoomIn','plus','Zoom in'],['fit','fit','Fit mechanism'],['play','play','Play mechanism'],
  ['closeProperties','close','Close properties'],['closeAnalysis','close','Close analysis'],['retractAnalysis','minus','Retract / expand analysis'],
- ['helpOpen','help','Help'],['propertiesToggle','properties','Properties'],['analysisToggle','analysis','Analysis']
+ ['appearanceOpen','appearance','Appearance'],['helpOpen','help','Help'],['propertiesToggle','properties','Properties'],['analysisToggle','analysis','Analysis']
 ])iconButton($(id),name,label);
 for(const [id,name,label] of [['new','new','New'],['load','open','Open'],['save','save','Save'],['printOpen','print','Print'],['examplesOpen','library','Examples'],['solve','solve','Solve']])iconButton($(id),name,label,true);
 for(const kind of ['velocity','acceleration'])for(const [suffix,name,label] of [['Out','minus','Zoom out'],['In','plus','Zoom in'],['Fit','fit','Fit polygon']])iconButton($(kind+suffix),name,label);
@@ -157,8 +158,8 @@ window.workspaceArea=()=>{
   const bottom=analysisPanel.hidden?85:drawerHeight+78;
   return {x:100,y:70,width:Math.max(90,canvasSize.width-right-130),height:Math.max(90,canvasSize.height-bottom-95)};
 };
-if(window.innerWidth<900){setPanel(propertiesPanel,false);setPanel(analysisPanel,false);}
-updateDrawerHeight(drawerHeight);
+if(window.innerWidth<900)setPanel(propertiesPanel,false);
+updateDrawerHeight(42);
 let canvasReady=false;
 function resizeWorkspace(){
   const before=drawingArea();

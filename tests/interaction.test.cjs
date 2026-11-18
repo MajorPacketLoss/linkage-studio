@@ -7,7 +7,9 @@ const map=new Map(),docEvents={},browserEvents={},downloads=[];
 class Element{
  constructor(id="",tag="div",attrs=""){
  this.id=id;this.tag=tag;this.attrs=attrs;this.dataset={};this.events={};this.checked=/\bchecked\b/.test(attrs);this.disabled=false;this.hidden=/\bhidden\b/.test(attrs);
- this.value=attrs.match(/\bvalue="([^"]*)"/)?.[1]??"";this._html="";this.children=[];this.classList={add(){},remove(){},toggle(){}};this.style={setProperty(){}};
+ this.value=attrs.match(/\bvalue="([^"]*)"/)?.[1]??"";this._html="";this.children=[];
+ const classes=new Set((attrs.match(/\bclass="([^"]*)"/)?.[1]??"").split(/\s+/).filter(Boolean));
+ this.classList={add(...names){names.forEach(name=>classes.add(name));},remove(...names){names.forEach(name=>classes.delete(name));},contains(name){return classes.has(name);},toggle(name,force){const on=force??!classes.has(name);if(on)classes.add(name);else classes.delete(name);return on;}};this.style={setProperty(name,value){this[name]=value;}};
  for(const m of attrs.matchAll(/data-([\w-]+)="([^"]*)"/g))this.dataset[m[1].replace(/-([a-z])/g,(_,s)=>s.toUpperCase())]=m[2];
  }
  set innerHTML(x){this.revision=(this.revision??0)+1;for(const child of this.children){if(child.id&&map.get(child.id)===child)map.delete(child.id);}this._html=x;this.children=parse(x);if(this.tag==="select")this.value=this.options.find(o=>o.attrs.includes("selected"))?.value??this.options[0]?.value??"";}
@@ -21,14 +23,15 @@ class Element{
  const data=selector.match(/^\[data-([\w-]+)\]$/)?.[1]?.replace(/-([a-z])/g,(_,s)=>s.toUpperCase());
  return data?this.children.filter(e=>data in e.dataset):[];
  }
- querySelector(selector){if(selector==="select")return this.children.find(e=>e.tag==="select");
+ querySelector(selector){const dimension=selector.match(/^rect\[data-dimension="(\d+)"\]$/);if(dimension)return this.children.find(e=>e.tag==="rect"&&e.dataset.dimension===dimension[1]);if(selector==="select")return this.children.find(e=>e.tag==="select");
  if(selector===".polygonExplainContent")return this.children.find(e=>e.attrs.includes("polygonExplainContent"));
  return this.querySelectorAll(selector)[0]??null;}
  addEventListener(k,fn){this.listeners??={};(this.listeners[k]??=[]).push(fn);this.events[k]=event=>this.listeners[k].forEach(f=>f(event));}
  setAttribute(name,value){this[name]=value;}focus(){document.activeElement=this;}contains(el){return el===this;}
- getBoundingClientRect(){return {width:1360,height:700};}
+ select(){}
+ getBoundingClientRect(){return {x:0,y:0,width:1360,height:700};}
  checkValidity(){if(!Number.isFinite(this.valueAsNumber)&&this.tag==="input")return false;
- const min=this.attrs.match(/min="([^"]*)"/)?.[1],max=this.attrs.match(/max="([^"]*)"/)?.[1];
+ const min=this.min??this.attrs.match(/min="([^"]*)"/)?.[1],max=this.attrs.match(/max="([^"]*)"/)?.[1];
  return !(min!==undefined&&this.valueAsNumber<Number(min)||max!==undefined&&this.valueAsNumber>Number(max));}
  reportValidity(){}showModal(){this.open=true;}close(){this.open=false;}click(){}setPointerCapture(){this.captures=(this.captures??0)+1;}
  getScreenCTM(){return{inverse(){return{};}};}
@@ -36,7 +39,7 @@ class Element{
 }
 function parse(text){
  const out=[];
- for(const m of text.matchAll(/<(input|select|button|option|div|span|output|details|svg|dialog|section|h1|h2|p|label|form|style|aside)\b([^>]*)>/g)){
+ for(const m of text.matchAll(/<(input|select|button|option|div|span|output|details|svg|dialog|section|h1|h2|p|label|form|style|aside|rect|text|g|line|path|circle)\b([^>]*)>/g)){
  const attrs=m[2],id=attrs.match(/\bid="([^"]*)"/)?.[1]??"";
  const el=new Element(id,m[1],attrs);out.push(el);if(id)map.set(id,el);
  if(["select"].includes(m[1])){
@@ -48,18 +51,62 @@ function parse(text){
 }
 const initialElements=parse(html);
 const $=id=>{const e=map.get(id);if(!e)throw Error("Missing DOM id "+id);return e;};
-const document={body:new Element('body'),querySelector(selector){return initialElements.find(e=>e.attrs.includes(selector.slice(1)));},getElementById:id=>map.get(id)??null,querySelectorAll:selector=>{
+const document={documentElement:new Element('html'),body:new Element('body'),querySelector(selector){return initialElements.find(e=>e.attrs.includes(selector.slice(1)));},getElementById:id=>map.get(id)??null,querySelectorAll:selector=>{
  const data=selector.match(/^\[data-([\w-]+)\]$/)?.[1]?.replace(/-([a-z])/g,(_,s)=>s.toUpperCase());
  return data?initialElements.filter(e=>data in e.dataset):[];
 },addEventListener(k,fn){const prior=docEvents[k];docEvents[k]=event=>{prior?.(event);fn(event);};},createElement(){return{click(){}};}};
+const appearanceStorage=new Map(),themeMedia={matches:false,addEventListener(name,listener){this.listener=listener;}};
+const localStorage={getItem(key){return appearanceStorage.get(key)??null;},setItem(key,value){appearanceStorage.set(key,value);}};
 const c=vm.createContext({document,cancelAnimationFrame(){},requestAnimationFrame(){return 1;},setTimeout(){},Blob,URL:{createObjectURL(blob){downloads.push(blob);return "blob:test";},revokeObjectURL(){}},
- ResizeObserver:class{constructor(fn){this.fn=fn;}observe(){}},window:{innerWidth:1360,innerHeight:838,scrollTo(){},addEventListener(k,f){browserEvents[k]=f;},print(){browserEvents.beforeprint();}}});
+ ResizeObserver:class{constructor(fn){this.fn=fn;}observe(){}},window:{localStorage,matchMedia(){return themeMedia;},innerWidth:1360,innerHeight:838,scrollTo(){},addEventListener(k,f){browserEvents[k]=f;},print(){browserEvents.beforeprint();}}});
 const run=code=>vm.runInContext(code,c);
-const scripts=["solver","examples","polygon-explain","position-vectors","general-core","gear-mounts","construction","live-edit","machines","studio","print","general-ui","workspace-ui"];
+const scripts=["appearance","solver","examples","polygon-explain","polygon-steps","position-vectors","general-core","gear-mounts","construction","live-edit","machines","studio","print","general-ui","workspace-ui"];
 for(const name of scripts){try{run(fs.readFileSync(root+name+".js","utf8"));}catch(e){console.error("Loading",name);throw e;}}
 assert.equal($("status").textContent,"Solved");
+assert.equal(run('drawerHeight'),42);
+assert.equal($('gridSnap').checked,true);
 assert.match($("title").textContent,/Four-bar/);
 const saved=run("JSON.stringify(model)");
+const appearanceSolution=run('JSON.stringify(result)'),appearanceRoot=document.documentElement;
+run('renderPrint(printPlan(true))');const appearancePrint=$('printOutput').innerHTML;
+$('appearanceOpen').onclick();assert.equal($('appearanceDialog').open,true);
+$('appTheme').onchange({target:{value:'dark'}});
+assert.equal(appearanceRoot['data-theme'],'dark');assert.equal(appearanceRoot.style['--canvas'],'#15202e');
+$('appAccent').oninput({target:{value:'#ffff00'}});
+assert.equal(appearanceRoot.style['--accent-text'],'#172438');
+$('appCanvasAutomatic').onchange({target:{checked:false}});
+$('appCanvas').oninput({target:{value:'#101010'}});
+assert.equal(appearanceRoot.style['--canvas-ink'],'#e2ebf5');
+const firstLink=document.querySelectorAll('[data-appearance-color]')[0];
+firstLink.oninput({target:{value:'#ff55aa'}});
+assert.equal(appearanceRoot.style['--link-1'],'#ff55aa');
+assert.match($('sketch').innerHTML,/var\(--link-1/);
+assert.equal(run('JSON.stringify(model)'),saved);assert.equal(run('JSON.stringify(result)'),appearanceSolution);
+run('renderPrint(printPlan(true))');assert.equal($('printOutput').innerHTML,appearancePrint);
+$('appAccent').oninput({target:{value:'not-a-color'}});
+assert.equal(appearanceRoot.style['--accent'],'#ffff00');
+run(fs.readFileSync(root+'appearance.js','utf8'));
+assert.equal($('appTheme').value,'dark');assert.equal(firstLink.value,'#ff55aa');
+$('appTheme').onchange({target:{value:'system'}});
+themeMedia.matches=true;themeMedia.listener();assert.equal(appearanceRoot['data-theme'],'dark');
+themeMedia.matches=false;themeMedia.listener();assert.equal(appearanceRoot['data-theme'],'light');
+assert.equal(appearanceRoot.style['--canvas'],'#101010');
+$('appearanceReset').onclick();assert.equal($('appCanvasAutomatic').checked,true);
+assert.equal(appearanceRoot.style['--canvas'],'#fbfcfe');assert.equal(firstLink.value,'#2467ad');
+const appearanceKey='linkage-studio-appearance';
+appearanceStorage.set(appearanceKey,JSON.stringify({theme:'invalid',accent:'url(unsafe)',link1:'#123456',autoCanvas:'no'}));
+run(fs.readFileSync(root+'appearance.js','utf8'));
+assert.equal($('appTheme').value,'light');assert.equal(appearanceRoot.style['--accent'],'#235f99');
+assert.equal(firstLink.value,'#123456');assert.equal($('appCanvasAutomatic').checked,true);
+appearanceStorage.set(appearanceKey,'invalid json');run(fs.readFileSync(root+'appearance.js','utf8'));
+assert.equal(firstLink.value,'#2467ad');
+const storageGet=localStorage.getItem,storageSet=localStorage.setItem;
+localStorage.getItem=localStorage.setItem=()=>{throw Error('Storage blocked');};
+run(fs.readFileSync(root+'appearance.js','utf8'));
+$('appTheme').onchange({target:{value:'dark'}});
+assert.equal(appearanceRoot['data-theme'],'dark');assert.match($('appearanceStatus').textContent,/storage is unavailable/);
+$('appearanceClose').onclick();assert.equal($('appearanceDialog').open,false);
+localStorage.getItem=storageGet;localStorage.setItem=storageSet;$('appearanceReset').onclick();
 const reset=run("reset"),examples=run("EXAMPLES");
 for(const ex of examples){
  reset(ex.build());
@@ -68,6 +115,66 @@ for(const ex of examples){
  assert.equal(run("validate(model)"),true,ex.id);
 
 }
+reset(examples[0].build());
+const stylePanel=$('editorPolygonStyle'),preset=stylePanel.querySelector('[data-preset-style]');
+const originalSolution=run('JSON.stringify(result)');
+for(const name of ['fine','bold','dashed','technical']){
+ preset.onchange({target:{value:name}});
+ assert.equal(preset.value,name);
+ assert.equal(run('JSON.stringify(result)'),originalSolution);
+ assert.match($('velocity').innerHTML,/data-arrowhead=/);
+ assert.match($('acceleration').innerHTML,/data-arrowhead=/);
+ if(name==='dashed')assert.match($('velocity').innerHTML,/stroke-dasharray="6 4"/);
+ if(name==='technical')assert.match($('acceleration').innerHTML,/stroke-dasharray="7 3 2 3"/);
+}
+const lineWidth=stylePanel.querySelectorAll('[data-style]').find(el=>el.dataset.style==='lineWidth');
+lineWidth.value='0.42';stylePanel.events.input({target:lineWidth});
+assert.equal(preset.value,'custom');assert.equal(run('polygonStyle.lineWidth'),.42);
+lineWidth.value='0';stylePanel.events.input({target:lineWidth});
+assert.equal(run('polygonStyle.lineWidth'),.42);
+stylePanel.querySelector('[data-reset-style]').onclick();
+assert.equal(preset.value,'tracing');assert.doesNotMatch($('velocity').innerHTML,/data-arrowhead=/);
+
+for(const id of ['velocity','acceleration']){
+ const panel=$(id+'Steps');panel.open=true;panel.ontoggle();
+ assert.match($(id+'StepText').innerHTML,/Set the pole and scale/);
+ assert.ok($(id).querySelectorAll('[data-polygon-part]').some(el=>el.classList.contains('polygonPending')));
+ $(id+'StepNext').onclick();
+ assert.match($(id+'StepText').innerHTML,/motion input/);
+ $(id+'StepProgress').oninput({target:{value:run('polygonConstructions.get("'+id+'").steps.findIndex(s=>s.value&&s.ids.some(key=>key.startsWith("'+(id==='acceleration'?'norm':'abs')+'-"))&&!s.coordinate)')}});
+ assert.match($(id+'StepText').innerHTML,/x component/);
+ const selectedStep=run('polygonConstructions.get("'+id+'").step');
+ run('zoomPlot("'+id+'",1.2);');
+ assert.equal(run('polygonConstructions.get("'+id+'").step'),selectedStep);
+ $('lengthUnits').onchange({target:{value:'cm'}});
+ assert.equal(run('polygonConstructions.get("'+id+'").step'),selectedStep);
+ assert.match($(id+'StepText').innerHTML,/cm\/s/);
+ $('lengthUnits').onchange({target:{value:'mm'}});
+ $(id+'StepComplete').onclick();
+ assert.equal($(id+'StepNext').disabled,true);
+ assert.ok($(id).querySelectorAll('[data-polygon-part]').every(el=>!el.classList.contains('polygonPending')));
+ $(id+'StepPrevious').onclick();
+ panel.open=false;panel.ontoggle();
+ assert.ok($(id).querySelectorAll('[data-polygon-part]').every(el=>!el.classList.contains('polygonPending')));
+}
+for(const ex of examples){
+ reset(ex.build());
+ for(const id of ['velocity','acceleration']){
+  assert.equal(run('polygonConstructions.get("'+id+'").step'),0,ex.id);
+  const coverage=run('JSON.stringify({parts:polygonExplanationState("'+id+'").parts.map(p=>p.id),covered:polygonConstructions.get("'+id+'").steps.flatMap(s=>s.ids)})');
+  const {parts,covered}=JSON.parse(coverage);
+  assert.ok(parts.every(part=>covered.includes(part)),ex.id+' '+id);
+ }
+}
+const custom=examples[0].build();custom.title='Custom mechanism';custom.points[1].name='Custom <pin>';
+reset(custom);
+assert.ok(run('polygonConstructions.get("velocity").steps.some(s=>s.label.includes("Custom <pin>"))'));
+const customIndex=run('polygonConstructions.get("velocity").steps.findIndex(s=>s.ids.includes("abs-1"))');
+$('velocityStepProgress').oninput({target:{value:customIndex}});
+assert.match($('velocityStepText').innerHTML,/Custom &lt;pin&gt;/);
+$('new').onclick();
+assert.equal($('velocityStepProgress').disabled,true);
+assert.match($('accelerationStepText').innerHTML,/Solve the mechanism/);
 reset(examples[0].build());
 const geom=run("JSON.stringify(result.q)"),length=run("model.links[0].length");
 for(const [u,k] of [["mm",1],["cm",.1],["m",.001],["in",1/25.4],["ft",1/304.8]]){
@@ -79,6 +186,43 @@ run('selection={type:"link",id:0};render();');
 $("length").value=.12; $("length").events.change();
 assert.ok(Math.abs(run("model.links[0].length")-36.576)<1e-8);
 $("undo").onclick();assert.equal(run("model.links[0].length"),length);
+reset(examples[0].build());
+const propertiesDetails={open:false};
+$("inspector").closest=()=>propertiesDetails;
+const openDimension=()=>$("sketch").events.dblclick({target:{closest:()=>({dataset:{dimension:"0"}})},preventDefault(){}});
+$("closeProperties").onclick();
+$("lengthUnits").onchange({target:{value:"cm"}});
+run('model.links[0].lengthLocked=false;');
+openDimension();
+assert.equal($("propertiesPanel").hidden,false);
+assert.equal(propertiesDetails.open,true);
+assert.equal(run('selection.type+"/"+selection.id'),'link/0');
+assert.equal($("dimensionEdit").hidden,false);
+assert.equal(document.activeElement,$("dimensionEdit"));
+assert.equal(Number($("dimensionEdit").value),3.5);
+const beforeDimension=run('JSON.stringify(model)'),dimensionHistory=run('history.length');
+$("dimensionEdit").value="0";$("dimensionEdit").events.change();
+assert.equal(run('JSON.stringify(model)'),beforeDimension);
+assert.equal($("dimensionEdit").hidden,false);
+$("dimensionEdit").value="4";
+$("dimensionEdit").events.keydown({key:"Enter",preventDefault(){},stopPropagation(){}});
+assert.equal(run('model.links[0].length'),40);
+assert.equal(run('model.links[0].lengthLocked'),true);
+assert.equal($("length").value,"4");
+assert.equal($("dimensionEdit").hidden,true);
+assert.equal(run('history.length'),dimensionHistory+1);
+$("undo").onclick();assert.equal(run('JSON.stringify(model)'),beforeDimension);
+openDimension();$("dimensionEdit").value="5";
+$("dimensionEdit").events.keydown({key:"Escape",preventDefault(){},stopPropagation(){}});
+assert.equal(run('JSON.stringify(model)'),beforeDimension);
+openDimension();$("dimensionEdit").events.blur();
+assert.equal(run('history.length'),dimensionHistory);
+openDimension();$("dimensionEdit").value="4";$("dimensionEdit").events.blur();
+assert.equal(run('model.links[0].length'),40);
+$("undo").onclick();
+openDimension();$("dimensionEdit").value="1000";$("dimensionEdit").events.change();
+assert.equal(run('JSON.stringify(model)'),beforeDimension);
+assert.match(run('notice'),/conflicts/);
 reset(examples[5].build());
 run('selection={type:"gear",id:1};render();');
 assert.equal($("gearTeeth").disabled,true);
@@ -94,8 +238,12 @@ reset(examples[0].build());
 $("printOpen").onclick();
 $("printGuides").checked=true;$("printComponents").checked=true;$("printLabels").checked=true;
 $("printEquations").checked=true;
+$('velocitySteps').open=true;$('velocitySteps').ontoggle();
+assert.ok($('velocity').querySelectorAll('[data-polygon-part]').some(el=>el.classList.contains('polygonPending')));
 $("printForm").onsubmit({preventDefault(){}});
 const withGuides=$("printOutput").innerHTML;
+assert.doesNotMatch(withGuides,/polygonPending|polygonStepCurrent/);
+$('velocitySteps').open=false;$('velocitySteps').ontoggle();
 assert.match(withGuides,/stroke-dasharray="4 3"/);
 assert.match(withGuides,/Normal/);
 assert.match(withGuides,/Equations and graphical/);
@@ -113,8 +261,14 @@ assert.equal($("sweepCSV").disabled,false);
 $("sweepCSV").onclick();
 run('const prior=JSON.parse('+JSON.stringify(saved)+'); delete prior.gears;delete prior.meshes;delete prior.shafts;reset(prior);');
 assert.equal($("status").textContent,"Solved");
+const beforeGearPoints=run('model.points.length');
 $("addGear").onclick();assert.equal(run("model.gears.length"),1);assert.equal(run("selection.type"),"gear");
+assert.equal($('gearMount').value,'free');
+assert.equal(run('model.gears[0].freePoint'),true);
+assert.equal(run('model.points.length'),beforeGearPoints+1);
+assert.equal(run('model.points[model.gears[0].centerPoint].fixed'),undefined);
 $("undo").onclick();assert.equal(run("model.gears.length"),0);
+assert.equal(run('model.points.length'),beforeGearPoints);
 
 // Real viewport coordinates and panel interactions, without changing physical geometry.
 assert.equal(run('canvasSize.width'),1360);
@@ -180,7 +334,37 @@ const gearTarget={closest(){return {dataset:{gear:'0'}};}};
 $('sketch').events.pointerdown(eventFor(gearTarget,...origin));
 $('sketch').events.pointermove(eventFor(gearTarget,origin[0]+50,origin[1]+20));$('sketch').events.pointerup();
 assert.equal(run('model.points[0].x'),oldX);assert.equal(run('JSON.stringify(model)'),beforeGroundDrag);
-// The analysis drawer retracts to just its tab strip.
+// Shaft support, not wheel type, controls translation during dragging.
+for(const kind of ['gear','pulley']){
+  run(`reset({title:'Shaft dragging',points:[],links:[],constraints:[],gears:[{name:'Wheel',kind:'${kind}',x:0,y:0,module:2,teeth:20,radius:20,angle:0}],drive:{type:'gear',id:0,position:0,speed:2,accel:0}})`);
+  const stationary=run('JSON.stringify(model)');origin=run('project(10,0)');
+  $('sketch').events.pointerdown(eventFor(gearTarget,...origin));
+  $('sketch').events.pointermove(eventFor(gearTarget,origin[0]+20,origin[1]-15));$('sketch').events.pointerup();
+  assert.equal(run('JSON.stringify(model)'),stationary);
+  run('mountGear(0,"free");result=solveModel(model,coord(model));render()');
+  origin=run('project(10,0)');
+  const requested=run('[(20/view.scale),(15/view.scale)]');
+  $('sketch').events.pointerdown(eventFor(gearTarget,...origin));
+  $('sketch').events.pointermove(eventFor(gearTarget,origin[0]+20,origin[1]-15));$('sketch').events.pointerup();
+  const center=run('gearCenter(model,coord(model),model.gears[0])');
+  assert.ok(Math.abs(center[0]-requested[0])<1e-6);
+  assert.ok(Math.abs(center[1]-requested[1])<1e-6);
+  $('undo').onclick();assert.ok(Math.abs(run('gearCenter(model,coord(model),model.gears[0])[0]'))<1e-6);
+}
+reset(examples[0].build());
+const snapScale=run('view.scale');run('view.scale=1;gridSpacing=25');
+assert.equal($('gridSnap').checked,true);
+assert.deepEqual(Array.from(run('snapGridPosition([24,28])')),[25,28]);
+$('gridSnap').checked=false;$('gridSnap').onchange();
+assert.deepEqual(Array.from(run('snapGridPosition([24,28])')),[24,28]);
+$('gridSnap').checked=true;$('gridSnap').onchange();
+assert.deepEqual(Array.from(run('snapGridPosition([24,28])')),[25,28]);
+assert.deepEqual(Array.from(run('snapGridPosition([21,29])')),[21,29]);
+run('view.scale=10');assert.deepEqual(Array.from(run('snapGridPosition([24,28])')),[24,28]);
+$('gridSnap').checked=false;$('gridSnap').onchange();run('view.scale='+snapScale);
+// The analysis drawer can expand and retract after earlier interactions.
+run('updateDrawerHeight(42);');
+$('retractAnalysis').onclick();assert.ok(run('drawerHeight')>70);
 $('retractAnalysis').onclick();assert.equal(run('drawerHeight'),42);
 $('retractAnalysis').onclick();assert.ok(run('drawerHeight')>70);
 assert.equal((html.match(/<details class="card side/g)||[]).length,3);
@@ -385,6 +569,11 @@ $('undo').onclick();assert.equal(run('model.meshes.length'),0);
 // Pulley creation, support controls, safe sizing, and the rope dialog are usable.
 reset(run('beltExample()'));$('addPulley').onclick();assert.equal(run('model.gears[2].kind'),'pulley');
 assert.ok($('pulleyRadius'));assert.ok($('pulleySupport'));
+assert.equal($('pulleySupport').value,'free');
+assert.equal(run('model.gears[2].freePoint'),true);
+assert.equal(run('model.points.length'),1);
+$('undo').onclick();assert.equal(run('model.points.length'),0);assert.equal(run('model.gears.length'),2);
+$('redo').onclick();assert.equal(run('model.points.length'),1);assert.equal($('pulleySupport').value,'free');
 $('pulleySupport').value='free';$('applyPulleySupport').onclick();assert.equal(run('model.gears[2].freePoint'),true);
 $('pulleySupport').value='ground';$('applyPulleySupport').onclick();assert.equal(run('model.gears[2].centerPoint'),undefined);
 reset(run('beltExample()'));run('selection={type:"gear",id:0};render()');

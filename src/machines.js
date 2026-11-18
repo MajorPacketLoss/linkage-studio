@@ -70,6 +70,7 @@ function addPulley(){
     const g={name:'P'+n,kind:'pulley',radius:30,x:0,y:0,teeth:20,module:3,angle:0};
     const last=model.gears.at(-1);if(last){g.x=last.x+gearRadius(last)+g.radius+40;g.y=last.y;}
     selection={type:'gear',id:model.gears.push(g)-1};
+    mountGear(selection.id,'free');
   });
 }
 function connectBelt(a,b,type){
@@ -89,7 +90,7 @@ function connectBelt(a,b,type){
 }
 function pulleyDrawing(source,q,i,map,scale,print){
   const g=source.gears[i],center=map(...gearCenter(source,q,g)),r=gearRadius(g)*scale,angle=q[2*source.points.length+i];
-  const color=print?'#244867':'#476e9d';let out='';
+  const color=print?'#244867':'var(--wheel-color,#476e9d)';let out='';
   if(!print&&objectSelected('gear',i))out+=circle(...center,r+6,'fill="none" stroke="#f0a128" stroke-width="5" opacity=".7"');
   out+='<g '+(!print?'data-gear="'+i+'" style="cursor:pointer"':'')+'>';
   out+=circle(...center,r,'fill="white" stroke="'+color+'" stroke-width="1.65"')+circle(...center,r*.9,'fill="none" stroke="'+color+'" stroke-width="1"');

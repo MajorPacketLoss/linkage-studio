@@ -7,9 +7,16 @@ function drawingArea(){
   if(typeof window.workspaceArea==="function")return window.workspaceArea();
   return {x:70,y:45,width:canvasSize.width-140,height:canvasSize.height-90};
 }
-const colors = ["#2467ad","#16776d","#75518f","#a16830","#a34a62","#657c28"];
+const colors = ["var(--link-1,#2467ad)","var(--link-2,#16776d)","var(--link-3,#75518f)","var(--link-4,#a16830)","var(--link-5,#a34a62)","var(--link-6,#657c28)"];
 const unitsPerPaperMillimetre=2.5;
-const defaultPolygonStyle=Object.freeze({lineWidth:.288,arrow:"none",headSize:2.6,headStroke:.22});
+const defaultPolygonStyle=Object.freeze({lineWidth:.288,linePattern:"solid",arrow:"none",headSize:2.6,headStroke:.22});
+const polygonStylePresets={
+  tracing:{label:"Tracing · plain",style:{...defaultPolygonStyle}},
+  fine:{label:"Fine · open arrows",style:{...defaultPolygonStyle,lineWidth:.16,arrow:"open",headStroke:.14}},
+  bold:{label:"Bold · filled arrows",style:{...defaultPolygonStyle,lineWidth:.5,arrow:"filled",headStroke:.3}},
+  dashed:{label:"Dashed · outlined arrows",style:{...defaultPolygonStyle,lineWidth:.3,linePattern:"dashed",arrow:"outline"}},
+  technical:{label:"Technical · differentiated",style:{...defaultPolygonStyle,lineWidth:.35,linePattern:"differentiated",arrow:"open"}}
+};
 const polygonStyle={...defaultPolygonStyle};
 const toolHints = {
   mount:"Click the joint that should carry this wheel shaft.",
@@ -53,7 +60,15 @@ const distanceText=(value,mmDecimals=2)=>fmt(toDisplay(value),Math.max(6,mmDecim
 const vectorUnit=accel=>displayUnits+(accel?"/s²":"/s");
 const plotViews={velocity:{zoom:1,x:0,y:0},acceleration:{zoom:1,x:0,y:0}};
 let expandedPlot=null;
-let gridSpacing=25;
+let gridSpacing=25,snapToGrid=true;
+function snapGridPosition(position){
+  if(!snapToGrid||!(gridSpacing>0)||!(view?.scale>0))return position;
+  const tolerance=Math.min(gridSpacing*.08,4/view.scale);
+  return position.map(value=>{
+    const nearest=Math.round(value/gridSpacing)*gridSpacing;
+    return Math.abs(nearest-value)<=tolerance?nearest:value;
+  });
+}
 let history = [], redoHistory=[], selection = null, staged = null, tool = "select", dirty = false;
 let constraintListOpen=true;
 let multiSelection=[];
@@ -206,9 +221,9 @@ function renderSketch() {
     svg+=line(p2.map((t,j)=>t-(j?dy:dx)*.15),p2.map((t,j)=>t+(j?dy:dx)*.15),'stroke="'+color+'"');
     const mx=(p1[0]+p2[0])/2,my=(p1[1]+p2[1])/2;
     const display=distanceText(drag?.pose&&l.lengthLocked===false?magnitude(...vector(q,a,b)):l.length)+" "+displayUnits, width=display.length*7+10;
-    svg+='<rect x="'+(mx-width/2)+'" y="'+(my-9)+'" width="'+width+'" height="18" rx="4" fill="#ffffff" '+hit+'/>';
+    svg+='<rect x="'+(mx-width/2)+'" y="'+(my-9)+'" width="'+width+'" height="18" rx="4" fill="#ffffff" data-dimension="'+i+'" '+hit+'/>';
     if(l.lengthLocked!==false)svg+='<g transform="translate('+(mx-width/2-12)+' '+(my-5)+')" fill="none" stroke="'+color+'" stroke-width="1.3" pointer-events="none"><rect x="0" y="4" width="8" height="7" rx="1"/><path d="M2 4V2a2 2 0 0 1 4 0v2"/></g>';
-    svg+=txt(mx,my+4,display,'text-anchor="middle" fill="'+color+'" font-size="12" '+hit);
+    svg+=txt(mx,my+4,display,'text-anchor="middle" fill="'+color+'" font-size="12" data-dimension="'+i+'" '+hit);
   }
   for(const [i,p] of model.points.entries()){
     const [x,y]=pos[i], active=objectSelected("point",i)||(staged?.type==="point"&&staged.id===i);
@@ -486,11 +501,13 @@ function polygon(id, values, accel=false) {
   if(!values) {
     svg.innerHTML=txt(240,139,"Solve the mechanism to draw this polygon.",'text-anchor="middle" fill="#536981" font-size="13"');
     updatePolygonExplanation(id,[],n=>distanceText(n,4),vectorUnit(accel));
+    updatePolygonConstruction(id,[],n=>distanceText(n,4),vectorUnit(accel));
     return;
   }
   const parts=[];
   svg.innerHTML=polygonMarkup(id,polygonGeometry(values,accel),accel,{...view,parts});
   updatePolygonExplanation(id,parts,n=>distanceText(n,4),vectorUnit(accel));
+  updatePolygonConstruction(id,parts,n=>distanceText(n,4),vectorUnit(accel));
 }
 function drawingBounds(extent) {
   const xs=extent.map(p=>p[0]),ys=extent.map(p=>p[1]);
@@ -500,9 +517,10 @@ function drawingBounds(extent) {
 function polygonGeometry(values,accel) {
   return buildGeneralPolygon(model,result,accel);
 }
-function polygonSegment(start,end,colour,absolute,style) {
+function polygonSegment(start,end,colour,absolute,style,kind="rel") {
   const stroke=style.lineWidth*unitsPerPaperMillimetre*(absolute?2/3:1);
-  const shaft='stroke="'+colour+'" stroke-width="'+stroke+'"';
+  const dash=style.linePattern==="dashed"?"6 4":style.linePattern==="differentiated"?(absolute?"2 3":kind==="norm"?"7 3":kind==="tan"?"7 3 2 3":""):"";
+  const shaft='stroke="'+colour+'" stroke-width="'+stroke+'"'+(dash?' stroke-dasharray="'+dash+'"':"");
   if(style.arrow==="none")return line(start,end,shaft);
   const dx=end[0]-start[0], dy=end[1]-start[1], span=magnitude(dx,dy);
   const size=Math.min(style.headSize*unitsPerPaperMillimetre,span*.48);
@@ -565,7 +583,7 @@ function polygonMarkup(id,geometry,accel,view) {
     const a=register({id:"guide-"+i,category:"Construction lines",label:guideLabel??"Dashed guide · "+link,
       text:description??(accel?"Extend the tangent direction through the normal tip. This line is perpendicular to "+link+". Its intersection locates the endpoint.":
         "Extend the direction perpendicular to "+link+". Its intersection with the other construction line locates the endpoint."),
-      equation:"Construction direction ∥ J r("+link+")"});
+      equation:edge?"Construction direction ∥ J r("+link+")":undefined});
     const end=[[u-k*dir[0],v+k*dir[1]],[u+k*dir[0],v-k*dir[1]]];
     content+=group(a,(a?line(...end,hit):"")+line(...end,'stroke="#7c8a99" stroke-width="'+guideStroke+'" stroke-dasharray="4 3"'));
   }
@@ -576,7 +594,7 @@ function polygonMarkup(id,geometry,accel,view) {
     const components=format(b[0]-a[0])+", "+format(b[1]-a[1]);
     return '<g'+attrs+'><title>'+safe(label+" ("+components+") "+unit)+'</title>'+
       (attrs?line(p,q,hit):"")+
-      polygonSegment(p,q,palette[k],k==="abs",style)+'</g>';
+      polygonSegment(p,q,palette[k],k==="abs",style,k)+'</g>';
   };
   const explain=(id,type,a,b,from,to,role)=>parts?explainVector(id,type,a,b,[to[0]-from[0],to[1]-from[1]],accel,role):null;
   points.forEach((p,i)=>content+=segment(pole,p,"abs","Pole → "+names[i],explain("abs-"+i,"abs","O",names[i],pole,p,pinRoles[i])));
@@ -599,7 +617,7 @@ function polygonMarkup(id,geometry,accel,view) {
     const [x,y]=map(e.tip);
     const attrs=register({id:"tip-"+e.id+"-"+e.a+"-"+e.b,category:"Construction points",label:(e.label??"Normal tip")+" · "+edgeLabel(e),
       text:"This is the end of the normal component and the start of the tangential component. It is a construction point in the acceleration diagram.",
-      equation:e.gearPoint?"Normal tip = −ω²r (fixed centre)": "Normal tip = a("+names[e.a]+") − ω² r("+names[e.a]+names[e.b]+")",value:e.tip,coordinate:true});
+      equation:e.gearPoint?"Normal tip = a(centre) − ω²r": "Normal tip = a("+names[e.a]+") − ω² r("+names[e.a]+names[e.b]+")",value:e.tip,coordinate:true});
     if(magnitude(x-map(points[e.a])[0],y-map(points[e.a])[1])>4)
       content+=group(attrs,(attrs?circle(x,y,6,'fill="transparent"'):"")+circle(x,y,1.4,'fill="#c27526"'));
   }
@@ -692,7 +710,8 @@ function renderMotion() {
   $("position").textContent=positionText;
   scrub.setAttribute("aria-valuetext",positionText);
 }
-function render() {
+function render(preserveSketch = false) {
+  cancelDimensionEdit();
   $("title").textContent=model.title;
   if(window.refreshGeneral)window.refreshGeneral();
   $("lengthUnits").value=displayUnits;
@@ -701,6 +720,7 @@ function render() {
   $("gridSpacing").min=toDisplay(0.001);
   $("gridSpacing").max=toDisplay(1000000);
   $("gridSpacing").value=distanceText(gridSpacing,3);
+  $("gridSnap").checked=snapToGrid;
   const blocks=model.points.filter(p=>p.rail).length;
   const ground=(model.points.some(p=>p.fixed||p.rail)||model.gears.length)?1:0;
   $("summary").textContent=(model.links.length+model.gears.length+blocks+ground)+" links · "+model.points.length+" pins · "+
@@ -711,7 +731,7 @@ function render() {
   document.querySelectorAll("[data-tool]").forEach(b=>{b.classList.toggle("active",b.dataset.tool===tool);b.setAttribute("aria-pressed",b.dataset.tool===tool);});
   $("constraintTool").value=modes.some(([key])=>key===tool)?tool:"";
   $("constraintsToggle").classList.toggle("active",modes.some(([key])=>key===tool));
-  renderSketch();
+  if(!preserveSketch)renderSketch();
   renderViewControls();
   renderDrive();
   renderInspector();
@@ -777,10 +797,11 @@ function engage(next) {
   tool=next;
   render();
 }
-function pick(target,xy) {
+function pick(target,xy,preserveSketch = false) {
+  if(xy)xy=snapGridPosition(xy);
   const point=target?.type==="point" ? target.id:null;
   const link=target?.type==="link" ? target.id:null;
-  if(tool==="select"){selection=target;multiSelection=[];render();return;}
+  if(tool==="select"){selection=target;multiSelection=[];render(preserveSketch);return;}
   if(tool==='collinear'){
     if(!staged&&(link!==null||point!==null)){staged=target;render();return;}
     if(staged?.type==='link'&&link!==null&&link!==staged.id){addConstructionConstraint({type:'collinear',link:staged.id,referenceLink:link});return;}
@@ -866,14 +887,15 @@ sketch.addEventListener("pointerdown",event=>{
   if(tool!=="select"||event.button!==0)return;
   const target=targetFrom(event);
   if(!target)return;
+  let grabbed=target;
   if(target.type==="gear"){
-    stop();seedCurrent();selection=target;
-    drag={mode:"gear",target,pointer:event.pointerId,x:event.clientX,y:event.clientY,cursor:modelPosition(event),before:snapshot()};
-    render();return;
+    const g=model.gears[target.id];
+    if(!Number.isInteger(g.centerPoint)||model.points[g.centerPoint].fixed)return;
+    grabbed={type:"point",id:g.centerPoint};
   }
   if(playing){stop();renderMotion();}
   const cursor=modelPosition(event), pose=scene();
-  const grab=grabPoint(model,pose,target,cursor);
+  const grab=grabPoint(model,pose,grabbed,cursor);
   if(!grab)return;
   const offset=grab.map((row,i)=>dot(row,pose)-cursor[i]);
   drag={mode:"geometry",target,grab,offset,seed:pose,pointer:event.pointerId,x:event.clientX,y:event.clientY};
@@ -898,17 +920,7 @@ sketch.addEventListener("pointermove",event=>{
     selection=drag.target;
     sketch.setPointerCapture(event.pointerId);
   }
-  if(drag.mode==="gear"){
-    const destination=modelPosition(event),dx=destination[0]-drag.cursor[0],dy=destination[1]-drag.cursor[1];
-    const base=clone(drag.before.model),g=base.gears[drag.target.id];
-    if(Number.isInteger(g.centerPoint)){
-      const seed=coord(base),grab=grabPoint(base,seed,{type:'point',id:g.centerPoint},drag.cursor);
-      const pose=dragPose({...base,editLengths:true,constructionMode:true},seed,grab,destination,Math.max(12,Math.hypot(dx,dy)));
-      if(pose){storeConstructionPose(base,pose);fitGearsToLinks(base);model=base;updateDrivePosition(pose);result=solveModel(model,pose);dirty=false;}
-    }else{model=translatedGearAssembly(base,drag.target.id,dx,dy);result=solveModel(model,coord(model));dirty=false;}
-    renderSketch();return;
-  }
-  const destination=modelPosition(event).map((x,i)=>x+drag.offset[i]);
+  const destination=snapGridPosition(modelPosition(event).map((x,i)=>x+drag.offset[i]));
   const next=dragPose({...model,editLengths:true,constructionMode:true},drag.pose??drag.seed,drag.grab,destination,Math.max(12,6/view.scale));
   drag.failed=!next;
   if(next){
@@ -938,11 +950,6 @@ function finishDrag(commit) {
     else if(moved)renderSketch();return;
   }
   if(mode==="pan")return;
-  if(mode==="gear"){
-    if(commit&&moved&&JSON.stringify(model)!==JSON.stringify(before.model)){history.push(before);redoHistory=[];render();}
-    else restoreSnapshot(before);
-    return;
-  }
   if(commit&&moved&&pose?.some((x,i)=>Math.abs(x-seed[i])>1e-7)){
     remember();
     storeConstructionPose(model,pose);
@@ -961,9 +968,54 @@ sketch.addEventListener("pointerup",()=>finishDrag(true));
 sketch.addEventListener("pointercancel",()=>finishDrag(false));
 sketch.addEventListener("lostpointercapture",()=>finishDrag(false));
 sketch.addEventListener("pointerleave",()=>{if(!moved)finishDrag(false);});
+let dimensionLink=null;
+function cancelDimensionEdit(){
+  dimensionLink=null;
+  $("dimensionEdit").hidden=true;
+}
+function commitDimensionEdit(){
+  if(dimensionLink===null)return;
+  const input=$("dimensionEdit");
+  if(!input.checkValidity()||!Number.isFinite(input.valueAsNumber)){input.reportValidity();return;}
+  const id=dimensionLink,value=fromDisplay(input.valueAsNumber);
+  cancelDimensionEdit();
+  if(input.valueAsNumber===Number(distanceText(model.links[id].length,9))){renderSketch();return;}
+  edit(()=>{model.links[id].length=value;model.links[id].lengthLocked=true;});
+}
+$("dimensionEdit").addEventListener("change",commitDimensionEdit);
+$("dimensionEdit").addEventListener("blur",commitDimensionEdit);
+$("dimensionEdit").addEventListener("keydown",event=>{
+  if(event.key!=="Enter"&&event.key!=="Escape")return;
+  event.preventDefault();event.stopPropagation();
+  if(event.key==="Enter")commitDimensionEdit();
+  else{cancelDimensionEdit();renderSketch();}
+});
 sketch.addEventListener("click",event=>{
   if(moved||event.shiftKey){moved=false;return;}
-  pick(targetFrom(event),modelPosition(event));
+  // Keep dimension labels mounted so the browser can dispatch a double click.
+  const dimension=event.target.closest("[data-dimension]"),target=targetFrom(event);
+  pick(target,modelPosition(event),Boolean(dimension));
+  if(dimension)setTimeout(()=>{
+    if(dimensionLink===null&&selection?.type===target?.type&&selection?.id===target?.id)renderSketch();
+  },600);
+});
+sketch.addEventListener("dblclick",event=>{
+  const label=event.target.closest("[data-dimension]");
+  if(!label||moved||event.shiftKey)return;
+  event.preventDefault();
+  stop();tool="select";staged=null;multiSelection=[];
+  selection={type:"link",id:Number(label.dataset.dimension)};
+  setPanel($("propertiesPanel"),true);
+  $("inspector").closest("details").open=true;
+  render();
+  const rect=sketch.querySelector('rect[data-dimension="'+selection.id+'"]').getBoundingClientRect();
+  const board=$("board").getBoundingClientRect(),input=$("dimensionEdit");
+  dimensionLink=selection.id;
+  input.min=toDisplay(.001);input.value=distanceText(model.links[dimensionLink].length,9);
+  input.setAttribute("aria-label",model.links[dimensionLink].name+" length ("+displayUnits+")");
+  input.style.left=(rect.x-board.x)+"px";input.style.top=(rect.y-board.y-5)+"px";
+  input.style.width=Math.max(100,rect.width)+"px";
+  input.hidden=false;input.focus();input.select();
 });
 sketch.addEventListener("wheel",event=>{
   event.preventDefault();
@@ -1092,6 +1144,7 @@ $("viewScale").onchange=event=>{
   if(Number.isFinite(value)) zoomTo(view.reference*value/100);
   else renderViewControls();
 };
+$("gridSnap").onchange=()=>snapToGrid=$("gridSnap").checked;
 $("gridSpacing").onchange=event=>{
   const field=event.target;
   if(field.checkValidity()&&Number.isFinite(field.valueAsNumber))gridSpacing=fromDisplay(field.valueAsNumber);
