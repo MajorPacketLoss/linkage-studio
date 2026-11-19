@@ -21,6 +21,7 @@ const polygonStyle={...defaultPolygonStyle};
 const toolHints = {
   mount:"Click the joint that should carry this wheel shaft.",
   select:"Drag a pin or link to move the constrained sketch. Select an item and press Delete to remove it.",
+  box:"Drag a selection box over pins, links or wheels. Choose Select to move objects.",
   pin:"Click the drawing to place a pin.",
   bar:"Select two pins, or click empty space to place link endpoints.",
   rail:"Select a pin to add a fixed guide or remove its slider.",
@@ -104,7 +105,9 @@ function edit(change, run = true) {
     if(requestedDrive!==null)model.drive.position=requestedDrive;
     inferInput();
     history.push(previous);redoHistory=[];if(history.length>60)history.shift();
-    dirty=false;notice='';result=solveModel(model,coord(model));render();return true;
+    dirty=false;notice='';result=solveModel(model,coord(model));
+    if(geometry()!==beforeGeometry){recordJointTrails(null);recordJointTrails(result.q);}
+    render();return true;
   }catch(error){
     ({model,result,dirty,displayUnits,selection}=previous);notice=error.message;render();return false;
   }
@@ -195,6 +198,7 @@ function renderSketch() {
       svg+=line(point(-1500),point(1500),'stroke="#5b7797" stroke-width="1.4" stroke-dasharray="7 5"');
     }
   }
+  svg+=jointPathMarkup();
   svg+=gearDrawing(drag?.previewModel??model,q,(x,y)=>project(x,y),view.scale);
   for(const [i,l] of model.links.entries()){
     const [a,b,...rest]=l.pins;
@@ -386,7 +390,7 @@ function renderInspector() {
       '<label class="inline"><input id="fixed" type="checkbox" '+(p.fixed?"checked":"")+'> Fixed ground pin</label>'+
       '<label class="inline"><input id="railToggle" type="checkbox" '+(p.rail?"checked":"")+'> Slider on fixed guide</label>'+
       (p.rail?'<div class="fields three">'+numericDistance("Guide X","railX",p.rail.x)+numericDistance("Guide Y","railY",p.rail.y)+numeric("Guide angle (°)","railAngle",p.rail.angle,"required")+'</div>':"")+
-      '<button id="removeSelection" class="remove">Delete pin and its links</button>';
+      jointPathFields(p)+'<button id="removeSelection" class="remove">Delete pin and its links</button>';
   }else if(l){
     panel='<h3>'+safe(l.name)+' · '+safe(labelFor(model,l))+'</h3>'+
       '<div class="fields">'+numericDistance("Length","length",l.length,'required min="'+toDisplay(0.001)+'"')+'</div>'+
@@ -414,6 +418,7 @@ function renderInspector() {
   $("inspector").querySelectorAll("[data-remove]").forEach(node=>node.onclick=()=>edit(()=>model.constraints.splice(Number(node.dataset.remove),1)));
   $("inspector").querySelectorAll("[data-constraint-physical]").forEach(node=>node.onchange=()=>edit(()=>model.constraints[Number(node.dataset.constraintPhysical)].physical=node.checked,true));
   if(p) {
+    bindJointPathFields(p);
     onNumber("pointX",x=>p.x=x,false,fromDisplay);
     onNumber("pointY",y=>p.y=y,false,fromDisplay);
     $("fixed").onchange=()=>toggleFixed(id);
@@ -710,6 +715,19 @@ function renderMotion() {
   $("position").textContent=positionText;
   scrub.setAttribute("aria-valuetext",positionText);
 }
+const touchHintMedia=window.matchMedia?.("(pointer: coarse)");
+function renderHints() {
+  const touch=touchHintMedia?.matches;
+  const hint=touch&&tool==="select"?
+    "Drag a pin or link to move the sketch. Touch: drag empty canvas to pan, pinch to zoom, double-tap and drag to select an area.":
+    toolHints[tool]+(touch&&tool==="box"?" Two fingers still pan and zoom.":"");
+  $("hint").textContent=hint+(staged?" First selection: "+(staged.type==="point"?model.points[staged.id].name:(staged.type==="gear"?model.gears[staged.id].name:model.links[staged.id].name))+". Select the next object.":"");
+  $("navigationHint").textContent=touch?
+    "Touch: pinch to zoom · Drag empty canvas to pan · Double-tap and drag or Box select to select":
+    "Scroll to zoom · Right-drag to pan · Left-drag to select";
+}
+if(touchHintMedia?.addEventListener)touchHintMedia.addEventListener("change",renderHints);
+else touchHintMedia?.addListener?.(renderHints);
 function render(preserveSketch = false) {
   cancelDimensionEdit();
   $("title").textContent=model.title;
@@ -725,7 +743,7 @@ function render(preserveSketch = false) {
   const ground=(model.points.some(p=>p.fixed||p.rail)||model.gears.length)?1:0;
   $("summary").textContent=(model.links.length+model.gears.length+blocks+ground)+" links · "+model.points.length+" pins · "+
     (!dirty&&result.q.length&&["solved","no-drive","indeterminate","incompatible"].includes(result.status)?result.dof+" DOF before input":"Planar sketch");
-  $("hint").textContent=toolHints[tool]+(staged?" First selection: "+(staged.type==="point"?model.points[staged.id].name:(staged.type==="gear"?model.gears[staged.id].name:model.links[staged.id].name))+". Select the next object.":"");
+  renderHints();
   $("undo").disabled=history.length===0;
   $("redo").disabled=redoHistory.length===0;
   document.querySelectorAll("[data-tool]").forEach(b=>{b.classList.toggle("active",b.dataset.tool===tool);b.setAttribute("aria-pressed",b.dataset.tool===tool);});
@@ -872,9 +890,71 @@ function targetFrom(event) {
   return node.dataset.point===undefined ?
     {type:"link",id:Number(node.dataset.link)} : {type:"point",id:Number(node.dataset.point)};
 }
-let moved=false;
+// After a pinch, ignore remaining fingers until all are lifted to avoid accidental edits.
+function touchNavigation(canvas,getView,redraw,cancelSingle,polygon=false) {
+  const touches=new Map();
+  let gesture=null,blocked=false;
+  function pair() {
+    const [a,b]=[...touches.values()];
+    return {x:(a.x+b.x)/2,y:(a.y+b.y)/2,distance:Math.max(1,magnitude(a.x-b.x,a.y-b.y))};
+  }
+  return {
+    down(event) {
+      if(event.pointerType!=="touch")return false;
+      touches.set(event.pointerId,boardPosition(event,canvas));
+      canvas.setPointerCapture(event.pointerId);
+      if(touches.size>=2&&!blocked){
+        cancelSingle();blocked=true;
+        gesture={...pair(),view:{...getView()}};
+      }
+      if(blocked)event.preventDefault();
+      return blocked;
+    },
+    move(event) {
+      if(!touches.has(event.pointerId))return false;
+      touches.set(event.pointerId,boardPosition(event,canvas));
+      if(!blocked)return false;
+      event.preventDefault();
+      if(touches.size>=2&&gesture){
+        const pt=pair(),view=getView(),start=gesture.view;
+        const key=polygon?"zoom":"scale",reference=start.reference??1;
+        view[key]=Math.max(polygon ? .25 : reference*.1,Math.min(polygon?32:reference*16,start[key]*pt.distance/gesture.distance));
+        const ratio=view[key]/start[key],ox=polygon?240:0,oy=polygon?128:0;
+        view.x=pt.x-ox+(start.x-gesture.x+ox)*ratio;
+        view.y=pt.y-oy+(start.y-gesture.y+oy)*ratio;
+        redraw();
+      }
+      return true;
+    },
+    end(event) {
+      if(!event||!touches.has(event.pointerId))return false;
+      touches.delete(event.pointerId);
+      const handled=blocked;
+      if(touches.size<2)gesture=null;
+      if(!touches.size)blocked=false;
+      return handled;
+    }
+  };
+}
+let moved=false,lastTouchTap=null;
+const sketchTouch=touchNavigation(sketch,()=>view,()=>{renderSketch();renderViewControls();},()=>{
+  finishDrag(false);moved=true;lastTouchTap=null;
+});
 sketch.addEventListener("pointerdown",event=>{
+  if(sketchTouch.down(event))return;
+  if(drag)return;
   moved=false;
+  const target=targetFrom(event),touch=event.pointerType==="touch";
+  const doubleTap=touch&&!target&&lastTouchTap&&event.timeStamp-lastTouchTap.time<350&&
+    magnitude(event.clientX-lastTouchTap.x,event.clientY-lastTouchTap.y)<24;
+  lastTouchTap=null;
+  if(event.button===0&&(tool==="box"||touch&&!target)){
+    const pt=boardPosition(event);
+    drag=tool==="box"||doubleTap?
+      {mode:'box',pointer:event.pointerId,start:pt,end:pt,x:event.clientX,y:event.clientY}:
+      {mode:'pan',pointer:event.pointerId,px:pt.x,py:pt.y,x:view.x,y:view.y,touch:true,cx:event.clientX,cy:event.clientY};
+    return;
+  }
   if(event.button===2||event.button===1){
     event.preventDefault();const pt=boardPosition(event);
     drag={mode:'pan',pointer:event.pointerId,px:pt.x,py:pt.y,x:view.x,y:view.y};
@@ -885,7 +965,6 @@ sketch.addEventListener("pointerdown",event=>{
     return;
   }
   if(tool!=="select"||event.button!==0)return;
-  const target=targetFrom(event);
   if(!target)return;
   let grabbed=target;
   if(target.type==="gear"){
@@ -898,12 +977,15 @@ sketch.addEventListener("pointerdown",event=>{
   const grab=grabPoint(model,pose,grabbed,cursor);
   if(!grab)return;
   const offset=grab.map((row,i)=>dot(row,pose)-cursor[i]);
-  drag={mode:"geometry",target,grab,offset,seed:pose,pointer:event.pointerId,x:event.clientX,y:event.clientY};
+  drag={mode:"geometry",target,grab,offset,seed:pose,trailSnapshot:jointTrailSnapshot(),pointer:event.pointerId,x:event.clientX,y:event.clientY};
 });
 sketch.addEventListener("pointermove",event=>{
-  if(!drag||drag.pointer!==event.pointerId||!event.buttons)return;
+  if(sketchTouch.move(event))return;
+  if(!drag||drag.pointer!==event.pointerId||!event.buttons&&event.pointerType!=="touch")return;
   if(drag.mode==="pan"){
+    if(drag.touch&&!moved&&magnitude(event.clientX-drag.cx,event.clientY-drag.cy)<4)return;
     const pt=boardPosition(event);
+    sketch.classList.add('panning');
     view.x=drag.x+pt.x-drag.px;
     view.y=drag.y+pt.y-drag.py;
     moved=true;
@@ -923,6 +1005,7 @@ sketch.addEventListener("pointermove",event=>{
   const destination=snapGridPosition(modelPosition(event).map((x,i)=>x+drag.offset[i]));
   const next=dragPose({...model,editLengths:true,constructionMode:true},drag.pose??drag.seed,drag.grab,destination,Math.max(12,6/view.scale));
   drag.failed=!next;
+  recordJointTrails(next);
   if(next){
     drag.pose=next;drag.previewModel=clone(model);storeConstructionPose(drag.previewModel,next);fitGearsToLinks(drag.previewModel);
   }
@@ -942,8 +1025,9 @@ function updateDrivePosition(q) {
 }
 function finishDrag(commit) {
   if(!drag)return;
-  const {mode,pose,seed,failed,before,start,end}=drag;
+  const {mode,pose,seed,failed,before,start,end,trailSnapshot}=drag;
   drag=null;
+  if(!commit||!moved||!pose)restoreJointTrails(trailSnapshot);
   sketch.classList.remove("panning");
   if(mode==='box'){
     if(commit&&moved){multiSelection=objectsInsideBox(start,end);selection=multiSelection[0]??null;render();}
@@ -964,10 +1048,22 @@ function finishDrag(commit) {
   if(moved)render();
 }
 sketch.addEventListener("contextmenu",event=>event.preventDefault());
-sketch.addEventListener("pointerup",()=>finishDrag(true));
-sketch.addEventListener("pointercancel",()=>finishDrag(false));
-sketch.addEventListener("lostpointercapture",()=>finishDrag(false));
-sketch.addEventListener("pointerleave",()=>{if(!moved)finishDrag(false);});
+sketch.addEventListener("pointerup",event=>{
+  if(sketchTouch.end(event))return;
+  if(event&&drag?.pointer!==event.pointerId)return;
+  if(event?.pointerType==="touch"&&drag?.touch&&!moved){
+    lastTouchTap={time:event.timeStamp,x:event.clientX,y:event.clientY};
+  }
+  finishDrag(true);
+});
+for(const name of ["pointercancel","lostpointercapture"]){
+  sketch.addEventListener(name,event=>{
+    if(sketchTouch.end(event))return;
+    if(event&&drag?.pointer!==event.pointerId)return;
+    lastTouchTap=null;finishDrag(false);
+  });
+}
+sketch.addEventListener("pointerleave",event=>{if(event?.pointerType!=="touch"&&!moved)finishDrag(false);});
 let dimensionLink=null;
 function cancelDimensionEdit(){
   dimensionLink=null;
@@ -992,6 +1088,7 @@ $("dimensionEdit").addEventListener("keydown",event=>{
 });
 sketch.addEventListener("click",event=>{
   if(moved||event.shiftKey){moved=false;return;}
+  if(tool==="box")return;
   // Keep dimension labels mounted so the browser can dispatch a double click.
   const dimension=event.target.closest("[data-dimension]"),target=targetFrom(event);
   pick(target,modelPosition(event),Boolean(dimension));
@@ -1029,9 +1126,10 @@ function seek(position,speed=model.drive.speed) {
   if(model.drive.type==="rotary")position=wrapAngle(position);
   const nextDrive={...model.drive,position,speed};
   const next=solveModel(model,result.q,nextDrive);
-  if(next.status!=="solved")return false;
+  if(next.status!=="solved"){recordJointTrails(null);return false;}
   model.drive=nextDrive;
   result=next;
+  recordJointTrails(next.q);
   return true;
 }
 function animate(time) {
@@ -1086,9 +1184,16 @@ $("scrub").oninput=event=>{
 $("scrub").onchange=()=>{scrubPosition=null;};
 $("split").onchange=renderAnalysis;
 for(const type of positionVectorTypes)$("sketch"+type.id).onchange=renderSketch;
+$("clearJointTrails").onclick=clearJointTrails;
+for(const id of ["sweepSpan","sweepSamples"]){
+  $(id).addEventListener("change",()=>{renderSketch();renderInspector();});
+}
 for(const id of Object.keys(plotViews)){
   const canvas=$(id), view=plotViews[id];
   let pan=null;
+  const touch=touchNavigation(canvas,()=>view,()=>redrawPlot(id),()=>{
+    pan=null;canvas.classList.remove("panning");
+  },true);
   $(id+"In").onclick=()=>zoomPlot(id,1.35);
   $(id+"Out").onclick=()=>zoomPlot(id,1/1.35);
   $(id+"Fit").onclick=()=>{resetPlotView(id);redrawPlot(id);};
@@ -1106,12 +1211,14 @@ for(const id of Object.keys(plotViews)){
   },{passive:false});
   canvas.addEventListener("pointerdown",event=>{
     if(event.button!==0||!analysisReady())return;
+    if(touch.down(event)||pan)return;
     const pt=boardPosition(event,canvas);
     pan={id:event.pointerId,px:pt.x,py:pt.y,x:view.x,y:view.y,part:polygonPartAt(event.target),moved:false};
     canvas.setPointerCapture(event.pointerId);
     canvas.classList.add("panning");
   });
   canvas.addEventListener("pointermove",event=>{
+    if(touch.move(event))return;
     if(pan?.id!==event.pointerId)return;
     const pt=boardPosition(event,canvas);
     if(!pan.moved&&magnitude(pt.x-pan.px,pt.y-pan.py)<3)return;
@@ -1122,6 +1229,7 @@ for(const id of Object.keys(plotViews)){
   });
   for(const name of ["pointerup","pointercancel","lostpointercapture"]){
     canvas.addEventListener(name,event=>{
+      if(touch.end(event))return;
       if(pan?.id!==event.pointerId)return;
       if(name==="pointerup"&&!pan.moved)selectPolygonPart(id,pan.part);
       pan=null;

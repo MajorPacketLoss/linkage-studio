@@ -2,7 +2,7 @@
 (() => {
   const storageKey = "linkage-studio-appearance";
   const defaults = {
-    theme: "light", accent: "#235f99", canvas: "#fbfcfe", autoCanvas: true,
+    theme: "system", accent: "#235f99", canvas: "#fbfcfe", autoCanvas: true,
     link1: "#2467ad", link2: "#16776d", link3: "#75518f",
     link4: "#a16830", link5: "#a34a62", link6: "#657c28",
     wheel: "#416e9e", rope: "#665649"

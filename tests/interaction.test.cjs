@@ -50,24 +50,45 @@ function parse(text){
  return out;
 }
 const initialElements=parse(html);
+map.get('tools').children=initialElements.filter(el=>el.dataset.tool);
 const $=id=>{const e=map.get(id);if(!e)throw Error("Missing DOM id "+id);return e;};
 const document={documentElement:new Element('html'),body:new Element('body'),querySelector(selector){return initialElements.find(e=>e.attrs.includes(selector.slice(1)));},getElementById:id=>map.get(id)??null,querySelectorAll:selector=>{
  const data=selector.match(/^\[data-([\w-]+)\]$/)?.[1]?.replace(/-([a-z])/g,(_,s)=>s.toUpperCase());
  return data?initialElements.filter(e=>data in e.dataset):[];
 },addEventListener(k,fn){const prior=docEvents[k];docEvents[k]=event=>{prior?.(event);fn(event);};},createElement(){return{click(){}};}};
 const appearanceStorage=new Map(),themeMedia={matches:false,addEventListener(name,listener){this.listener=listener;}};
+const touchHintMedia={matches:false,addEventListener(name,listener){this.listener=listener;}};
 const localStorage={getItem(key){return appearanceStorage.get(key)??null;},setItem(key,value){appearanceStorage.set(key,value);}};
 const c=vm.createContext({document,cancelAnimationFrame(){},requestAnimationFrame(){return 1;},setTimeout(){},Blob,URL:{createObjectURL(blob){downloads.push(blob);return "blob:test";},revokeObjectURL(){}},
- ResizeObserver:class{constructor(fn){this.fn=fn;}observe(){}},window:{localStorage,matchMedia(){return themeMedia;},innerWidth:1360,innerHeight:838,scrollTo(){},addEventListener(k,f){browserEvents[k]=f;},print(){browserEvents.beforeprint();}}});
+ ResizeObserver:class{constructor(fn){this.fn=fn;}observe(){}},window:{localStorage,matchMedia(query){return query==='(pointer: coarse)'?touchHintMedia:themeMedia;},innerWidth:1360,innerHeight:838,scrollTo(){},addEventListener(k,f){browserEvents[k]=f;},print(){browserEvents.beforeprint();}}});
 const run=code=>vm.runInContext(code,c);
-const scripts=["appearance","solver","examples","polygon-explain","polygon-steps","position-vectors","general-core","gear-mounts","construction","live-edit","machines","studio","print","general-ui","workspace-ui"];
+const scripts=["appearance","solver","examples","polygon-explain","polygon-steps","position-vectors","general-core","gear-mounts","construction","live-edit","machines","joint-paths","studio","print","general-ui","workspace-ui"];
 for(const name of scripts){try{run(fs.readFileSync(root+name+".js","utf8"));}catch(e){console.error("Loading",name);throw e;}}
 assert.equal($("status").textContent,"Solved");
 assert.equal(run('drawerHeight'),42);
 assert.equal($('gridSnap').checked,true);
 assert.match($("title").textContent,/Four-bar/);
 const saved=run("JSON.stringify(model)");
+assert.doesNotMatch($('hint').textContent,/Touch:|pinch|double-tap/);
+assert.match($('navigationHint').textContent,/Right-drag/);
+const hintRevision=$('sketch').revision;
+touchHintMedia.matches=true;touchHintMedia.listener();
+assert.match($('hint').textContent,/Touch: drag empty canvas to pan, pinch to zoom/);
+assert.match($('navigationHint').textContent,/Double-tap and drag/);
+assert.equal($('sketch').revision,hintRevision);assert.equal(run('JSON.stringify(model)'),saved);
+run('engage("box")');assert.match($('hint').textContent,/Two fingers/);
+touchHintMedia.matches=false;touchHintMedia.listener();
+assert.doesNotMatch($('hint').textContent,/Two fingers/);
+assert.match($('navigationHint').textContent,/Right-drag/);
+run('engage("bar");staged={type:"point",id:0};render()');
+const stagedHint=$('hint').textContent;
+touchHintMedia.matches=true;touchHintMedia.listener();assert.equal($('hint').textContent,stagedHint);
+touchHintMedia.matches=false;touchHintMedia.listener();run('engage("select")');
+assert.doesNotMatch($('hint').textContent,/Touch:|pinch|double-tap/);
 const appearanceSolution=run('JSON.stringify(result)'),appearanceRoot=document.documentElement;
+assert.equal($('appTheme').value,'system');
+themeMedia.matches=true;themeMedia.listener();assert.equal(appearanceRoot['data-theme'],'dark');
+themeMedia.matches=false;themeMedia.listener();assert.equal(appearanceRoot['data-theme'],'light');
 run('renderPrint(printPlan(true))');const appearancePrint=$('printOutput').innerHTML;
 $('appearanceOpen').onclick();assert.equal($('appearanceDialog').open,true);
 $('appTheme').onchange({target:{value:'dark'}});
@@ -92,11 +113,12 @@ themeMedia.matches=true;themeMedia.listener();assert.equal(appearanceRoot['data-
 themeMedia.matches=false;themeMedia.listener();assert.equal(appearanceRoot['data-theme'],'light');
 assert.equal(appearanceRoot.style['--canvas'],'#101010');
 $('appearanceReset').onclick();assert.equal($('appCanvasAutomatic').checked,true);
+assert.equal($('appTheme').value,'system');
 assert.equal(appearanceRoot.style['--canvas'],'#fbfcfe');assert.equal(firstLink.value,'#2467ad');
 const appearanceKey='linkage-studio-appearance';
 appearanceStorage.set(appearanceKey,JSON.stringify({theme:'invalid',accent:'url(unsafe)',link1:'#123456',autoCanvas:'no'}));
 run(fs.readFileSync(root+'appearance.js','utf8'));
-assert.equal($('appTheme').value,'light');assert.equal(appearanceRoot.style['--accent'],'#235f99');
+assert.equal($('appTheme').value,'system');assert.equal(appearanceRoot.style['--accent'],'#235f99');
 assert.equal(firstLink.value,'#123456');assert.equal($('appCanvasAutomatic').checked,true);
 appearanceStorage.set(appearanceKey,'invalid json');run(fs.readFileSync(root+'appearance.js','utf8'));
 assert.equal(firstLink.value,'#2467ad');
@@ -544,6 +566,180 @@ const beforeSelection=run('model.points.length');
 $('sketch').events.pointerdown(eventFor(gridTarget,100,100));$('sketch').events.pointermove(eventFor(gridTarget,800,500));$('sketch').events.pointerup();$('sketch').events.click(eventFor(gridTarget,800,500));
 assert.equal(run('model.points.length'),beforeSelection);assert.ok(run('multiSelection.length')>0);
 
+
+// Touch taps still place objects; empty drags pan without editing or creating pins.
+const touchEvent=(target,x,y,id=1,time=1000)=>eventFor(target,x,y,{pointerType:'touch',pointerId:id,timeStamp:time});
+run('engage("pin")');
+let touchBefore=run('model.points.length');
+let tap=touchEvent(background,900,350);
+$('sketch').events.pointerdown(tap);$('sketch').events.pointerup(tap);$('sketch').events.click(tap);
+assert.equal(run('model.points.length'),touchBefore+1);
+const touchModel=run('JSON.stringify(model)'),touchHistory=run('history.length');
+const touchView=JSON.parse(run('JSON.stringify(view)'));
+$('sketch').events.pointerdown(touchEvent(background,900,350,1,1500));
+$('sketch').events.pointermove(touchEvent(background,940,380,1,1600));
+$('sketch').events.pointerup(touchEvent(background,940,380,1,1700));
+$('sketch').events.click(touchEvent(background,940,380));
+assert.equal(run('view.x'),touchView.x+40);assert.equal(run('view.y'),touchView.y+30);
+assert.equal(run('JSON.stringify(model)'),touchModel);assert.equal(run('history.length'),touchHistory);
+// Double-tap-and-drag draws a box, while Box select can start directly over an object.
+tap=touchEvent(background,0,0,1,2000);
+$('sketch').events.pointerdown(tap);$('sketch').events.pointerup(tap);$('sketch').events.click(tap);
+const doubleView=run('JSON.stringify(view)');
+$('sketch').events.pointerdown(touchEvent(background,0,0,1,2200));
+$('sketch').events.pointermove(touchEvent(background,1360,700,1,2300));
+assert.match($('sketch').innerHTML,/data-selection-box/);
+$('sketch').events.pointerup(touchEvent(background,1360,700,1,2400));
+$('sketch').events.click(touchEvent(background,1360,700));
+assert.ok(run('multiSelection.length')>1);assert.equal(run('JSON.stringify(view)'),doubleView);
+const boxButton=document.querySelectorAll('[data-tool]').find(el=>el.dataset.tool==='box');
+boxButton.onclick();assert.equal(run('tool'),'box');assert.equal(boxButton['aria-pressed'],true);
+$('sketch').events.pointerdown(touchEvent(point0,0,0,1,3000));
+$('sketch').events.pointermove(touchEvent(point0,1360,700,1,3100));
+$('sketch').events.pointerup(touchEvent(point0,1360,700,1,3200));
+assert.ok(run('multiSelection.length')>1);
+// Pinching cancels a geometry preview, preserves the anchor, and ignores leftover fingers.
+run('engage("select")');origin=run('project(...scene().slice(0,2))');
+const pinchModel=run('JSON.stringify(model)'),pinchHistory=run('history.length');
+$('sketch').events.pointerdown(touchEvent(point0,...origin));
+$('sketch').events.pointermove(touchEvent(point0,origin[0]+30,origin[1]-20));
+assert.equal(run('drag.mode'),'geometry');
+$('sketch').events.pointerdown(touchEvent(background,origin[0]+230,origin[1]-20,2));
+assert.equal(run('drag'),null);assert.equal(run('JSON.stringify(model)'),pinchModel);
+const pinchStart=JSON.parse(run('JSON.stringify(view)'));
+$('sketch').events.pointermove(touchEvent(background,origin[0]-20,origin[1],1));
+$('sketch').events.pointermove(touchEvent(background,origin[0]+380,origin[1],2));
+assert.ok(Math.abs(run('view.scale')-pinchStart.scale*2)<1e-9);
+assert.ok(Math.abs(run('view.x')-(origin[0]+180+(pinchStart.x-origin[0]-130)*2))<1e-9);
+assert.ok(Math.abs(run('view.y')-(origin[1]+(pinchStart.y-origin[1]+20)*2))<1e-9);
+$('sketch').events.pointerup(touchEvent(background,0,0,2));
+const leftoverView=run('JSON.stringify(view)');
+$('sketch').events.pointermove(touchEvent(point0,100,100));
+$('sketch').events.pointerup(touchEvent(point0,100,100));
+assert.equal(run('JSON.stringify(view)'),leftoverView);assert.equal(run('JSON.stringify(model)'),pinchModel);
+assert.equal(run('history.length'),pinchHistory);
+// Cancellation removes the box; unrelated pointer-up events do not terminate a drag.
+run('engage("box")');
+$('sketch').events.pointerdown(touchEvent(background,0,0));
+$('sketch').events.pointermove(touchEvent(background,800,500));
+$('sketch').events.pointerup(touchEvent(background,0,0,99));assert.equal(run('drag.mode'),'box');
+$('sketch').events.pointercancel(touchEvent(background,800,500));
+assert.equal(run('drag'),null);assert.doesNotMatch($('sketch').innerHTML,/data-selection-box/);
+// A normal touch drag commits one constrained edit, even when the finger leaves the SVG.
+run('reset({title:"Touch editing",points:[{name:"O",x:0,y:0,fixed:true},{name:"A",x:100,y:0}],links:[{name:"Arm",pins:[0,1],length:100,lengthLocked:false}],constraints:[],drive:{type:"rotary",id:0,position:0,speed:2,accel:0}});engage("select")');
+origin=run('project(...scene().slice(2,4))');
+const touchEditModel=run('JSON.stringify(model)');
+$('sketch').events.pointerdown(touchEvent(pointTarget,...origin));
+$('sketch').events.pointerleave(touchEvent(pointTarget,...origin));assert.equal(run('drag.mode'),'geometry');
+$('sketch').events.pointermove(touchEvent(pointTarget,origin[0]+60,origin[1]-20));
+$('sketch').events.pointerup(touchEvent(pointTarget,origin[0]+60,origin[1]-20));
+assert.ok(run('model.links[0].length')>110);assert.equal(run('validate(model)'),true);
+$('undo').onclick();assert.equal(run('JSON.stringify(model)'),touchEditModel);
+// Polygon pinch uses its own zoom/offset coordinates and never selects a part on release.
+reset(examples[0].build());
+for(const id of ['velocity','acceleration']){
+ const canvas=$(id),before=JSON.parse(run('JSON.stringify(plotViews["'+id+'"])'));
+ const picked=run('polygonExplanationState("'+id+'").key');
+ const partTarget={closest(){return {dataset:{polygonPart:'abs-1'}};}};
+ canvas.events.pointerdown(touchEvent(partTarget,100,100));
+ canvas.events.pointerdown(touchEvent(background,300,100,2));
+ canvas.events.pointermove(touchEvent(background,50,120));
+ canvas.events.pointermove(touchEvent(background,450,120,2));
+ assert.equal(run('plotViews["'+id+'"].zoom'),before.zoom*2);
+ assert.equal(run('plotViews["'+id+'"].x'),10+(before.x+40)*2);
+ assert.equal(run('plotViews["'+id+'"].y'),-8+(before.y+28)*2);
+ canvas.events.pointercancel(touchEvent(background,450,120,2));
+ canvas.events.pointermove(touchEvent(background,80,140));
+ canvas.events.pointerup(touchEvent(background,80,140));
+ assert.equal(run('polygonExplanationState("'+id+'").key'),picked);
+}
+
+// Joint paths are independent screen preferences, with cached continuation and no model edits.
+run('reset({title:"Joint paths",points:[{name:"O",x:0,y:0,fixed:true},{name:"A",x:100,y:0}],links:[{name:"Arm",pins:[0,1],length:100,lengthLocked:true}],constraints:[],drive:{type:"rotary",id:0,position:0,speed:2,accel:0}});selection={type:"point",id:1};render()');
+$('sweepSpan').value='360';$('sweepSamples').value='90';
+const pathModel=run('JSON.stringify(model)'),pathResult=run('JSON.stringify(result)'),pathHistory=run('history.length');
+run('renderPrint(printPlan(true))');const pathPrint=$('printOutput').innerHTML;
+$('jointCalculatedPath').onchange({target:{checked:true}});
+assert.match($('sketch').innerHTML,/data-joint-path="1" data-path-kind="calculated"/);
+assert.match($('jointPathStatus').textContent,/91 poses/);
+assert.equal(run('JSON.stringify(model)'),pathModel);assert.equal(run('JSON.stringify(result)'),pathResult);assert.equal(run('history.length'),pathHistory);
+const circlePoses=JSON.parse(run('JSON.stringify(calculatedJointPaths.positions)'));
+assert.ok(circlePoses.every(q=>Math.abs(Math.hypot(q[2],q[3])-100)<1e-5));
+assert.ok(Math.hypot(circlePoses.at(-1)[2]-circlePoses[0][2],circlePoses.at(-1)[3]-circlePoses[0][3])<1e-5);
+run('renderPrint(printPlan(true))');assert.equal($('printOutput').innerHTML,pathPrint);
+const cachedPaths=run('calculatedJointPaths');
+$('jointLiveTrail').onchange({target:{checked:true}});
+assert.equal(run('seek(40)'),true);assert.equal(run('seek(80)'),true);run('render()');
+assert.equal(run('calculatedJointPaths'),cachedPaths);
+assert.match($('sketch').innerHTML,/data-path-kind="trail"/);
+const trailBeforePan=run('JSON.stringify(jointPathState(model.points[1]).positions)');
+run('zoomTo(view.scale*1.2);renderSketch()');
+assert.equal(run('JSON.stringify(jointPathState(model.points[1]).positions)'),trailBeforePan);
+run('selection={type:"point",id:0};render()');
+assert.equal($('jointCalculatedPath').checked,false);assert.equal($('jointLiveTrail').checked,false);
+$('jointLiveTrail').onchange({target:{checked:true}});assert.equal(run('seek(100)'),true);run('renderSketch()');
+assert.equal(run('jointPathState(model.points[0]).positions.length'),1);
+assert.doesNotMatch($('sketch').innerHTML,/data-joint-path="0"/);
+run('selection={type:"point",id:1};render()');
+assert.equal($('clearJointTrail').disabled,false);assert.equal($('clearJointTrail').hidden,false);$('clearJointTrail').onclick();
+assert.equal(run('jointPathState(model.points[1]).positions.length'),0);
+assert.equal(run('jointPathState(model.points[0]).positions.length'),1);
+assert.equal($('jointLiveTrail').checked,true);assert.equal($('clearJointTrail').disabled,true);
+assert.equal($('clearJointTrail').hidden,true);assert.equal($('clearJointTrails').hidden,false);
+assert.match($('sketch').innerHTML,/data-path-kind="calculated"/);
+assert.equal(run('seek(110)'),true);assert.equal(run('seek(120)'),true);run('renderSketch()');
+assert.match($('sketch').innerHTML,/data-path-kind="trail"/);assert.equal($('clearJointTrail').disabled,false);assert.equal($('clearJointTrail').hidden,false);
+assert.equal($('clearJointTrails').disabled,false);$('clearJointTrails').onclick();
+assert.doesNotMatch($('sketch').innerHTML,/data-path-kind="trail"/);assert.equal($('clearJointTrails').disabled,true);
+assert.equal($('clearJointTrails').hidden,true);assert.equal($('clearJointTrail').hidden,true);
+assert.match($('sketch').innerHTML,/data-path-kind="calculated"/);
+// Cancelled geometry previews restore trails, while committed movement adds positions.
+run('selection={type:"point",id:1};render()');
+origin=run('project(...scene().slice(2,4))');
+const cancelledTrail=run('JSON.stringify(jointPathState(model.points[1]).positions)');
+$('sketch').events.pointerdown(eventFor(pointTarget,...origin));
+$('sketch').events.pointermove(eventFor(pointTarget,origin[0]+25,origin[1]-30));
+assert.ok(run('jointPathState(model.points[1]).positions.length')>0);
+$('sketch').events.pointercancel(eventFor(pointTarget,origin[0]+25,origin[1]-30));
+assert.equal(run('JSON.stringify(jointPathState(model.points[1]).positions)'),cancelledTrail);
+$('sketch').events.pointerdown(eventFor(pointTarget,...origin));
+$('sketch').events.pointermove(eventFor(pointTarget,origin[0]+25,origin[1]-30));$('sketch').events.pointerup();
+assert.ok(run('jointPathState(model.points[1]).positions.length')>0);
+assert.equal(run('validate(model)'),true);
+// Samples and span changes refresh calculated paths; impossible poses truncate instead of bridging.
+$('sweepSpan').value='90';$('sweepSamples').value='30';$('sweepSpan').events.change();
+assert.equal(run('calculatedJointPaths.positions.length'),31);
+$('sweepSamples').value='0';$('sweepSamples').events.change();
+assert.doesNotMatch($('sketch').innerHTML,/data-path-kind="calculated"/);assert.match($('inspector').innerHTML,/12–360/);
+$('sweepSamples').value='90';$('sweepSpan').value='360';
+run('reset({title:"Partial path",points:[{name:"O",x:0,y:0,fixed:true},{name:"A",x:100,y:0},{name:"P",x:150,y:0,rail:{x:150,y:0,angle:90}}],links:[{name:"Arm",pins:[0,1],length:100}],constraints:[{type:"collinear",link:0,p:2}],drive:{type:"rotary",id:0,position:0,speed:2,accel:0}});selection={type:"point",id:2};render()');
+$('jointCalculatedPath').onchange({target:{checked:true}});
+assert.match($('jointPathStatus').textContent,/Stopped at the last solvable/);
+assert.ok(run('calculatedJointPaths.positions.length')>1);assert.ok(run('calculatedJointPaths.positions.length')<91);
+// Reopening identical geometry starts a fresh calculation at the new input position.
+run('reset({title:"Fresh path",points:[{name:"S",x:0,y:0,rail:{x:0,y:0,angle:0}}],links:[],constraints:[],drive:{type:"linear",id:0,position:0,speed:2,accel:0}});selection={type:"point",id:0};render()');
+$('sweepSpan').value='10';$('sweepSamples').value='30';$('jointCalculatedPath').onchange({target:{checked:true}});
+run('const reopenedPath=clone(model);reopenedPath.drive.position=50;reset(reopenedPath);selection={type:"point",id:0};render()');
+$('jointCalculatedPath').onchange({target:{checked:true}});
+assert.ok(Math.abs(run('calculatedJointPaths.positions[0][0]')-50)<1e-6);
+// Linear spans follow display units and paths survive joint reindexing without moving to a new joint.
+run('reset({title:"Linear path",points:[{name:"S",x:0,y:0,rail:{x:0,y:0,angle:0}}],links:[],constraints:[],drive:{type:"linear",id:0,position:0,speed:2,accel:0}});displayUnits="cm";selection={type:"point",id:0};render()');
+$('sweepSpan').value='10';$('sweepSamples').value='30';$('jointCalculatedPath').onchange({target:{checked:true}});
+assert.ok(Math.abs(run('calculatedJointPaths.positions.at(-1)[0]')-100)<1e-6);
+$('jointLiveTrail').onchange({target:{checked:true}});
+run('for(let i=1;i<=1005;i++)recordJointTrails([i,0])');
+assert.equal(run('jointPathState(model.points[0]).positions.length'),1000);
+assert.equal(run('jointPathState(model.points[0]).positions[0][0]'),6);
+run('recordJointTrails(null);recordJointTrails([2000,0]);renderSketch()');
+assert.ok((($('sketch').innerHTML.match(/data-path-kind="trail"[^>]*d="([^"]*)"/)?.[1]??'').match(/M/g)??[]).length>1);
+run('edit(()=>{model.points.unshift({name:"New",x:0,y:0,fixed:true});model.drive.id=1;},true);selection={type:"point",id:1};render()');
+assert.equal($('jointLiveTrail').checked,true);
+run('selection={type:"point",id:0};render()');assert.equal($('jointLiveTrail').checked,false);
+run('deleteSelection();selection={type:"point",id:0};render()');assert.equal($('jointLiveTrail').checked,true);
+reset(examples[0].build());run('displayUnits="mm";selection={type:"point",id:1};render()');
+assert.equal($('jointLiveTrail').checked,false);assert.equal($('jointCalculatedPath').checked,false);
+assert.doesNotMatch($('sketch').innerHTML,/data-joint-path=/);
+$('sweepSpan').value='90';$('sweepSamples').value='30';
 
 // Belt speed and angular acceleration are radius-weighted; crossed belts reverse direction.
 for(const crossed of [false,true]){

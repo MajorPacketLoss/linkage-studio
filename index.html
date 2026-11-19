@@ -24,7 +24,7 @@ h1,h2,h3,p{margin:0}h1{font-size:24px;font-weight:600;letter-spacing:-.035em;lin
 .toolbar{display:flex;align-items:center;gap:4px;padding:8px 10px;background:#f5f7fa;border-bottom:1px solid var(--line);flex-wrap:wrap}.toolbar button,.toolbar select{font-size:11px;padding:6px 9px}.toolbar button:first-child{margin-right:5px}
 .viewControls{display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:7px 10px;border-bottom:1px solid #e1e8ef;background:#fcfdfe;font-size:10px;color:var(--muted)}.viewControls input{width:63px;border:1px solid var(--line);border-radius:3px;padding:4px;background:#fff;color:var(--ink)}.viewControls button{font-size:11px;padding:3px 8px}.viewControls span{margin-left:auto}
 #dimensionEdit{position:absolute;z-index:1;height:28px;padding:3px 7px;font:12px ui-monospace,monospace}#board{background:#f9fbfd;position:relative}#sketch{display:block;width:100%;min-height:280px;max-height:570px;user-select:none;touch-action:none}#sketch.panning,#sketch.panning *{cursor:grabbing!important}
-.positionVectorControls{display:flex;gap:15px;flex-wrap:wrap;align-items:center;padding:7px 12px;font-size:10px;color:var(--muted);border-top:1px solid var(--line)}.positionVectorControls label{display:flex;align-items:center;gap:4px}.positionVectorControls span{margin-left:auto}
+.positionVectorControls{display:flex;gap:15px;flex-wrap:wrap;align-items:center;padding:7px 12px;font-size:10px;color:var(--muted);border-top:1px solid var(--line)}.positionVectorControls label{display:flex;align-items:center;gap:4px}.positionVectorControls span{margin-left:auto}.positionVectorControls button{font-size:10px;padding:3px 7px}.jointPathFields{border:1px solid var(--line);border-radius:4px;padding:6px 9px;margin:10px 0}.jointPathFields legend{font-size:11px;font-weight:600}
 .motion{display:flex;align-items:center;gap:11px;padding:9px 12px;border-top:1px solid var(--line);background:#f5f8fb}.motion button{min-width:52px;font-size:11px}.motion label{font-size:10px;color:var(--muted);white-space:nowrap}.motion input{flex:1;min-width:0}.motion output{font:12px ui-monospace,Consolas,monospace;min-width:70px;text-align:right;color:#1d5689}
 .sidebar{display:grid;gap:11px}.sideHead{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px;background:#f6f8fa;border-bottom:1px solid var(--line)}.sideHead button{font-size:10px;padding:3px 6px}.side>div:last-child{padding:11px 12px}.side label{display:grid;gap:4px;color:var(--muted);font-size:11px}.side input:not([type=checkbox]),.side select{width:100%;min-width:0;border:1px solid var(--line);border-radius:3px;padding:6px 7px;color:var(--ink);background:#fff}.side label.inline{display:flex;gap:6px;align-items:center;margin:9px 0}
 .fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:8px 0}.fields.three{grid-template-columns:repeat(3,minmax(0,1fr))}.description{font-size:11px;line-height:1.5;color:var(--muted);margin:7px 0}.notice{font-size:11px;line-height:1.5;background:#fff5df;border-left:2px solid #d1a14c;padding:8px;color:#704f20;margin:8px 0}.badge{font-size:9px;font-weight:700;color:#8f6827;background:#fff0d4;padding:3px 7px;border-radius:3px;white-space:nowrap}.badge.good{color:#1b6e54;background:#e6f3ec}.remove{font-size:10px;color:#9f3a47;padding:5px 7px;margin:5px 0}.sideDetails{margin-top:9px;padding-top:9px;border-top:1px solid var(--line)}.sideDetails summary{font-size:11px;color:var(--muted);cursor:pointer}
@@ -55,6 +55,7 @@ dialog{border:1px solid #c3cfdb;border-radius:7px;color:var(--ink);padding:20px;
  .brand{font-size:16px}.brandSub{display:none}.logo{display:flex;color:#b7cee7}
  .topActions{flex-wrap:nowrap;align-items:center;gap:4px}
  button{display:inline-flex;justify-content:center;align-items:center;gap:6px;min-height:28px}
+ .toolbar button[data-tool="box"]{display:none}
  .toolIcon{display:block;width:20px;height:20px;flex:none;pointer-events:none}
  .topActions button{height:32px;padding:5px 8px}.topActions .toolIcon{width:18px;height:18px}
  .project{position:fixed;inset:48px 0 auto;height:43px;margin:0;padding:0 16px;background:#fff;border-bottom:1px solid var(--line);z-index:25;gap:10px;flex-direction:row;align-items:center}
@@ -146,6 +147,21 @@ dialog{border:1px solid #c3cfdb;border-radius:7px;color:var(--ink);padding:20px;
  .appearanceFields select{width:100%;min-width:0;height:34px}
 }
 @media screen and (max-width:400px){.brand .logo{display:none}.topActions button{width:25px}}
+@media screen and (pointer:coarse){
+ .toolbar button[data-tool="box"]{display:inline-flex}
+ .toolbar{width:48px;padding:3px;overflow-y:auto;overflow-x:hidden;max-height:calc(100dvh - 165px)}
+ #constraintPopover{position:fixed;left:64px;top:150px;max-height:calc(100dvh - 210px);overflow:auto}
+ .toolbar button{min-height:40px;width:40px;height:40px;flex-shrink:0}
+ .topActions button{min-height:40px}
+ .side input:not([type=checkbox]),.side select,.side button,.dialogHead button,.polygonStepControls button{min-height:36px}
+ #sketch circle[data-point][fill=transparent]{r:20px}
+ #sketch line[data-link][stroke=transparent]{stroke-width:30px}
+}
+@media screen and (max-height:650px){
+ .toolbar{overflow-y:auto;overflow-x:hidden}
+ #constraintPopover{position:fixed;left:64px;top:110px;max-height:calc(100dvh - 170px);overflow:auto}
+}
+#helpDialog{overflow-y:auto}.helpContent h3{font-size:14px;margin:16px 0 8px}.helpStart,.helpShortcuts{padding-left:22px;margin:8px 0 16px}.helpStart li,.helpShortcuts li{margin:5px 0}.helpContent details{border-bottom:1px solid var(--line)}.helpContent summary{cursor:pointer;padding:10px 4px;min-height:44px;font-weight:600;line-height:1.5}.helpContent summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:3px}.helpContent details p,.helpContent details ul{margin:4px 0 12px;padding-left:18px}.helpContent .helpMore{color:var(--muted);font-size:12px;margin-top:16px}.helpContent .helpFooter{font-size:11px;border-top:1px solid var(--line);padding-top:12px}
 @media print{
  html,body{padding:0;margin:0;background:#fff;color:#172438}
  body>header,body>main,dialog{display:none!important}
@@ -172,7 +188,7 @@ dialog{border:1px solid #c3cfdb;border-radius:7px;color:var(--ink);padding:20px;
 
 
 
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-y8DSopmm8dAWpBu4dcMwoi/5ztfb1846xXd0FFD5fr0='; style-src 'unsafe-inline'; img-src data: blob:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-RYyyr3MEDGxduNQ/GlICQE9pWiJ/gUb6lZ7lx1rsxBY='; style-src 'unsafe-inline'; img-src data: blob:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 </head>
 <body>
@@ -189,17 +205,17 @@ dialog{border:1px solid #c3cfdb;border-radius:7px;color:var(--ink);padding:20px;
 <section class="card sketch">
   <div class="cardHead"><div><p id="hint"></p></div><span id="sketchUnit" class="unit"></span></div>
   <div id="tools" class="toolbar" aria-label="Drawing tools">
-    <button data-tool="select">Select</button><button data-tool="pin">Pin</button><button data-tool="bar">Link</button><button data-tool="rail">Slider</button><button data-tool="fix">Ground</button><button data-tool="attach">Attach pin</button><button id="addGear">Gear</button><button id="addPulley">Pulley</button>
+    <button data-tool="select">Select</button><button data-tool="box">Box select</button><button data-tool="pin">Pin</button><button data-tool="bar">Link</button><button data-tool="rail">Slider</button><button data-tool="fix">Ground</button><button data-tool="attach">Attach pin</button><button id="addGear">Gear</button><button id="addPulley">Pulley</button>
     <button id="constraintsToggle" aria-controls="constraintPopover" aria-expanded="false">Constraints</button><div id="constraintPopover" hidden><h3>Constraints</h3><p>Midpoint and coincident stay active in motion. Choose whether alignment and angle constraints apply during simulation.</p><button data-constraint="midpoint">Midpoint</button><button data-constraint="coincident">Coincident</button><button data-constraint="horizontal">Horizontal</button><button data-constraint="vertical">Vertical</button><button data-constraint="collinear">Collinear</button><button data-constraint="angle">Angle…</button><label hidden>Constraint<select id="constraintTool" aria-label="Geometric constraint"><option value="">Constraints</option><option value="midpoint">Midpoint</option><option value="coincident">Coincident</option><option value="horizontal">Horizontal</option><option value="vertical">Vertical</option><option value="collinear">Collinear</option><option value="angle">Angle</option></select></label></div>
     <button id="undo" title="Undo last edit">Undo</button><button id="redo" title="Redo last edit">Redo</button>
   </div>
   <div id="canvasViewControls" class="viewControls">
     <button id="zoomOut" aria-label="Zoom out">−</button><label for="viewScale">Zoom %</label><input id="viewScale" type="number" min="10" max="1600" step="1"><button id="zoomIn" aria-label="Zoom in">+</button><button id="fit">Fit</button>
     <label id="gridLabel" for="gridSpacing">Grid</label><input id="gridSpacing" type="number" step="any"><label class="gridSnap" title="Snap within 4 screen pixels, without overriding constraints"><input id="gridSnap" type="checkbox" checked>Snap</label>
-    <span>Scroll to zoom · Right-drag to pan · Left-drag to select</span>
+    <span id="navigationHint">Scroll to zoom · Right-drag to pan · Left-drag to select</span>
   </div>
   <div id="board"><svg id="sketch" viewBox="0 0 800 440" aria-label="Editable mechanism position diagram"></svg><input id="dimensionEdit" type="number" step="any" required hidden aria-label="Link length"></div>
-  <div id="canvasVectors" class="positionVectorControls"><label><input type="checkbox" id="sketchVelocityVectors">Velocity vectors</label><label><input type="checkbox" id="sketchAccelerationVectors">Acceleration vectors</label><span id="sketchVectorStatus"></span></div>
+  <div id="canvasVectors" class="positionVectorControls"><label><input type="checkbox" id="sketchVelocityVectors">Velocity vectors</label><label><input type="checkbox" id="sketchAccelerationVectors">Acceleration vectors</label><button id="clearJointTrails" disabled hidden>Clear trails</button><span id="sketchVectorStatus"></span></div>
   <div class="motion"><button id="play" aria-label="Play mechanism">Play</button><label id="scrubLabel" for="scrub">Input angle</label><input id="scrub" type="range"><output id="position"></output></div>
 </section>
 <aside class="sidebar" id="propertiesPanel" aria-label="Model properties"><div class="panelTitle"><h2>Model</h2><span id="status" role="status"></span><button id="closeProperties" aria-label="Close properties" title="Close properties">Close</button></div>
@@ -225,20 +241,20 @@ dialog{border:1px solid #c3cfdb;border-radius:7px;color:var(--ink);padding:20px;
 <fieldset><legend>Mechanism colors</legend><p class="description">Link colors repeat in order for each group of six links.</p><div class="appearanceFields"><label>Link 1<input type="color" data-appearance-color="link1" value="#2467ad"></label><label>Link 2<input type="color" data-appearance-color="link2" value="#16776d"></label><label>Link 3<input type="color" data-appearance-color="link3" value="#75518f"></label><label>Link 4<input type="color" data-appearance-color="link4" value="#a16830"></label><label>Link 5<input type="color" data-appearance-color="link5" value="#a34a62"></label><label>Link 6<input type="color" data-appearance-color="link6" value="#657c28"></label><label>Gears and pulleys<input type="color" data-appearance-color="wheel" value="#416e9e"></label><label>Belts and ropes<input type="color" data-appearance-color="rope" value="#665649"></label></div></fieldset>
 <div class="printActions"><button id="appearanceReset" type="button">Reset appearance</button></div><p id="appearanceStatus" class="description" role="status"></p></dialog>
 <dialog id="exampleDialog"><div class="dialogHead"><h2>Example library</h2><button id="examplesClose">Close</button></div><div id="exampleList"></div></dialog>
-<dialog id="helpDialog"><div class="dialogHead"><h2>Using Linkage Studio</h2><button id="helpClose">Close</button></div><div class="helpContent">
-<p>Open Appearance in the top bar to choose Light, Dark or Follow system, set an app accent, and customize mechanism colors. The drawing background follows the theme unless you uncheck Follow theme and choose a color. Changes preview immediately and are stored in this browser when possible; Reset appearance restores the defaults. These screen preferences do not change mechanism files, analysis values or printed diagrams.</p>
-<p>The grid is the drawing workspace. The Snap checkbox beside Grid is on by default and can be turned off. It attracts placements and dragged objects only when they are very close to a grid line (at most four screen pixels); mechanical constraints still take priority. Analysis starts retracted with its tab strip visible; click a tab or the retract/expand button to expand it. Use the Properties and Analysis buttons to reopen closed panels. Drag the top edge of the analysis panel to resize it, or use its retract button to leave only the tab strip; its tabs contain polygons, results, equations and motion studies.</p>
-<p>Choose an example, or place pins and connect them with the Link tool. Ground pins fix their location. A slider pin follows a fixed straight guide. Set a link length in Properties, choose one motion input, then Solve.</p>
-<p>Midpoint, coincident and collinear relations snap immediately and stay active during simulation. Alignment and angle constraints have a During simulation switch; use it for a motion constraint, or leave it off to set only the construction pose. Shared pins, tracer attachments, sliders, locked lengths and gear meshes remain mechanical constraints.</p>
-<p>New links have an editable length. Entering a length enables its editing lock; turn off “Lock length while editing” to reshape it again. Links remain rigid during motion analysis. The padlock beside a dimension marks a locked length.</p>
-<p>Select an object to edit it. Double-click a link length in the sketch to edit it in the selected length unit and open that link in Properties. Enter or leaving the field applies the value; Escape cancels. Drag pins or links to explore the constrained motion. Delete removes the selection. Ctrl+Z undoes edits; Ctrl+Shift+Z or Ctrl+Y redoes them. Right-drag the grid to pan in any tool. Left-drag empty grid to select an area. Drag an object in Select mode to edit it. Escape clears selection and returns to Select. Save and Open use portable JSON files, including files from earlier versions.</p>
-<p>New gears and pulleys use Free centre shaft support by default. Gear wheels can use a ground shaft, a joint-mounted shaft, or a free centre. In Properties, choose shaft support and Apply. Grounded shafts do not translate when dragged. Free shafts and shafts following a movable joint drag with that joint's constraints; grabbing the wheel preserves the pointer's offset from its shaft. Follow a joint lets the wheel spin independently; Attach shaft to link makes the wheel rotate rigidly with that link. Meshing supports carrier-relative motion, including moving shaft centres. A free centre can leave undetermined motion until more constraints are added.</p><p> Define pitch size through module and tooth count, then connect gears with an external mesh, internal mesh or common shaft. Select a link and any of its joints when attaching a rigid shaft. Automatic fit moves an editable second shaft into contact or fits an independent pair’s module to the shaft spacing. The placement setting can instead require existing positions to match. Incompatible connections fail without changing the sketch. Gear outlines are schematic. Ideal no-slip kinematics use pitch circles.</p>
-<p>U adds a pulley. Connect two fixed shafts with an open or crossed belt in Wheel and rope connections. Rope constraints relate signed slider travels using strand coefficients; the moving-pulley example explains its two supporting strands. These are ideal, inextensible fixed-direction segments. K applies collinear to two links or a link and joint. Select a tracer-bearing link to dimension tracer offsets, radius and angle; entered offsets remain fixed when the base length changes.</p>
-<p>Inspect individual polygon parts by selecting a point or segment. Use Polygon appearance for thickness, line-style and arrowhead presets. Open Step-by-step polygon drawing beneath either polygon to reveal the current solved mechanism one part at a time, with explanations and values. Show complete or close the viewer to restore the full drawing. Printing always includes the full polygon. For a manual construction, draw the known vector, extend the perpendicular directions, intersect them, and separate normal and tangential acceleration. Stationary pins and zero vectors share the pole.</p>
-<p>Print supports physical scales in millimetres on paper. Choose the same paper and orientation in the browser dialog, use 100% or Actual size, disable headers and footers, and measure the 50 mm check line. Add or remove construction guides, dimensions, annotations and component vectors before printing.</p>
-<p>Length units are mm, cm, m, in and ft. Rates use seconds, angular input uses degrees and angular rates use rad/s and rad/s². Analysis covers planar rigid links, fixed guides and ideal gears with grounded or joint-mounted shafts. It stops at unresolved or singular configurations.</p>
-<h3>Keyboard shortcuts</h3><p>V Select · J Joint · U Pulley · K Collinear · L Link · S Slider · F Ground · T Tracer · G Gear · M Midpoint · C Coincident · H Horizontal · I Vertical · Space Play/pause · Home Fit · +/− Zoom · P Properties · A Analysis · ? Help. Ctrl+S Save · Ctrl+O Open · Ctrl+N New · Ctrl+Z Undo · Ctrl+Shift+Z / Ctrl+Y Redo. Drawing shortcuts pause while typing or using a dialog.</p><p>Gear reference <a href="https://mae3.eng.ucsd.edu/machine-design/gear-ratios" target="_blank" rel="noreferrer">UC San Diego · Gear ratios</a></p>
-<p>Linkage Studio 0.3.0 · <a href="https://github.com/MajorPacketLoss/linkage-studio" target="_blank" rel="noreferrer">Source and issue tracker</a> · <a href="https://github.com/MajorPacketLoss/linkage-studio/blob/main/LICENSE" target="_blank" rel="noreferrer">The Unlicense</a></p></div></dialog>
+<dialog id="helpDialog" aria-labelledby="helpTitle"><div class="dialogHead"><h2 id="helpTitle">Quick help</h2><button id="helpClose">Close</button></div><div class="helpContent">
+<h3>Start here</h3>
+<ol class="helpStart"><li>Open <strong>Examples</strong>, or draw pins and connect them with links.</li><li>Add ground pivots or sliders. Choose a motion input in <strong>Properties</strong>, then <strong>Solve</strong>.</li><li>Press <strong>Play</strong> to watch motion. Open an <strong>Analysis</strong> tab for polygons, results or a motion study.</li></ol>
+<h3>FAQs</h3>
+<details><summary>How do I move around or select an area?</summary><p><strong>Mouse:</strong> scroll to zoom, right-drag to pan, left-drag empty grid to select an area.</p><p><strong>Touch:</strong> drag empty canvas to pan; pinch with two fingers to zoom/pan, including polygons. Double-tap-and-drag or use <strong>Box select</strong> to select an area. Lift all fingers after a pinch before editing again.</p></details>
+<details><summary>How do I edit a link or undo a change?</summary><p>Select an object for <strong>Properties</strong>, or drag it with Select active. Double-click a link dimension to edit its length: Enter applies; Escape cancels. Entering a length locks it; disable <strong>Lock length while editing</strong> to reshape it.</p><p>Delete removes the selection. Ctrl+Z undoes; Ctrl+Shift+Z or Ctrl+Y redoes. <strong>Snap</strong> toggles grid snapping; constraints still take priority.</p></details>
+<details><summary>Why won’t my mechanism solve or move?</summary><p>Check ground pivots, slider guides, locked lengths and the motion input. Too few constraints leave motion undetermined; conflicting constraints or a singular pose can stop a solution.</p><p>For alignment and angle constraints, <strong>During simulation</strong> keeps the relation active during motion. Leave it off for a starting-pose constraint.</p></details>
+<details><summary>How do gears, pulleys and ropes connect?</summary><p>New wheels have a <strong>Free centre</strong>. In Properties, choose a ground shaft, a joint to follow, or <strong>Attach shaft to link</strong>. Following a joint allows independent spin; attaching to a link locks their rotation together.</p><p>Use <strong>Wheel and rope connections</strong> for meshes, open/crossed belts or rope constraints. Belts need fixed shafts; ropes use signed slider-travel coefficients. Try the pulley examples first.</p></details>
+<details><summary>How do I read polygons or trace a joint’s path?</summary><p>In <strong>Polygons</strong>, select a vector for its explanation or open <strong>Step-by-step polygon drawing</strong>. <strong>Polygon appearance</strong> controls lines and arrowheads.</p><p>Select a joint → <strong>Motion paths</strong>: Calculated path is solid and uses the Motion study span/samples; Live trail is dashed and keeps the latest 1,000 positions. Clear one trail in Properties or all with <strong>Clear trails</strong>. Paths are not saved or printed and reset on Open or Undo/Redo.</p></details>
+<details><summary>How do I save or print to scale?</summary><p><strong>Save</strong> downloads a mechanism JSON file; <strong>Open</strong> restores it. Save before leaving—drawings are not automatically saved. Results and motion studies can be exported as CSV.</p><p>For printing, match paper/orientation, use <strong>100% / Actual size</strong>, disable browser headers/footers and measure the <strong>50 mm check line</strong>. Printed polygons are always complete.</p></details>
+<details><summary>Where are themes, panels and units?</summary><p><strong>Appearance</strong> sets the theme and colors, saved in this browser. Reset follows your system theme. Screen colors do not change prints; polygon styles do.</p><p>Use <strong>Properties</strong> or <strong>Analysis</strong> to reopen panels; drag the analysis panel’s top edge to resize it. <strong>Length</strong> changes display units. Angular input is in degrees; rates use seconds and radians.</p></details>
+<details><summary>What are the keyboard shortcuts?</summary><ul class="helpShortcuts"><li><strong>Draw:</strong> J Pin · L Link · S Slider · F Ground · T Tracer · G Gear · U Pulley</li><li><strong>Constrain:</strong> M Midpoint · C Coincident · K Collinear · H Horizontal · I Vertical</li><li><strong>Navigate:</strong> V Select · Escape Clear selection · Space Play/pause · Home Fit · +/− Zoom</li><li><strong>Panels:</strong> P Properties · A Analysis · ? Help</li><li><strong>Files:</strong> Ctrl+S Save · Ctrl+O Open · Ctrl+N New</li><li><strong>History:</strong> Ctrl+Z Undo · Ctrl+Shift+Z / Ctrl+Y Redo</li></ul><p>Drawing shortcuts pause while typing or using a dialog.</p></details>
+<p class="helpMore">Need the details? <a href="https://github.com/MajorPacketLoss/linkage-studio/blob/main/docs/USER_GUIDE.md" target="_blank" rel="noreferrer">Full user guide</a>. Analysis assumes planar rigid links and ideal gears, belts and ropes; verify results independently.</p>
+<p class="helpFooter">Linkage Studio 0.5.0 · <a href="https://github.com/MajorPacketLoss/linkage-studio" target="_blank" rel="noreferrer">Source / issues</a> · <a href="https://github.com/MajorPacketLoss/linkage-studio/blob/main/LICENSE" target="_blank" rel="noreferrer">The Unlicense</a></p></div></dialog>
 <dialog id="printDialog"><form id="printForm"><h2>Print to scale</h2><p class="description">Use 100% or Actual size. Match the paper and orientation, disable browser headers and footers, and verify the 50 mm check line.</p><div class="fields"><label>Paper<select id="printPaper"><option value="letter">Letter</option><option value="a4">A4</option></select></label><label>Orientation<select id="printOrientation"><option value="portrait">Portrait</option><option value="landscape">Landscape</option></select></label></div>
 <fieldset><legend>Sheets</legend><div class="printChoice"><label><input id="printMechanism" type="checkbox" checked>Position diagram</label><label>Scale 1 : <input id="mechanismRatio" type="number" step="any"></label></div><div class="printChoice"><label><input id="printVelocity" type="checkbox" checked>Velocity polygon</label><label><input id="velocityRatio" type="number" step="any"><span id="printVelocityUnit"></span></label></div><div class="printChoice"><label><input id="printAcceleration" type="checkbox" checked>Acceleration polygon</label><label><input id="accelerationRatio" type="number" step="any"><span id="printAccelerationUnit"></span></label></div><label><input id="printResults" type="checkbox" checked>Numerical results</label></fieldset>
 <fieldset class="printOptions"><legend>Drawing details</legend><label><input type="checkbox" id="printGuides" checked>Construction lines</label><label><input type="checkbox" id="printComponents" checked>Normal and tangential components</label><label><input type="checkbox" id="printLabels" checked>Point labels and scale bars</label><label><input type="checkbox" id="printDimensions" checked>Dimensions</label><label><input type="checkbox" id="printVectors">Position velocity and acceleration vectors</label><label><input type="checkbox" id="printEquations">Equations and construction notes</label></fieldset>
@@ -251,7 +267,7 @@ dialog{border:1px solid #c3cfdb;border-radius:7px;color:var(--ink);padding:20px;
 (() => {
   const storageKey = "linkage-studio-appearance";
   const defaults = {
-    theme: "light", accent: "#235f99", canvas: "#fbfcfe", autoCanvas: true,
+    theme: "system", accent: "#235f99", canvas: "#fbfcfe", autoCanvas: true,
     link1: "#2467ad", link2: "#16776d", link3: "#75518f",
     link4: "#a16830", link5: "#a34a62", link6: "#657c28",
     wheel: "#416e9e", rope: "#665649"
@@ -1578,6 +1594,124 @@ function tackleExample(){
   return normalizedModel({title:'Moving pulley — two supporting strands',points:[{name:'C',x:60,y:-100,rail:{x:60,y:0,angle:90}},{name:'E',x:120,y:-140,rail:{x:120,y:0,angle:90}}],links:[],constraints:[],gears:[{name:'Moving pulley',kind:'pulley',radius:20,x:60,y:-100,centerPoint:0,teeth:20,module:2,angle:0},{name:'Fixed idler',kind:'pulley',radius:20,x:100,y:0,teeth:20,module:2,angle:0}],meshes:[],shafts:[],cables:[{name:'Inextensible rope',terms:[{point:0,weight:2},{point:1,weight:1}],constant:-340,spins:[{pulley:0,point:0,sign:1,phase:100},{pulley:1,point:1,sign:1,phase:140}],layout:'tackle',movingPoint:0,loadPoint:1}],drive:{type:'linear',id:1,position:-140,speed:-40,accel:-10},displayUnits:'mm',inputMode:'manual'});
 }
 
+"use strict";
+const jointPathStates=new WeakMap();
+let calculatedJointPaths=null;
+function jointPathState(point) {
+  if(!jointPathStates.has(point))jointPathStates.set(point,{calculated:false,trail:false,positions:[]});
+  return jointPathStates.get(point);
+}
+function recordJointTrails(q) {
+  model.points.forEach((point,i)=>{
+    const state=jointPathStates.get(point);
+    if(!state?.trail)return;
+    const position=q?.slice(2*i,2*i+2),last=state.positions.at(-1);
+    if(position?.length!==2||!position.every(Number.isFinite)){
+      if(last)state.positions.push(null);
+    }else if(!last||magnitude(position[0]-last[0],position[1]-last[1])>1e-7){
+      state.positions.push(position);
+    }
+    if(state.positions.length>1000)state.positions.splice(0,state.positions.length-1000);
+  });
+}
+function jointTrailSnapshot() {
+  return model.points.filter(point=>jointPathStates.get(point)?.trail)
+    .map(point=>[point,jointPathState(point).positions.slice()]);
+}
+function restoreJointTrails(snapshot) {
+  for(const [point,positions] of snapshot??[])jointPathState(point).positions=positions;
+}
+function clearJointTrails() {
+  for(const point of model.points){
+    const state=jointPathStates.get(point);
+    if(state)state.positions=[];
+  }
+  renderSketch();
+}
+function calculateJointPaths() {
+  if(!model.points.some(point=>jointPathStates.get(point)?.calculated))return null;
+  if(drag?.pose)return calculatedJointPaths;
+  if(!analysisReady())return {positions:[],message:"Solve a mechanism with an input to calculate paths."};
+  const samples=$("sweepSamples").valueAsNumber,raw=$("sweepSpan").valueAsNumber;
+  const span=model.drive.type==="linear"?fromDisplay(raw):raw;
+  if(!Number.isInteger(samples)||samples<12||samples>360||!Number.isFinite(span)||Math.abs(span)>1e5){
+    return {positions:[],message:"Set 12–360 samples and a finite span within ±100000 in Motion study."};
+  }
+  const signature=JSON.stringify([model.points,model.links,model.constraints,model.gears,model.meshes,model.shafts,model.cables,model.drive.type,model.drive.id,span,samples]);
+  if(calculatedJointPaths?.source===model&&calculatedJointPaths.signature===signature)return calculatedJointPaths;
+  const source=clone(model),drive={...source.drive,speed:0,accel:0},start=drive.position;
+  const positions=[result.q.slice()];
+  let last=result.q.slice(),previous=start,stopped=false,steps=0;
+  for(let i=1;i<=samples;i++){
+    const target=start+span*i/samples;
+    const parts=Math.max(1,Math.ceil(Math.abs(target-previous)/(drive.type==="linear"?Math.max(1,Math.abs(span)/200):2)));
+    if(steps+parts>2000){stopped=true;break;}
+    for(let k=1;k<=parts;k++){
+      const next=solveModel(source,last,{...drive,position:previous+(target-previous)*k/parts});
+      steps++;
+      if(next.status!=="solved"){stopped=true;break;}
+      last=next.q;
+    }
+    if(stopped)break;
+    positions.push(last.slice());previous=target;
+  }
+  calculatedJointPaths={source:model,signature,positions,message:positions.length+" poses calculated over "+fmt(span)+" "+(drive.type==="linear"?"mm":"°")+"."+(stopped?" Stopped at the last solvable pose or calculation limit; reduce the span if needed.":"")};
+  return calculatedJointPaths;
+}
+function jointPathMarkup() {
+  const calculated=calculateJointPaths();
+  let markup="";
+  model.points.forEach((point,i)=>{
+    const state=jointPathStates.get(point);
+    if(!state)return;
+    const color=colors[i%colors.length];
+    for(const [kind,positions] of [["calculated",state.calculated?calculated?.positions.map(p=>p.slice(2*i,2*i+2)):null],["trail",state.trail?state.positions:null]]){
+      if(!positions?.length)continue;
+      let d="",previous=null;
+      for(const position of positions){
+        if(!position){previous=null;continue;}
+        if(previous&&magnitude(position[0]-previous[0],position[1]-previous[1])<1e-7)continue;
+        const [x,y]=project(...position);
+        d+=(previous?"L":"M")+x+" "+y+" ";previous=position;
+      }
+      if(d.includes("L"))markup+='<path data-joint-path="'+i+'" data-path-kind="'+kind+'" d="'+d+'" fill="none" stroke="'+color+'" stroke-width="2" opacity="'+(kind==="trail"?'.85':'.5')+'"'+(kind==="trail"?' stroke-dasharray="4 3"':'')+' pointer-events="none"/>';
+    }
+  });
+  $("clearJointTrails").disabled=!model.points.some(point=>jointPathStates.get(point)?.positions.length);
+  $("clearJointTrails").hidden=$("clearJointTrails").disabled;
+  const selectedClear=$("clearJointTrail");
+  if(selectedClear){
+    selectedClear.disabled=selection?.type!=="point"||!jointPathStates.get(model.points[selection.id])?.positions.length;
+    selectedClear.hidden=selectedClear.disabled;
+  }
+  return markup;
+}
+function jointPathFields(point) {
+  const state=jointPathState(point);
+  return '<fieldset class="jointPathFields"><legend>Motion paths</legend>'+
+    '<label class="inline"><input id="jointCalculatedPath" type="checkbox" '+(state.calculated?'checked':'')+'> Calculated path</label>'+
+    '<label class="inline"><input id="jointLiveTrail" type="checkbox" '+(state.trail?'checked':'')+'> Live trail</label>'+
+    '<button id="clearJointTrail" type="button" '+(state.positions.length?'':'disabled hidden')+'>Clear this joint’s trail</button>'+
+    '<p class="description">Solid: calculated using the Motion study span and samples. Dashed: latest 1,000 positions during playback, scrubbing or dragging.</p>'+
+    '<p id="jointPathStatus" class="description" role="status">'+(state.calculated?safe(calculateJointPaths()?.message??""):"")+'</p></fieldset>';
+}
+function bindJointPathFields(point) {
+  $("clearJointTrail").onclick=()=>{
+    jointPathState(point).positions=[];
+    renderSketch();
+  };
+  $("jointCalculatedPath").onchange=event=>{
+    jointPathState(point).calculated=event.target.checked;
+    renderSketch();
+    $("jointPathStatus").textContent=event.target.checked?calculateJointPaths()?.message??"":"";
+  };
+  $("jointLiveTrail").onchange=event=>{
+    jointPathState(point).trail=event.target.checked;
+    if(event.target.checked)recordJointTrails(scene());
+    renderSketch();
+  };
+}
+
 
 "use strict";
 const $ = id => document.getElementById(id);
@@ -1601,6 +1735,7 @@ const polygonStyle={...defaultPolygonStyle};
 const toolHints = {
   mount:"Click the joint that should carry this wheel shaft.",
   select:"Drag a pin or link to move the constrained sketch. Select an item and press Delete to remove it.",
+  box:"Drag a selection box over pins, links or wheels. Choose Select to move objects.",
   pin:"Click the drawing to place a pin.",
   bar:"Select two pins, or click empty space to place link endpoints.",
   rail:"Select a pin to add a fixed guide or remove its slider.",
@@ -1684,7 +1819,9 @@ function edit(change, run = true) {
     if(requestedDrive!==null)model.drive.position=requestedDrive;
     inferInput();
     history.push(previous);redoHistory=[];if(history.length>60)history.shift();
-    dirty=false;notice='';result=solveModel(model,coord(model));render();return true;
+    dirty=false;notice='';result=solveModel(model,coord(model));
+    if(geometry()!==beforeGeometry){recordJointTrails(null);recordJointTrails(result.q);}
+    render();return true;
   }catch(error){
     ({model,result,dirty,displayUnits,selection}=previous);notice=error.message;render();return false;
   }
@@ -1775,6 +1912,7 @@ function renderSketch() {
       svg+=line(point(-1500),point(1500),'stroke="#5b7797" stroke-width="1.4" stroke-dasharray="7 5"');
     }
   }
+  svg+=jointPathMarkup();
   svg+=gearDrawing(drag?.previewModel??model,q,(x,y)=>project(x,y),view.scale);
   for(const [i,l] of model.links.entries()){
     const [a,b,...rest]=l.pins;
@@ -1966,7 +2104,7 @@ function renderInspector() {
       '<label class="inline"><input id="fixed" type="checkbox" '+(p.fixed?"checked":"")+'> Fixed ground pin</label>'+
       '<label class="inline"><input id="railToggle" type="checkbox" '+(p.rail?"checked":"")+'> Slider on fixed guide</label>'+
       (p.rail?'<div class="fields three">'+numericDistance("Guide X","railX",p.rail.x)+numericDistance("Guide Y","railY",p.rail.y)+numeric("Guide angle (°)","railAngle",p.rail.angle,"required")+'</div>':"")+
-      '<button id="removeSelection" class="remove">Delete pin and its links</button>';
+      jointPathFields(p)+'<button id="removeSelection" class="remove">Delete pin and its links</button>';
   }else if(l){
     panel='<h3>'+safe(l.name)+' · '+safe(labelFor(model,l))+'</h3>'+
       '<div class="fields">'+numericDistance("Length","length",l.length,'required min="'+toDisplay(0.001)+'"')+'</div>'+
@@ -1994,6 +2132,7 @@ function renderInspector() {
   $("inspector").querySelectorAll("[data-remove]").forEach(node=>node.onclick=()=>edit(()=>model.constraints.splice(Number(node.dataset.remove),1)));
   $("inspector").querySelectorAll("[data-constraint-physical]").forEach(node=>node.onchange=()=>edit(()=>model.constraints[Number(node.dataset.constraintPhysical)].physical=node.checked,true));
   if(p) {
+    bindJointPathFields(p);
     onNumber("pointX",x=>p.x=x,false,fromDisplay);
     onNumber("pointY",y=>p.y=y,false,fromDisplay);
     $("fixed").onchange=()=>toggleFixed(id);
@@ -2290,6 +2429,19 @@ function renderMotion() {
   $("position").textContent=positionText;
   scrub.setAttribute("aria-valuetext",positionText);
 }
+const touchHintMedia=window.matchMedia?.("(pointer: coarse)");
+function renderHints() {
+  const touch=touchHintMedia?.matches;
+  const hint=touch&&tool==="select"?
+    "Drag a pin or link to move the sketch. Touch: drag empty canvas to pan, pinch to zoom, double-tap and drag to select an area.":
+    toolHints[tool]+(touch&&tool==="box"?" Two fingers still pan and zoom.":"");
+  $("hint").textContent=hint+(staged?" First selection: "+(staged.type==="point"?model.points[staged.id].name:(staged.type==="gear"?model.gears[staged.id].name:model.links[staged.id].name))+". Select the next object.":"");
+  $("navigationHint").textContent=touch?
+    "Touch: pinch to zoom · Drag empty canvas to pan · Double-tap and drag or Box select to select":
+    "Scroll to zoom · Right-drag to pan · Left-drag to select";
+}
+if(touchHintMedia?.addEventListener)touchHintMedia.addEventListener("change",renderHints);
+else touchHintMedia?.addListener?.(renderHints);
 function render(preserveSketch = false) {
   cancelDimensionEdit();
   $("title").textContent=model.title;
@@ -2305,7 +2457,7 @@ function render(preserveSketch = false) {
   const ground=(model.points.some(p=>p.fixed||p.rail)||model.gears.length)?1:0;
   $("summary").textContent=(model.links.length+model.gears.length+blocks+ground)+" links · "+model.points.length+" pins · "+
     (!dirty&&result.q.length&&["solved","no-drive","indeterminate","incompatible"].includes(result.status)?result.dof+" DOF before input":"Planar sketch");
-  $("hint").textContent=toolHints[tool]+(staged?" First selection: "+(staged.type==="point"?model.points[staged.id].name:(staged.type==="gear"?model.gears[staged.id].name:model.links[staged.id].name))+". Select the next object.":"");
+  renderHints();
   $("undo").disabled=history.length===0;
   $("redo").disabled=redoHistory.length===0;
   document.querySelectorAll("[data-tool]").forEach(b=>{b.classList.toggle("active",b.dataset.tool===tool);b.setAttribute("aria-pressed",b.dataset.tool===tool);});
@@ -2452,9 +2604,71 @@ function targetFrom(event) {
   return node.dataset.point===undefined ?
     {type:"link",id:Number(node.dataset.link)} : {type:"point",id:Number(node.dataset.point)};
 }
-let moved=false;
+// After a pinch, ignore remaining fingers until all are lifted to avoid accidental edits.
+function touchNavigation(canvas,getView,redraw,cancelSingle,polygon=false) {
+  const touches=new Map();
+  let gesture=null,blocked=false;
+  function pair() {
+    const [a,b]=[...touches.values()];
+    return {x:(a.x+b.x)/2,y:(a.y+b.y)/2,distance:Math.max(1,magnitude(a.x-b.x,a.y-b.y))};
+  }
+  return {
+    down(event) {
+      if(event.pointerType!=="touch")return false;
+      touches.set(event.pointerId,boardPosition(event,canvas));
+      canvas.setPointerCapture(event.pointerId);
+      if(touches.size>=2&&!blocked){
+        cancelSingle();blocked=true;
+        gesture={...pair(),view:{...getView()}};
+      }
+      if(blocked)event.preventDefault();
+      return blocked;
+    },
+    move(event) {
+      if(!touches.has(event.pointerId))return false;
+      touches.set(event.pointerId,boardPosition(event,canvas));
+      if(!blocked)return false;
+      event.preventDefault();
+      if(touches.size>=2&&gesture){
+        const pt=pair(),view=getView(),start=gesture.view;
+        const key=polygon?"zoom":"scale",reference=start.reference??1;
+        view[key]=Math.max(polygon ? .25 : reference*.1,Math.min(polygon?32:reference*16,start[key]*pt.distance/gesture.distance));
+        const ratio=view[key]/start[key],ox=polygon?240:0,oy=polygon?128:0;
+        view.x=pt.x-ox+(start.x-gesture.x+ox)*ratio;
+        view.y=pt.y-oy+(start.y-gesture.y+oy)*ratio;
+        redraw();
+      }
+      return true;
+    },
+    end(event) {
+      if(!event||!touches.has(event.pointerId))return false;
+      touches.delete(event.pointerId);
+      const handled=blocked;
+      if(touches.size<2)gesture=null;
+      if(!touches.size)blocked=false;
+      return handled;
+    }
+  };
+}
+let moved=false,lastTouchTap=null;
+const sketchTouch=touchNavigation(sketch,()=>view,()=>{renderSketch();renderViewControls();},()=>{
+  finishDrag(false);moved=true;lastTouchTap=null;
+});
 sketch.addEventListener("pointerdown",event=>{
+  if(sketchTouch.down(event))return;
+  if(drag)return;
   moved=false;
+  const target=targetFrom(event),touch=event.pointerType==="touch";
+  const doubleTap=touch&&!target&&lastTouchTap&&event.timeStamp-lastTouchTap.time<350&&
+    magnitude(event.clientX-lastTouchTap.x,event.clientY-lastTouchTap.y)<24;
+  lastTouchTap=null;
+  if(event.button===0&&(tool==="box"||touch&&!target)){
+    const pt=boardPosition(event);
+    drag=tool==="box"||doubleTap?
+      {mode:'box',pointer:event.pointerId,start:pt,end:pt,x:event.clientX,y:event.clientY}:
+      {mode:'pan',pointer:event.pointerId,px:pt.x,py:pt.y,x:view.x,y:view.y,touch:true,cx:event.clientX,cy:event.clientY};
+    return;
+  }
   if(event.button===2||event.button===1){
     event.preventDefault();const pt=boardPosition(event);
     drag={mode:'pan',pointer:event.pointerId,px:pt.x,py:pt.y,x:view.x,y:view.y};
@@ -2465,7 +2679,6 @@ sketch.addEventListener("pointerdown",event=>{
     return;
   }
   if(tool!=="select"||event.button!==0)return;
-  const target=targetFrom(event);
   if(!target)return;
   let grabbed=target;
   if(target.type==="gear"){
@@ -2478,12 +2691,15 @@ sketch.addEventListener("pointerdown",event=>{
   const grab=grabPoint(model,pose,grabbed,cursor);
   if(!grab)return;
   const offset=grab.map((row,i)=>dot(row,pose)-cursor[i]);
-  drag={mode:"geometry",target,grab,offset,seed:pose,pointer:event.pointerId,x:event.clientX,y:event.clientY};
+  drag={mode:"geometry",target,grab,offset,seed:pose,trailSnapshot:jointTrailSnapshot(),pointer:event.pointerId,x:event.clientX,y:event.clientY};
 });
 sketch.addEventListener("pointermove",event=>{
-  if(!drag||drag.pointer!==event.pointerId||!event.buttons)return;
+  if(sketchTouch.move(event))return;
+  if(!drag||drag.pointer!==event.pointerId||!event.buttons&&event.pointerType!=="touch")return;
   if(drag.mode==="pan"){
+    if(drag.touch&&!moved&&magnitude(event.clientX-drag.cx,event.clientY-drag.cy)<4)return;
     const pt=boardPosition(event);
+    sketch.classList.add('panning');
     view.x=drag.x+pt.x-drag.px;
     view.y=drag.y+pt.y-drag.py;
     moved=true;
@@ -2503,6 +2719,7 @@ sketch.addEventListener("pointermove",event=>{
   const destination=snapGridPosition(modelPosition(event).map((x,i)=>x+drag.offset[i]));
   const next=dragPose({...model,editLengths:true,constructionMode:true},drag.pose??drag.seed,drag.grab,destination,Math.max(12,6/view.scale));
   drag.failed=!next;
+  recordJointTrails(next);
   if(next){
     drag.pose=next;drag.previewModel=clone(model);storeConstructionPose(drag.previewModel,next);fitGearsToLinks(drag.previewModel);
   }
@@ -2522,8 +2739,9 @@ function updateDrivePosition(q) {
 }
 function finishDrag(commit) {
   if(!drag)return;
-  const {mode,pose,seed,failed,before,start,end}=drag;
+  const {mode,pose,seed,failed,before,start,end,trailSnapshot}=drag;
   drag=null;
+  if(!commit||!moved||!pose)restoreJointTrails(trailSnapshot);
   sketch.classList.remove("panning");
   if(mode==='box'){
     if(commit&&moved){multiSelection=objectsInsideBox(start,end);selection=multiSelection[0]??null;render();}
@@ -2544,10 +2762,22 @@ function finishDrag(commit) {
   if(moved)render();
 }
 sketch.addEventListener("contextmenu",event=>event.preventDefault());
-sketch.addEventListener("pointerup",()=>finishDrag(true));
-sketch.addEventListener("pointercancel",()=>finishDrag(false));
-sketch.addEventListener("lostpointercapture",()=>finishDrag(false));
-sketch.addEventListener("pointerleave",()=>{if(!moved)finishDrag(false);});
+sketch.addEventListener("pointerup",event=>{
+  if(sketchTouch.end(event))return;
+  if(event&&drag?.pointer!==event.pointerId)return;
+  if(event?.pointerType==="touch"&&drag?.touch&&!moved){
+    lastTouchTap={time:event.timeStamp,x:event.clientX,y:event.clientY};
+  }
+  finishDrag(true);
+});
+for(const name of ["pointercancel","lostpointercapture"]){
+  sketch.addEventListener(name,event=>{
+    if(sketchTouch.end(event))return;
+    if(event&&drag?.pointer!==event.pointerId)return;
+    lastTouchTap=null;finishDrag(false);
+  });
+}
+sketch.addEventListener("pointerleave",event=>{if(event?.pointerType!=="touch"&&!moved)finishDrag(false);});
 let dimensionLink=null;
 function cancelDimensionEdit(){
   dimensionLink=null;
@@ -2572,6 +2802,7 @@ $("dimensionEdit").addEventListener("keydown",event=>{
 });
 sketch.addEventListener("click",event=>{
   if(moved||event.shiftKey){moved=false;return;}
+  if(tool==="box")return;
   // Keep dimension labels mounted so the browser can dispatch a double click.
   const dimension=event.target.closest("[data-dimension]"),target=targetFrom(event);
   pick(target,modelPosition(event),Boolean(dimension));
@@ -2609,9 +2840,10 @@ function seek(position,speed=model.drive.speed) {
   if(model.drive.type==="rotary")position=wrapAngle(position);
   const nextDrive={...model.drive,position,speed};
   const next=solveModel(model,result.q,nextDrive);
-  if(next.status!=="solved")return false;
+  if(next.status!=="solved"){recordJointTrails(null);return false;}
   model.drive=nextDrive;
   result=next;
+  recordJointTrails(next.q);
   return true;
 }
 function animate(time) {
@@ -2666,9 +2898,16 @@ $("scrub").oninput=event=>{
 $("scrub").onchange=()=>{scrubPosition=null;};
 $("split").onchange=renderAnalysis;
 for(const type of positionVectorTypes)$("sketch"+type.id).onchange=renderSketch;
+$("clearJointTrails").onclick=clearJointTrails;
+for(const id of ["sweepSpan","sweepSamples"]){
+  $(id).addEventListener("change",()=>{renderSketch();renderInspector();});
+}
 for(const id of Object.keys(plotViews)){
   const canvas=$(id), view=plotViews[id];
   let pan=null;
+  const touch=touchNavigation(canvas,()=>view,()=>redrawPlot(id),()=>{
+    pan=null;canvas.classList.remove("panning");
+  },true);
   $(id+"In").onclick=()=>zoomPlot(id,1.35);
   $(id+"Out").onclick=()=>zoomPlot(id,1/1.35);
   $(id+"Fit").onclick=()=>{resetPlotView(id);redrawPlot(id);};
@@ -2686,12 +2925,14 @@ for(const id of Object.keys(plotViews)){
   },{passive:false});
   canvas.addEventListener("pointerdown",event=>{
     if(event.button!==0||!analysisReady())return;
+    if(touch.down(event)||pan)return;
     const pt=boardPosition(event,canvas);
     pan={id:event.pointerId,px:pt.x,py:pt.y,x:view.x,y:view.y,part:polygonPartAt(event.target),moved:false};
     canvas.setPointerCapture(event.pointerId);
     canvas.classList.add("panning");
   });
   canvas.addEventListener("pointermove",event=>{
+    if(touch.move(event))return;
     if(pan?.id!==event.pointerId)return;
     const pt=boardPosition(event,canvas);
     if(!pan.moved&&magnitude(pt.x-pan.px,pt.y-pan.py)<3)return;
@@ -2702,6 +2943,7 @@ for(const id of Object.keys(plotViews)){
   });
   for(const name of ["pointerup","pointercancel","lostpointercapture"]){
     canvas.addEventListener(name,event=>{
+      if(touch.end(event))return;
       if(pan?.id!==event.pointerId)return;
       if(name==="pointerup"&&!pan.moved)selectPolygonPart(id,pan.part);
       pan=null;
@@ -3285,6 +3527,7 @@ refresh(true);
 // Engineering tool symbols share a 24-unit canvas and stay crisp at any scale.
 const workspaceSymbols={
   select:'<path d="m5 3 14 10-7 1-3 7z"/>',
+  box:'<rect x="3" y="3" width="18" height="18" rx="1" stroke-dasharray="3 3"/>',
   pin:'<circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="2"/>',
   bar:'<path d="M6 8h12a4 4 0 0 1 0 8H6a4 4 0 0 1 0-8z"/><circle cx="6" cy="12" r="1.4"/><circle cx="18" cy="12" r="1.4"/>',
   rail:'<path d="M2 6h20M2 18h20M4 3 2 6m7-3L7 6m7-3-2 3m7-3-2 3M4 21l-2-3m7 3-2-3m7 3-2-3m7 3-2-3" stroke-width="1.2"/><rect x="7" y="8" width="10" height="8" rx="1"/><circle cx="12" cy="12" r="2"/>',
@@ -3333,7 +3576,7 @@ function iconButton(button,name,label,visible=false){
   button.innerHTML=window.workspaceIcon(name)+(visible?'<span class="buttonText">'+safe(label)+'</span>':'');
   button.title=label;button.setAttribute('aria-label',label);
 }
-for(const button of document.querySelectorAll('[data-tool]'))iconButton(button,button.dataset.tool,({select:'Select / drag',pin:'Pin joint',bar:'Rigid link',rail:'Slider joint',fix:'Ground pivot',attach:'Attach tracer pin'})[button.dataset.tool]);
+for(const button of document.querySelectorAll('[data-tool]'))iconButton(button,button.dataset.tool,({select:'Select / drag',box:'Box select',pin:'Pin joint',bar:'Rigid link',rail:'Slider joint',fix:'Ground pivot',attach:'Attach tracer pin'})[button.dataset.tool]);
 for(const [id,name,label] of [
  ['addGear','gear','Add gear'],['addPulley','pulley','Add pulley (U)'],['constraintsToggle','constraints','Geometric constraints'],['undo','undo','Undo (Ctrl+Z)'],['redo','redo','Redo (Ctrl+Shift+Z / Ctrl+Y)'],
  ['zoomOut','minus','Zoom out'],['zoomIn','plus','Zoom in'],['fit','fit','Fit mechanism'],['play','play','Play mechanism'],

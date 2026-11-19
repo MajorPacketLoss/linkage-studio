@@ -32,6 +32,13 @@ Open the generated root `index.html` in a browser to use the app locally. Edit t
 
 The integration suite uses a simulated DOM. It checks solver and editor behavior but does not verify browser layout or native pointer-event delivery.
 
+## Preparing a release
+
+1. Update the version in `package.json` and the release label in `src/index.html`.
+2. Add a dated entry to `CHANGELOG.md` describing the changes since the previous release. Keep historical entries unchanged and update the README, user guide and in-app help for changed behavior.
+3. Run `npm run build`, `npm run check` and `npm test`. Verify the generated app in a browser and include the regenerated root `index.html` with the source changes.
+4. After review, commit the release changes and tag the release with the same version (for example, `v0.5.0`). Push the commit and tag, then publish GitHub release notes from the changelog. Confirm the hosted app shows the new version.
+
 ## Source layout
 
 | Path | Purpose |

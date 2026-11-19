@@ -50,6 +50,10 @@ In **Polygons → Polygon appearance**, choose **Tracing**, **Fine**, **Bold**, 
 
 Open **Step-by-step polygon drawing** beneath either polygon to progressively reveal its current solved vectors. Use **Previous**, **Next**, or the drawing-progress slider to inspect explanations, equations and vector components. **Show complete** reveals the entire polygon; closing the step viewer also restores the full drawing. Steps are generated for the current mechanism, including custom links, sliders, tracer points, gears, belts and moving pulleys, rather than a fixed example. Changing the pose or display units updates the values; loading a different mechanism restarts the sequence. Unsolved mechanisms need to be solved first. These steps trace the computed solution, not an independent manual intersection solver. **Construction guides** and **Normal and tangential** determine which construction details are included. Printing always uses the complete polygon, even while stepping.
 
+Select a joint and open **Motion paths** in Properties to toggle its **Calculated path** (solid) and **Live trail** (dashed) independently. Calculated paths start at the current assembly and use the **Motion study** span and samples (12–360), stopping at the last solvable pose or 2,000 continuation steps. Changing the span or samples refreshes the path.
+
+Live trails retain the latest 1,000 positions during playback, scrubbing and object dragging. **Clear this joint’s trail** clears only the selected joint; **Clear trails** on the canvas clears all trails. Clear buttons appear only when recorded positions exist. Recording continues while Live trail is enabled; cancelled drags restore the previous trail. Paths are screen-only, are not saved or printed, and reset when opening a mechanism or restoring Undo/Redo.
+
 Counterclockwise angular rates are positive. Rates use seconds, angular rates use radians, and linear results follow the selected length unit.
 
 ## Saving and printing
@@ -60,10 +64,12 @@ Print lets you choose diagrams, polygons, results and construction details. Choo
 
 ## Workspace
 
-Open **Appearance** in the top bar to choose **Light**, **Dark**, or **Follow system**, and customize the app accent. The drawing background follows the theme by default; uncheck **Follow theme** to choose a custom background. Customize the six repeating link colors, gears and pulleys, or belts and ropes. Changes preview immediately and persist in this browser when local storage is available; otherwise they last for the session. **Reset appearance** restores the original light theme and colors. Appearance preferences do not alter mechanism JSON files, analysis values, or printed diagrams. Polygon line and arrowhead settings remain separate.
+The app follows your system theme by default. Open **Appearance** in the top bar to choose **Light**, **Dark**, or **Follow system**, and customize the app accent. The drawing background follows the theme by default; uncheck **Follow theme** to choose a custom background. Customize the six repeating link colors, gears and pulleys, or belts and ropes. Changes preview immediately and persist in this browser when local storage is available; otherwise they last for the session. **Reset appearance** restores the system theme and default colors. Previously saved theme choices remain in effect until changed or reset. Appearance preferences do not alter mechanism JSON files, analysis values, or printed diagrams. Polygon line and arrowhead settings remain separate.
 
 **Snap** is enabled by default. Turn it off beside **Grid** to disable attraction to nearby grid lines; mechanical constraints always take priority.
 
 Right-drag pans the grid. Left-drag empty grid selects an area. Drag an object with Select active to edit it within its constraints. Escape clears selection and returns to Select. Delete removes selected objects; Ctrl+Z restores an edit.
+
+On touchscreens, tap to select or place objects, drag an object with Select active to edit it, and drag empty canvas to pan. Use two fingers to pinch to zoom and pan the sketch or polygons. Double-tap empty canvas and keep the second finger down while dragging to select an area, or choose **Box select** and drag over objects. Starting a two-finger gesture cancels any unfinished object drag or selection box; lift all fingers before editing again. Box select and touch-specific hints appear only when the primary input is a coarse pointer, such as a phone or tablet touchscreen.
 
 Properties sections collapse individually. The analysis panel can be resized, retracted to its tabs or closed. The top-bar controls reopen closed panels.

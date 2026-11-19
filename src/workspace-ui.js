@@ -2,6 +2,7 @@
 // Engineering tool symbols share a 24-unit canvas and stay crisp at any scale.
 const workspaceSymbols={
   select:'<path d="m5 3 14 10-7 1-3 7z"/>',
+  box:'<rect x="3" y="3" width="18" height="18" rx="1" stroke-dasharray="3 3"/>',
   pin:'<circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="2"/>',
   bar:'<path d="M6 8h12a4 4 0 0 1 0 8H6a4 4 0 0 1 0-8z"/><circle cx="6" cy="12" r="1.4"/><circle cx="18" cy="12" r="1.4"/>',
   rail:'<path d="M2 6h20M2 18h20M4 3 2 6m7-3L7 6m7-3-2 3m7-3-2 3M4 21l-2-3m7 3-2-3m7 3-2-3m7 3-2-3" stroke-width="1.2"/><rect x="7" y="8" width="10" height="8" rx="1"/><circle cx="12" cy="12" r="2"/>',
@@ -50,7 +51,7 @@ function iconButton(button,name,label,visible=false){
   button.innerHTML=window.workspaceIcon(name)+(visible?'<span class="buttonText">'+safe(label)+'</span>':'');
   button.title=label;button.setAttribute('aria-label',label);
 }
-for(const button of document.querySelectorAll('[data-tool]'))iconButton(button,button.dataset.tool,({select:'Select / drag',pin:'Pin joint',bar:'Rigid link',rail:'Slider joint',fix:'Ground pivot',attach:'Attach tracer pin'})[button.dataset.tool]);
+for(const button of document.querySelectorAll('[data-tool]'))iconButton(button,button.dataset.tool,({select:'Select / drag',box:'Box select',pin:'Pin joint',bar:'Rigid link',rail:'Slider joint',fix:'Ground pivot',attach:'Attach tracer pin'})[button.dataset.tool]);
 for(const [id,name,label] of [
  ['addGear','gear','Add gear'],['addPulley','pulley','Add pulley (U)'],['constraintsToggle','constraints','Geometric constraints'],['undo','undo','Undo (Ctrl+Z)'],['redo','redo','Redo (Ctrl+Shift+Z / Ctrl+Y)'],
  ['zoomOut','minus','Zoom out'],['zoomIn','plus','Zoom in'],['fit','fit','Fit mechanism'],['play','play','Play mechanism'],

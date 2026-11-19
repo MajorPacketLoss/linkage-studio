@@ -22,7 +22,9 @@ Use **Save** to keep a mechanism as a JSON file. Use **Print** for diagrams and 
 - Inextensible rope-length constraints with signed strand coefficients.
 - Midpoint, coincident, horizontal, vertical, angle and collinear constraints.
 - Position, velocity and acceleration analysis with component explanations and step-by-step polygon drawing.
-- Light, dark and system themes, with custom accent, drawing-background and mechanism colors saved locally.
+- Per-joint **Calculated path** and **Live trail** toggles in Properties. Calculated paths use the Motion study span/samples and stop at the last solvable pose or 2,000 continuation steps. Live trails retain the latest 1,000 positions during playback, scrubbing and dragging; **Clear this joint’s trail** in Properties clears only that joint, while **Clear trails** on the canvas clears all trails. Clear buttons appear only when their corresponding trails contain recorded positions. Recording continues while Live trail is enabled. Paths are screen-only and reset when opening a mechanism or restoring Undo/Redo.
+- System theme by default (with light/dark overrides), with custom accent, drawing-background and mechanism colors saved locally.
+- Touchscreen editing: tap to select/place objects, drag objects to edit, drag empty canvas to pan, and pinch with two fingers to zoom/pan the sketch or polygons. Double-tap-and-drag empty canvas or use **Box select** for area selection. Lift all fingers after a pinch before editing again. The **Box select** toolbar button and on-screen touch hints appear only when the primary input is a coarse pointer (such as a phone or tablet touchscreen); mouse/trackpad devices show desktop hints and can drag empty canvas to select an area.
 - Polygon line-thickness, line-style and arrowhead presets, with custom appearance controls.
 - Animation, motion studies, CSV export and scale printing.
 - Metric and imperial length units, editable link and tracer dimensions, undo and redo.
@@ -41,7 +43,7 @@ Use **Save** to keep a mechanism as a JSON file. Use **Print** for diagrams and 
 | Undo / redo | Ctrl+Z / Ctrl+Shift+Z or Ctrl+Y |
 | Play or pause / fit view | Space / Home |
 
-The in-app Help includes the full shortcut list.
+In-app **Help** offers a three-step quick start, collapsible FAQs and grouped keyboard shortcuts. The [user guide](docs/USER_GUIDE.md) covers detailed workflows.
 
 ## Scope
 
